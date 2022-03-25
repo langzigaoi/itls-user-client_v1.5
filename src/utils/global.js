@@ -8,9 +8,15 @@
 let SD = 'http://192.168.162.193:60101';  // 远程测试后端
 let LD = 'http://localhost:60101';  // 本地测试后端
 
+// 默认头像地址
+let avatar = "https://langzigao.oss-cn-shenzhen.aliyuncs.com/2022/03/21/aba8f99e4af6492fb39f2d001abbfd37usr.png";
+
 // export const baseUrl = SD
 export const baseUrl = LD
 
+export const avatarUrl = avatar
+
 export default {
-    baseUrl
+    baseUrl,
+    avatarUrl
 }

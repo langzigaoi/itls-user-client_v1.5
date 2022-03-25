@@ -7,7 +7,8 @@
  import * as level from './metadata/level'
  import * as require from './metadata/require'
  import * as type from './metadata/type'
- 
+ import * as title from './metadata/title'
+
  
  // 默认全部导出
  export {
@@ -15,5 +16,6 @@
   goal,
   level,
   require,
-  type
+  type,
+  title,
  }

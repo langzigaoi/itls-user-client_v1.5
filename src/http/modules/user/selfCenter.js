@@ -23,3 +23,14 @@ export const getUsrUser = params => {
     params
   })
 }
+
+// 更新用户密码
+export const updatePassword = (params) => {
+  return axios({
+      url: preUrl + 'updatePassword',
+      method: 'post',
+      params
+  })
+}
+
+

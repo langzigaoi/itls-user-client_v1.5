@@ -8,20 +8,37 @@
       <el-container>
         <el-aside class="aside" width="10%">
           <ul>
-            <!-- v-if="this.hasMenuPerm('/home/selfcenter')" -->
-            <router-link
+            <!-- <router-link
               v-if="hasMenu('/home/selfcenter')"
               to="/home/selfcenter"
             >
               <li :class="{ active: onRoutes.path == '/home/selfcenter' }">
                 <i class="el-icon-user"> 个人中心</i>
               </li>
-            </router-link>
-            <router-link v-if="hasMenu('/home/alterpwd')" to="/home/alterpwd">
-              <li :class="{ active: onRoutes.path == '/home/alterpwd' }">
-                <i class="el-icon-edit"> 密码修改</i>
+            </router-link> -->
+
+            <router-link
+              v-if="hasMenu('/home/teacherselfcenter')"
+              to="/home/teacherselfcenter"
+            >
+              <li
+                :class="{ active: onRoutes.path == '/home/teacherselfcenter' }"
+              >
+                <i class="el-icon-user"> 个人中心</i>
               </li>
             </router-link>
+
+            <router-link
+              v-if="hasMenu('/home/studentselfcenter')"
+              to="/home/studentselfcenter"
+            >
+              <li
+                :class="{ active: onRoutes.path == '/home/studentselfcenter' }"
+              >
+                <i class="el-icon-user"> 个人中心</i>
+              </li>
+            </router-link>
+
             <!-- {{userinfo}} -->
             <!-- <router-link to="/home/teachercourse"><li>教授课程<i class="el-icon-date"></i></li></router-link>
               <router-link to="/home/studentCourse"><li>学习课程<i class="el-icon-document"></i></li></router-link> -->
@@ -42,26 +59,25 @@
               </li>
             </router-link>
             <router-link to="/">
-              <li>退出</li>
+              <li class="el-icon-bicycle">退出</li>
             </router-link>
           </ul>
         </el-aside>
         <el-main class="main">
-          <el-breadcrumb separator-class="el-icon-arrow-right">
+          <!-- <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item
               v-for="(item, index) in navPath"
               :to="item.path"
               :key="index"
               >{{ item.name | routeToName }}</el-breadcrumb-item
             >
-          </el-breadcrumb>
+          </el-breadcrumb> -->
           <router-view></router-view>
         </el-main>
       </el-container>
       <footer class="footer">
         <p>©2020-2021 | 赣南师范大学 大数据与计算智能研究组</p>
       </footer>
-      <!-- <Knowledge-log ></Knowledge-log > -->
     </el-container>
   </div>
 </template>
@@ -159,21 +175,22 @@ export default {
   border-color: #14889a;
 }
 .el-select .el-input__inner:focus {
-    border-color: #14889a;
+  border-color: #14889a;
 }
-.el-select .el-input.is-focus .el-input__inner:focus{
-    border-color: #14889a;
+.el-select .el-input.is-focus .el-input__inner:focus {
+  border-color: #14889a;
 }
 .el-select-dropdown__item.selected {
-    color: #14889a;
-    font-weight: 700;
+  color: #14889a;
+  font-weight: 700;
 }
-.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-    background-color: #14889a;
-    border-color: #14889a;
+.el-checkbox__input.is-checked .el-checkbox__inner,
+.el-checkbox__input.is-indeterminate .el-checkbox__inner {
+  background-color: #14889a;
+  border-color: #14889a;
 }
-.el-checkbox__input.is-checked+.el-checkbox__label {
-    color: #14889a;
+.el-checkbox__input.is-checked + .el-checkbox__label {
+  color: #14889a;
 }
 .el-header,
 .el-footer {
@@ -195,6 +212,7 @@ export default {
   justify-content: center;
   /**水平居中*/
   padding: 15px;
+  height: 1px;
 }
 .footer p {
   font-size: 0.8em;

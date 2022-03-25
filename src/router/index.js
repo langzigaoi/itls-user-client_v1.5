@@ -34,7 +34,7 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: () => import('@/components/home/Home'),
-    redirect: '/home/selfcenter',
+    // redirect: '/home/',
     children: [
       {
         path: 'teacherCourse',
@@ -48,18 +48,19 @@ const routes = [
           }
         ]
       },
-      {
-        path: 'selfcenter',
-        name: 'SelfCenter',
-        component: () => import('@/components/home/selfCenter/SelfCenter'),
 
+      {
+        path: 'teacherselfcenter',
+        name: 'TeacherSelfCenter',
+        component: () => import('@/components/home/selfCenter/TeacherSelfCenter'),
       },
       {
-        path: 'alterpwd',
-        name: 'AlterPwd',
-        component: () => import('@/components/home/alterPwd/AlterPwd'),
+        path: 'studentselfcenter',
+        name: 'StudentSelfCenter',
+        component: () => import('@/components/home/selfCenter/StudentSelfCenter'),
       },
 
+      
       {
         path: 'studentCourse',
         name: 'StudentCourse',
@@ -94,6 +95,7 @@ const routes = [
       },
     ]
   },
+
   {
     path: '/course',
     name: 'course',
