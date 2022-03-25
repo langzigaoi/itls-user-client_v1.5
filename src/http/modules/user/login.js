@@ -20,9 +20,9 @@ export const login = data => {
 // 注册
 export const register = data => {
     return axios({
-        url: 'user/register'+data,
+        url: '/user/register',
         method: 'post',
-        // data: data
+        data,
     })
 }
 
