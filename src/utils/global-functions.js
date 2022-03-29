@@ -125,4 +125,9 @@ Vue.prototype.isMobile = function(mobile) {
   return /^1[0-9]{10}$/.test(mobile)
 }
 
+Vue.prototype.isInterger = function(str) {
+  return /^\d+$/.test(str)
+}
+
+
 }

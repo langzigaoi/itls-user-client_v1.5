@@ -4,7 +4,7 @@ import axios from '../../axios'
  * 元数据-课程方向
  */
 
- const preUrl = "/meta/title/";
+ const preUrl = "/metadata/title/";
 
 // 查询所有课程方向
 export const findAll = () => {

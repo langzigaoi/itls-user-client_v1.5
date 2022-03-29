@@ -8,7 +8,7 @@
       <el-row>
         <el-col :span="5">
           <div>
-            <el-avatar size="120" :src="info.avatar"></el-avatar>
+            <el-avatar :size="120" :src="info.avatar"></el-avatar>
           </div>
 
           <!-- <el-row type="flex" align="middle" justify="center">
@@ -345,7 +345,7 @@
     <el-dialog title="修改密码" width="40%" :visible.sync="editPasswdVisible" :close-on-click-modal="false" 
     :modal="false" align="center" 
      >
-      <el-form :model="updatePwdDataForm" label-width="100px"  style="width:60% "  :rules="updatePwdDataFormRules" ref="updatePwdDataForm" :size="size">
+      <el-form :model="updatePwdDataForm" label-width="100px"  style="width:60% "  :rules="updatePwdDataFormRules" ref="updatePwdDataForm" >
         <el-form-item label="原密码" prop="password" >
           <el-input v-model="updatePwdDataForm.password" type="password" auto-complete="off" ></el-input>
         </el-form-item>
@@ -386,7 +386,7 @@ export default {
   data() {
     return {
       info: [],
-      infoForm: [],
+      infoForm: {},
       sexOptions: [
         {
           value: "男",
@@ -409,7 +409,7 @@ export default {
       defaultAvatar: "",
 
       infoFormRules: {
-        telNum: [{ validator: this.checkTel, trigger: "blur" }],
+        telNum: [{ validator: this.checkTel, trigger: 'blur' }],
         email: [{ validator: this.checkEmail, trigger: "blur" }],
       },
       editPasswdVisible: false,
@@ -452,14 +452,13 @@ export default {
         this.info = JSON.parse(JSON.stringify(res.data));
         if (res.code == 200) this.loading = false;
         this.infoForm = JSON.parse(JSON.stringify(this.info));
-        console.log(this.info);
+        // console.log(this.info);
         if (res.code == 200) this.loading = false;
       });
     },
 
     // 编辑
     submitInfoForm: function () {
-      console.log(654654);
       this.$refs.infoForm.validate((valid) => {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
@@ -492,7 +491,7 @@ export default {
     findAllTitle() {
       let suggests = [];
       this.$api.metadata.title.findAll().then((res) => {
-        console.log(res);
+        // console.log(res);
         for (let index = 0; index < res.data.length; index++) {
           suggests.push({
             value: res.data[index].name,
@@ -504,20 +503,14 @@ export default {
     },
 
     handleAvatarSuccess(res, file) {
-      console.log("上传成功的回调", res);
+      // console.log("上传成功的回调", res);
       this.infoForm.avatar = res.data;
-      console.log(this.infoForm);
+      // console.log(this.infoForm);
     },
 
     handleTitleSelect(item) {
       this.infoForm.title = item;
-      console.log(item);
-    },
-
-    handleAvatarSuccess(res, file) {
-      console.log("上传成功的回调", res);
-      this.infoForm.avatar = res.data;
-      console.log(this.infoForm);
+      // console.log(item);
     },
     beforeAvatarUpload(file) {
       // const isJPG = file.type === 'image/jpeg';
@@ -532,7 +525,9 @@ export default {
       return isJPG && isLt2M;
     },
 
-     checkTel(rule, value, callback) {
+    checkTel(rule, value, callback) {
+      console.log(typeof this.infoForm.telNum);
+      console.log(value);
       if (!value) {
         callback();
       } else {

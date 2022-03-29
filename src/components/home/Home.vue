@@ -8,33 +8,17 @@
       <el-container>
         <el-aside class="aside" width="10%">
           <ul>
-            <!-- <router-link
-              v-if="hasMenu('/home/selfcenter')"
-              to="/home/selfcenter"
-            >
-              <li :class="{ active: onRoutes.path == '/home/selfcenter' }">
-                <i class="el-icon-user"> 个人中心</i>
-              </li>
-            </router-link> -->
 
             <router-link
               v-if="hasMenu('/home/teacherselfcenter')"
-              to="/home/teacherselfcenter"
-            >
-              <li
-                :class="{ active: onRoutes.path == '/home/teacherselfcenter' }"
-              >
+              to="/home/teacherselfcenter">
+              <li :class="{ active: onRoutes.path == '/home/teacherselfcenter' }">
                 <i class="el-icon-user"> 个人中心</i>
               </li>
             </router-link>
 
-            <router-link
-              v-if="hasMenu('/home/studentselfcenter')"
-              to="/home/studentselfcenter"
-            >
-              <li
-                :class="{ active: onRoutes.path == '/home/studentselfcenter' }"
-              >
+            <router-link v-if="hasMenu('/home/studentselfcenter')" to="/home/studentselfcenter">
+              <li :class="{ active: onRoutes.path == '/home/studentselfcenter' }">
                 <i class="el-icon-user"> 个人中心</i>
               </li>
             </router-link>
@@ -50,6 +34,7 @@
                 <i class="el-icon-date"> 教授课程</i>
               </li>
             </router-link>
+
             <router-link
               v-if="hasMenu('/home/studentCourse')"
               to="/home/studentCourse"
@@ -58,8 +43,11 @@
                 <i class="el-icon-document"> 学习课程</i>
               </li>
             </router-link>
+            
             <router-link to="/">
-              <li class="el-icon-bicycle">退出</li>
+              <li>
+                <i class="el-icon-bicycle">退出</i>
+              </li>
             </router-link>
           </ul>
         </el-aside>

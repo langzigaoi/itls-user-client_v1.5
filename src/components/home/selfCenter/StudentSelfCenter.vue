@@ -441,7 +441,7 @@ export default {
     },
     getInfo() {
       this.$api.user.selfCenter.getUsrUser().then((res) => {
-        console.log(res);
+        // console.log(res);
         // 时间处理
         res.data.birthday = this.dateFormat(res.data.birthday);
         res.data.entranceYear = this.dateFormat(res.data.entranceYear);
@@ -453,14 +453,13 @@ export default {
         this.info = JSON.parse(JSON.stringify(res.data));
         if (res.code == 200) this.loading = false;
         this.infoForm = JSON.parse(JSON.stringify(this.info));
-        console.log(this.info);
+        // console.log(this.info);
         if (res.code == 200) this.loading = false;
       });
     },
 
     // 编辑
     submitInfoForm: function () {
-      console.log(654654);
       this.$refs.infoForm.validate((valid) => {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
@@ -493,7 +492,7 @@ export default {
     findAllTitle() {
       let suggests = [];
       this.$api.metadata.title.findAll().then((res) => {
-        console.log(res);
+        // console.log(res);
         for (let index = 0; index < res.data.length; index++) {
           suggests.push({
             value: res.data[index].name,
@@ -505,21 +504,16 @@ export default {
     },
 
     handleAvatarSuccess(res, file) {
-      console.log("上传成功的回调", res);
+      // console.log("上传成功的回调", res);
       this.infoForm.avatar = res.data;
-      console.log(this.infoForm);
+      // console.log(this.infoForm);
     },
 
     handleTitleSelect(item) {
       this.infoForm.title = item;
-      console.log(item);
+      // console.log(item);
     },
 
-    handleAvatarSuccess(res, file) {
-      console.log("上传成功的回调", res);
-      this.infoForm.avatar = res.data;
-      console.log(this.infoForm);
-    },
     beforeAvatarUpload(file) {
       // const isJPG = file.type === 'image/jpeg';
       const isJPG = true;

@@ -23,9 +23,9 @@ export const findAllCourseInstance = (params) => {
   })
 }
 // 删除
-export const detete = (params) => {
+export const del = (params) => {
   return axios({
-      url: preUrl + 'detete',
+      url: preUrl + 'del',
       method: 'patch',
       params
   })

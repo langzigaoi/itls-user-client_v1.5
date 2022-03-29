@@ -16,7 +16,7 @@ export const findAllLanguage = () => {
 // 查询所有某课程实例的编程语言
 export const findCinstanceLanguage = (params) => {
   return axios({
-      url: preUrl + 'selectCourseInstanceLanguage',
+      url: preUrl + 'findByCid',
       method: 'get',
       params
   })

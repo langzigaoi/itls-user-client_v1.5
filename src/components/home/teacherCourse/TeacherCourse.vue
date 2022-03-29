@@ -1,471 +1,1223 @@
 <template>
-  <div class="parent">
-    <div>
-      <!-- 添加课程的弹框 -->
-      <el-button type="primary" @click="visable">添加课程</el-button>
+  <el-container>
+    <!-- <el-header>
 
-      <el-dialog title="添加课程 " :visible.sync="adddialogVisible">
-        <el-form :model="course">
-          <el-form-item label="课程名称" :label-width="formLabelWidth">
-            <div @mouseenter="showHide()" @mouseleave="hideHide()">
-              <el-input v-model="course.name" autocomplete="off"></el-input>
-              <div v-show="isshow == true">
-                <el-table :data="allCourseInfo" :max-height="hight">
-                  <el-table-column type="index" :index="indexMethod">
-                  </el-table-column>
-                  <el-table-column prop="name" label="已有课程" width="180">
-                  </el-table-column>
-                  <el-table-column
-                    prop="createTime"
-                    label="创建时间"
-                    width="180"
-                  >
-                  </el-table-column>
-                </el-table>
-                <!-- <span>已有课程：</span>
-                  <p v-for=" item in allCourseInfo" :key="item.name">{{item.name}}</p> -->
-              </div>
-            </div>
-          </el-form-item>
-          <el-form-item label="课程类型" :label-width="formLabelWidth">
-            <el-select v-model="type1" placeholder="请选择课程类型">
-              <el-option value="数学类">数学类</el-option>
-              <el-option value="算法类">算法类</el-option>
-              <el-option value="程序设计类">程序设计类</el-option>
-              <el-option value="人工智能类">人工智能类</el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="选修类型" :label-width="formLabelWidth">
-            <el-select v-model="type2" placeholder="请选择选修类型">
-              <el-option value="必修课">必修课</el-option>
-              <el-option value="选修课">选修课</el-option>
-              <el-option value="限选课">限选课</el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="选课层次" :label-width="formLabelWidth">
-            <el-select v-model="level" placeholder="请选择课程层次">
-              <el-option value="幼儿园">幼儿园</el-option>
-              <el-option value="小学">小学</el-option>
-              <el-option value="初中">初中</el-option>
-              <el-option value="高中">高中</el-option>
-              <el-option value="专科">专科</el-option>
-              <el-option value="本科">本科</el-option>
-              <el-option value="硕士研究生">硕士研究生</el-option>
-              <el-option value="博士研究生">博士研究生</el-option>
-            </el-select>
-          </el-form-item>
-        </el-form>
-        <!-- <div slot="footer" class="dialog-footer">
-          <el-button>取 消</el-button>
-          <el-button type="primary" @click="add()">确 定</el-button>
-        </div> -->
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="visable">取 消</el-button>
-          <el-button type="primary" @click="add()">确定</el-button>
-        </span>
-      </el-dialog>
+    </el-header> -->
+    <el-main>
+      <div class="page-container">
+        <!--工具栏-->
+        <el-row>
+          <el-col :span="12" align="right">
+            <el-tabs
+              v-model="isPub"
+              type="card"
+              @tab-click="getAllInstance"
+              class="mlef-20"
+            >
+              <el-tab-pane label="待审核" name="0"></el-tab-pane>
+              <el-tab-pane label="我的课程" name="1"></el-tab-pane>
+            </el-tabs>
+          </el-col>
+          <el-col :span="12">
+            <el-form :inline="true" :model="filters">
+              <el-form-item>
+                <el-input
+                  size="small"
+                  v-model="filters.name"
+                  placeholder="名称"
+                ></el-input>
+              </el-form-item>
 
-      <el-divider></el-divider>
+              <el-form-item>
+                <el-button size="mini" type="primary">查询</el-button>
+              </el-form-item>
 
-      <el-button
-        @click="changevisable"
-        type="primary"
-        v-if="hasKey('home:teacherCourse:add')"
-        >开设课程</el-button
-      >
-      <!-- <el-button @click="changeLogVisable()" type="info">课程实例记录</el-button> -->
-      <!-- 添加课程实例的弹框 -->
-      <add-course ref="addCourse"></add-course>
-      <!-- 添加课程实例的记录 -->
-      <addCourseCinstanceLog
-        ref="AddCourseCinstanceLog"
-      ></addCourseCinstanceLog>
-    </div>
-    <div>
-      <!-- <el-card class="box-card">
-                <div slot="header" class="clearfix">
-                    <span>即将开始课程</span>
-                    <el-button style="float: right; padding: 3px 0" type="text">删除课程</el-button>
-                </div>
-                <div v-for="o in 4" :key="o" class="text item">
-                    {{'课程 ' + o }}
-                </div>
-            </el-card>
+              <el-form-item>
+                <el-button
+                  size="mini"
+                  type="primary"
+                  @click="chandgeAddInstanceVisible"
+                  >新增</el-button
+                >
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </el-row>
 
-            
-            <el-card class="box-card">
-                <div slot="header" class="clearfix">
-                    <span>正在进行课程</span>
-                    <el-button style="float: right; padding: 3px 0" type="text">删除课程</el-button>
-                </div>
-                <div v-for="o in 4" :key="o" class="text item">
-                    {{'课程 ' + o }}
-                </div>
-            </el-card>
-
-            <el-card class="box-card" v-loading="loading">
-                <div slot="header" class="clearfix">
-                    <span>已完成课程</span>
-                    <el-button style="float: right; padding: 3px 0" type="text">删除课程</el-button>
-                </div>
-                <div v-for="course in courses" :key="course.id" class="text item">
-                    {{ course.name }} 
-                    <router-link :to="{path:'knowledge',query:{courseid:course.id,:course.name}}" append>图谱编辑</router-link>
-                    <router-link :to="'auditKnowledge'" append>图谱审核</router-link>
-                    <router-link :to="{name:'course',params:{'courseid':course.id}}" append>教学编辑</router-link>
-                    <router-link to="knowledge" append>题库编辑</router-link>
-                </div>
-            </el-card> -->
-
-      <el-card class="box-card" v-loading="loading">
-        <div slot="header" class="clearfix">
-          <span>课程实例</span>
-          <!-- <el-button style="float: right; padding: 3px 0" type="text">删除课程</el-button> -->
-        </div>
-        <div class="griddiv">
-          <!--  @click="toOtherPath('/course', course.id)" -->
-          <div
-            class="grid"
-            v-for="course in coursescistance"
-            :key="course.id"
-            @click="toOtherPath('/course', course.id)"
-          >
-            <!-- <p class="delete">删除</p> -->
-            <!-- <p class="status"> {{coursescistanceStatus(course.isPub)}}</p> -->
-            <img :src="course.image" alt="" />
-
-            <div class="gridtext">
-              <p>
-                {{ course.courseName }}
-                <!-- {{ coursescistanceStatus(course.isPub) }} -->
-              </p>
-              <!-- <router-link
-                :to="{
-                  path: 'knowledge',
-                  query: { courseid: course.courseId, coursename: course.name },
-                }"
-                append
-                >图谱编辑
-              </router-link>
-              <router-link
-                :to="{ name: 'course', query: { id: course.id } }"
-                append
-                >教学编辑
-              </router-link>
-              <router-link 
-              :to="{name: 'problemBank', query: {id: course.id} }" 
-              append
-              >题库编辑</router-link> -->
+        <el-card
+          class="box-card"
+          style="padding: 0"
+          :body-style="{ padding: '15px' }"
+          v-for="(item, index) in tableFliter"
+          :key="index"
+        >
+          <div class="card-header" align="center">
+            <div class="fl-left" style="width: 60%; padding-top: 5px">
+              <!-- <h3 class="clear-pm">{{ item.courseName }}</h3> -->
             </div>
           </div>
-          <!-- <div>1</div> -->
-        </div>
-        <!-- <div v-for="course in coursescistance" :key="course.id" class="text item">
-                    <img :src="course.courseImage" />
-                    {{ course. }} 
-                    <router-link :to="{path:'knowledge',query:{courseid:course.courseId,:course.name}}" append>图谱编辑</router-link>
-                    <router-link :to="'auditKnowledge'" append>图谱审核</router-link>
-                    <router-link :to="{name:'course',params:{'courseid':course.courseId}}" append>教学编辑</router-link>
-                    <router-link to="knowledge" append>题库编辑</router-link>
-                   {{coursescistanceStatus(course.isPub)}}
-                </div> -->
-      </el-card>
-      <!-- <el-card class="box-card" v-loading="loading">
-                <div slot="header" class="clearfix">
-                    <span>审核通过课程</span>
-                    <el-button style="float: right; padding: 3px 0" type="text">删除课程</el-button>
+
+          <div class="card-body">
+            <div style="width: 50%">
+              <el-image
+                :src="item.image"
+                fit="fill"
+                style="width: 250px; height: 180px"
+              >
+                <div slot="placeholder" class="image-slot">
+                  加载中<span class="dot">...</span>
                 </div>
-                <div v-for="course in courses" :key="course.id" class="text item">
-                    {{ course.name }} 
-                    <router-link :to="{path:'knowledge',query:{courseid:course.id,:course.name}}" append>图谱编辑</router-link>
-                    <router-link :to="'auditKnowledge'" append>图谱审核</router-link>
-                    <router-link :to="{name:'course',params:{'courseid':course.id}}" append>教学编辑</router-link>
-                    <router-link to="knowledge" append>题库编辑</router-link>
+              </el-image>
+            </div>
+            <div style="width: 80%" align="left">
+              <el-row >
+                <el-col :span="10">
+                  <el-row>
+                    <div class="details-lable">课程名称:</div>
+                  </el-row>
+                  <!-- <el-row>
+                    <div class="details-lable">课程简介:</div>
+                  </el-row> -->
+                  <el-row>
+                    <div class="details-lable">申请时间:</div>
+                  </el-row>
+                </el-col>
+
+                <el-col :span="14">
+                  <el-row>
+                    <div class="details-lable">{{ item.courseName }}</div>
+                  </el-row>
+                  <!-- <el-row>
+                    <div class="details-lable">{{ item.intro }}</div>
+                  </el-row> -->
+                  <el-row>
+                    <div class="time">"{{ time(item.createTime) }}"</div>
+                  </el-row>
+                </el-col>
+              </el-row>
+            </div>
+
+            <div class="card-footer">
+              <div style="float: right; padding: 3px 0" type="text">
+                <el-button
+                  v-show="isPub == 0 "
+                  size="mini"
+                  type="primary"
+                  @click="chandgeEditInstanceVisible(item)"
+                >编辑</el-button>
+                <el-button
+                  v-show="isPub == 1"
+                  size="mini"
+                  type="primary"
+                  @click="handleInto(item)"
+                >进入课程</el-button>
+                <el-button
+                  v-show="isPub == 0"
+                  size="mini"
+                  type="danger"
+                  @click="handleDelete(item)"
+                >删除</el-button>
+        
+              </div>
+            </div>
+          </div>
+
+        </el-card>
+      </div>
+
+      <!-- 编辑课程实例-->
+      <el-dialog
+        title="编辑课程实例"
+        width="60%"
+        :visible.sync="editInstanceDialogVisible"
+        :close-on-click-modal="false"
+        destroy-on-close
+      >
+        <el-form
+          ref="editInstanceForm"
+          :model="editInstanceForm"
+          :rules="addInstanceRules"
+        >
+          <div>
+            <el-row type="flex" justify="center">
+              <el-col :span="5">
+                <div>
+                  <el-upload
+                    class="avatar-uploader"
+                    :action="uploadimgurl"
+                    :show-file-list="false"
+                    :on-success="handleImageSuccess"
+                    name="image"
+                    with-credentials
+                    :before-upload="beforeImageUpload"
+                  >
+                    <img
+                      v-if="editInstanceForm.image"
+                      :src="editInstanceForm.image"
+                      style="max-width: 100px"
+                      class="avatar"
+                    />
+                    <i
+                      v-else
+                      class="el-icon-plus avatar-uploader-icon"
+                      style="
+                        min-width: 100px;
+                        border: 1px solid #ccc;
+                        min-height: 100px;
+                        line-height: 100px;
+                      "
+                    ></i>
+                  </el-upload>
                 </div>
-            </el-card> -->
-    </div>
-    <router-view class="kid"></router-view>
-  </div>
+              </el-col>
+
+              <el-col :span="9">
+                <el-form-item label="课程名称" label-width="70px">
+                  <el-row type="flex">
+                    <el-select
+                      disabled
+                      style="width: 205px"
+                      size="small"
+                      v-model="editInstanceForm.courseId"
+                      placeholder="请选择"
+                    >
+                      <el-option
+                        v-for="item in allCourse"
+                        :key="item.value"
+                        :label="item.value"
+                        :value="item.id"
+                      >
+                      </el-option>
+                    </el-select>
+                    
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item label="开始时间" label-width="70px">
+                  <el-row type="flex">
+                    <el-date-picker
+                      disabled
+                      style="width: 205px"
+                      size="small"
+                      align="left"
+                      v-model="editInstanceForm.startYear"
+                      type="date"
+                      placeholder="选择日期"
+                      :picker-options="pickerOptions"
+                    >
+                    </el-date-picker>
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item label="结束时间" label-width="70px">
+                  <el-row type="flex">
+                    <el-date-picker
+                      disabled
+                      style="width: 205px"
+                      size="small"
+                      align="left"
+                      v-model="editInstanceForm.endYear"
+                      type="date"
+                      placeholder="选择日期"
+                      :picker-options="pickerOptions"
+                    >
+                    </el-date-picker>
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item label="主讲人" label-width="70px">
+                  <el-row type="flex">
+                    <el-input
+                      style="width: 205px"
+                      size="small"
+                      v-model="editInstanceForm.lecturer"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item label="课程简介" label-width="70px">
+                  <el-row type="flex">
+                    <el-input
+                      style="width: 205px"
+                      size="small"
+                      type="textarea"
+                      :rows="6"
+                      v-model="editInstanceForm.intro"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+              </el-col>
+
+              <el-col :span="10">
+                <!-- <el-form-item  label-width="70px">
+                  <el-row type="flex">
+                    <el-button type="text" @click="chandgeAddCourseVisible"
+                      >没有想要的课程？请点击</el-button
+                    >
+                  </el-row>
+                </el-form-item>  -->
+
+                <el-form-item label="教学类型" label-width="70px">
+                  <el-row type="flex">
+                    <el-select
+                      size="small"
+                      v-model="editInstanceForm.teachingTypeId"
+                      placeholder="请选择"
+                    >
+                      <el-option
+                        v-for="item in allTeachingType"
+                        :key="item.value"
+                        :label="item.value"
+                        :value="item.id"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item label="学期" label-width="70px">
+                  <el-row type="flex">
+                    <div>
+                      <el-select
+                        disabled
+                        size="small"
+                        v-model="editInstanceForm.semester"
+                        placeholder="请选择"
+                      >
+                        <el-option
+                          v-for="item in semesterOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item
+                  label="周学时"
+                  prop="hoursOfWeek"
+                  label-width="70px"
+                >
+                  <el-row type="flex">
+                    <el-input
+                      style="width: 205px"
+                      size="small"
+                      v-model="editInstanceForm.hoursOfWeek"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item label="学分" prop="grade" label-width="70px">
+                  <el-row type="flex">
+                    <el-input
+                      style="width: 205px"
+                      size="small"
+                      v-model="editInstanceForm.grade"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item label="需要编程" label-width="70px">
+                  <el-row type="flex">
+                    <div>
+                      <el-select
+                        size="small"
+                        v-model="editInstanceForm.isProgram"
+                        placeholder="请选择"
+                        @change="handleSelectIsProgram"
+                      >
+                        <el-option
+                          v-for="item in programOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item label="编程语言" label-width="70px">
+                  <el-row type="flex">
+                    <div>
+                      <el-select
+                       :disabled="program"
+                        multiple
+                        size="small"
+                        v-model="langlist"
+                        @change="handleSelectLanguage"
+                        placeholder="请选择"
+                        clearable
+                      >
+                        <el-option
+                          v-for="item in allLanguage"
+                          :key="item.value"
+                          :label="item.value"
+                          :value="item.id"
+                        >
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </el-row>
+                </el-form-item>
+
+
+
+              </el-col>
+            </el-row>
+
+            <div>
+              <el-row type="flex" align="bottom" justify="end">
+                <el-button size="mini" @click="closeEditInstanceForm"
+                  >返回
+                </el-button>
+                <el-button type="primary" size="mini" @click="submitEditInstance"
+                  >确定</el-button
+                >
+              </el-row>
+            </div>
+          </div>
+        </el-form>
+      </el-dialog>
+
+
+
+
+
+
+
+      <!-- 增加课程实例-->
+      <el-dialog
+        title="新建课程实例"
+        width="60%"
+        :visible.sync="addInstanceDialogVisible"
+        :close-on-click-modal="false"
+        destroy-on-close
+      >
+        <el-form
+          ref="addInstanceInform"
+          :model="addInstanceInform"
+          :rules="addInstanceRules"
+        >
+          <div>
+            <el-row type="flex" justify="center">
+              <el-col :span="5">
+                <div>
+                  <el-upload
+                    class="avatar-uploader"
+                    :action="uploadimgurl"
+                    :show-file-list="false"
+                    :on-success="handleImageSuccess"
+                    name="image"
+                    with-credentials
+                    :before-upload="beforeImageUpload"
+                  >
+                    <img
+                      v-if="addInstanceInform.image"
+                      :src="addInstanceInform.image"
+                      style="max-width: 100px"
+                      class="avatar"
+                    />
+                    <i
+                      v-else
+                      class="el-icon-plus avatar-uploader-icon"
+                      style="
+                        min-width: 100px;
+                        border: 1px solid #ccc;
+                        min-height: 100px;
+                        line-height: 100px;
+                      "
+                    ></i>
+                  </el-upload>
+                </div>
+              </el-col>
+
+              <el-col :span="9">
+                <el-form-item label="课程名称" label-width="70px">
+                  <el-row type="flex">
+                    <el-select
+                      style="width: 205px"
+                      size="small"
+                      v-model="addInstanceInform.courseId"
+                      placeholder="请选择"
+                    >
+                      <el-option
+                        v-for="item in allCourse"
+                        :key="item.value"
+                        :label="item.value"
+                        :value="item.id"
+                      >
+                      </el-option>
+                    </el-select>
+                    <el-tooltip
+                      class="item"
+                      effect="dark"
+                      content="没有想要的课程？请点击"
+                      placement="right-start"
+                    >
+                      <el-button
+                        icon="el-icon-question"
+                        type="text"
+                        @click="chandgeAddCourseVisible"
+                      ></el-button>
+                    </el-tooltip>
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item label="开始时间" label-width="70px">
+                  <el-row type="flex">
+                    <el-date-picker
+                      style="width: 205px"
+                      size="small"
+                      align="left"
+                      v-model="addInstanceInform.startYear"
+                      type="date"
+                      placeholder="选择日期"
+                      :picker-options="pickerOptions"
+                    >
+                    </el-date-picker>
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item label="结束时间" label-width="70px">
+                  <el-row type="flex">
+                    <el-date-picker
+                      style="width: 205px"
+                      size="small"
+                      align="left"
+                      v-model="addInstanceInform.endYear"
+                      type="date"
+                      placeholder="选择日期"
+                      :picker-options="pickerOptions"
+                    >
+                    </el-date-picker>
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item label="主讲人" label-width="70px">
+                  <el-row type="flex">
+                    <el-input
+                      style="width: 205px"
+                      size="small"
+                      v-model="addInstanceInform.lecturer"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item label="课程简介" label-width="70px">
+                  <el-row type="flex">
+                    <el-input
+                      style="width: 205px"
+                      size="small"
+                      type="textarea"
+                      :rows="5"
+                      v-model="addInstanceInform.intro"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+              </el-col>
+
+              <el-col :span="10">
+                <!-- <el-form-item  label-width="70px">
+                  <el-row type="flex">
+                    <el-button type="text" @click="chandgeAddCourseVisible"
+                      >没有想要的课程？请点击</el-button
+                    >
+                  </el-row>
+                </el-form-item>  -->
+
+                <el-form-item label="教学类型" label-width="70px">
+                  <el-row type="flex">
+                    <el-select
+                      size="small"
+                      v-model="addInstanceInform.teachingTypeId"
+                      placeholder="请选择"
+                    >
+                      <el-option
+                        v-for="item in allTeachingType"
+                        :key="item.value"
+                        :label="item.value"
+                        :value="item.id"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item label="学期" label-width="70px">
+                  <el-row type="flex">
+                    <div>
+                      <el-select
+                        size="small"
+                        v-model="addInstanceInform.semester"
+                        placeholder="请选择"
+                      >
+                        <el-option
+                          v-for="item in semesterOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item
+                  label="周学时"
+                  prop="hoursOfWeek"
+                  label-width="70px"
+                >
+                  <el-row type="flex">
+                    <el-input
+                      style="width: 205px"
+                      size="small"
+                      v-model="addInstanceInform.hoursOfWeek"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item label="学分" prop="grade" label-width="70px">
+                  <el-row type="flex">
+                    <el-input
+                      style="width: 205px"
+                      size="small"
+                      v-model="addInstanceInform.grade"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item label="需要编程" label-width="70px">
+                  <el-row type="flex">
+                    <div>
+                      <el-select
+                        size="small"
+                        v-model="addInstanceInform.isProgram"
+                        placeholder="请选择"
+                        @change="handleSelectIsProgram"
+                      >
+                        <el-option
+                          v-for="item in programOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </el-row>
+                </el-form-item>
+
+                <el-form-item label="编程语言" label-width="70px">
+                  <el-row type="flex">
+                    <div>
+                      <el-select
+                       :disabled="program"
+                        multiple
+                        size="small"
+                        v-model="langlist"
+                        @change="handleSelectLanguage"
+                        placeholder="请选择"
+                        clearable
+                      >
+                        <el-option
+                          v-for="item in allLanguage"
+                          :key="item.value"
+                          :label="item.value"
+                          :value="item.id"
+                        >
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </el-row>
+                </el-form-item>
+
+
+
+              </el-col>
+            </el-row>
+
+            <div>
+              <el-row type="flex" align="bottom" justify="end">
+                <el-button size="mini" @click="closeAddInstanceVisible"
+                  >返回
+                </el-button>
+                <el-button type="primary" size="mini" @click="submitAddInstance"
+                  >确定</el-button
+                >
+              </el-row>
+            </div>
+          </div>
+        </el-form>
+      </el-dialog>
+
+      <!-- 增加课程-->
+      <el-dialog
+        title="申请新课程"
+        width="60%"
+        :visible.sync="addCourseDialogVisible"
+        :close-on-click-modal="false"
+        destroy-on-close
+      >
+        <el-form ref="courseForm" v-model="addCourseInform">
+          <el-row type="flex" align="middle" justify="center">
+            <el-col :span="12">
+              <!-- <el-form-item label="" label-width="80px">
+                {{viewForm.name}}
+            </el-form-item> -->
+              <el-form-item label="课程名称" label-width="80px">
+                <el-input
+                  style="width:205px"
+                  size="small"
+                  v-model="addCourseInform.name"
+                  placeholder="请输入内容"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="课程层次" label-width="80px">
+                <el-select
+                  size="small"
+                  v-model="addCourseInform.level"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in allLevel"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.id"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="课程方向" label-width="80px">
+                <el-select
+                  size="small"
+                  v-model="addCourseInform.type1Id"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in allDirection"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.id"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="课程要求" label-width="80px">
+                <el-select
+                  size="small"
+                  v-model="addCourseInform.type2Id"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in ALLRequirement"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.id"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <div>
+            <el-row type="flex" align="bottom" justify="end">
+              <el-button size="mini" @click="chandgeAddCourseVisible"
+                >返回
+              </el-button>
+              <el-button type="primary" size="mini" @click="submitAddCourse"
+                >确定</el-button
+              >
+            </el-row>
+          </div>
+        </el-form>
+      </el-dialog>
+    </el-main>
+  </el-container>
 </template>
 <script>
-import addCourse from "./AddCourseCinstance.vue"; //添加课程实例
-import AddCourseCinstanceLog from "./AddCourseCinstanceLog.vue"; //添加课程实例的记录
+import { time, isInterger, isEmail } from "@/utils/global-functions";
+import { baseUrl } from "@/utils/global";
+
 export default {
-  components: { addCourse, AddCourseCinstanceLog },
   data() {
     return {
-      course: {
-        name: null,
-        type1Id: null, //课程类型
-        type2Id: null, //选课类型
-        level: null, //课程层次
-        teacherNo: null,
+      isPub: "1",
+      // 课程实例数据
+      allIstance: [],
+      tableData: [],
+      filters: {
+        name: "",
       },
-      type1: null,
-      type2: null,
-      level: null,
-      courses: [
-        // {
-        //     id: 1,
-        //     code: null,
-        //     name: "C语言程序设计",
-        //     type1Id: null,
-        //     type2Id: null,
-        //     level: null,
-        //     kid: null,
-        // }
+      uploadimgurl: "",
+      // 课程数据
+      allCourse: [],
+      allLevel: [],
+      allDirection: [],
+      ALLRequirement: [],
+      allTeachingType: [],
+      allLanguage: [],
+      // 新增课程表单
+      addCourseInform: [],
+      addCourseDialogVisible: false,
+      // 新增课程实例表单
+      addInstanceDialogVisible: false,
+      addInstanceInform: {
+        image: null,
+      },
+      semesterOptions: [
+        {
+          value: 1,
+          label: "第一学期",
+        },
+        {
+          value: 2,
+          label: "第二学期",
+        },
       ],
-      //cinstancepub0:[], //待审核课程实例
-      //cinstancepub1:[], //审核通过课程实例
-      formLabelWidth: "80px",
-      adddialogVisible: false,
-      coursescistance: [],
-      loading: true,
-      isshow: false,
-      allCourseInfo: [], //所有课程信息
-      hight: 150,
-      // courseProblemTypeList: [],
+      programOptions: [
+        {
+          value: 1,
+          label: "是",
+        },
+        {
+          value: 0,
+          label: "否",
+        },
+      ],
+      langlist: [],
+      langlistCheck: [],
+      program: false,
+      cinstanceLanguage: [],
+      // 时间选择器
+      pickerOptions: {
+      },
+      addInstanceRules: {
+        hoursOfWeek: [{ validator: this.checkHoursOfWeek, trigger: "blur" }],
+        grade: [{ validator: this.checkGrade, trigger: "blur" }],
+      },
+      // 编辑课程实例
+      editInstanceDialogVisible: false,
+      editInstanceForm:{
+
+      },
+      editInstanceRules: {
+
+      },
+      
+
+
     };
   },
+
   computed: {
+    tableFliter() {
+      return this.tableData.filter((item) => {
+        return (
+          String(item.courseName).toLowerCase().indexOf(this.filters.name) > -1
+        );
+      });
+    },
     userinfo() {
       return this.$store.state.user.userInfo;
     },
   },
+
   mounted() {
-    this.getcoursescinstance();
+    this.getAllInstance();
     this.getAllCourse();
-    // this.getcourses();
+    this.findAllLevel();
+    this.findAllDirection();
+    this.findAllRequirement();
+    this.findAllTeachingType();
+    this.findAllLanguage();
+    this.uploadimgurl = `${baseUrl}/OssUpload/image`;
   },
   methods: {
     //自增序列
     indexMethod(index) {
       return index + 1;
     },
-    //课程实例审核状态
-    coursescistanceStatus(ispub) {
-      if (ispub === -1) {
-        return "未通过";
-      }
-      if (ispub === 0) return "待审核";
-      if (ispub === 1) return "已通过";
+    //获取所有课程实例
+    getAllInstance() {
+      console.log(this.isPub);
+      this.loading = true;
+      this.$api.course.cinstance
+        .findAllCourseInstance({ isPub: this.isPub })
+        .then((res) => {
+          console.log(res.data);
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.tableData = [];
+        });
     },
     //获取所有课程
     getAllCourse() {
+      let suggests = [];
       this.$api.course.course.findAllCourse().then((res) => {
-        let result = res.data;
         for (let index = 0; index < res.data.length; index++) {
-          result[index].createTime = this.dateTimeFormate(
-            new Date(res.data[index].createTime)
-          );
-        }
-        this.allCourseInfo = result;
-      });
-    },
-    //获取所有课程实例
-    getcoursescinstance() {
-      this.loading = true;
-      this.$api.course.cinstance
-        .findAllCourseInstance({ teacherNo: this.userinfo.id })
-        .then((res) => {
-          this.coursescistance = res.data;
-          this.loading = false;
-        })
-        .catch((err) => {
-          this.loading = false;
-          this.coursescistance = [];
-        });
-    },
-    //鼠标移入时显示
-    showHide() {
-      this.isshow = true;
-    },
-    //鼠标移出时隐藏
-    hideHide() {
-      // this.isshow = false
-    },
-    //添加课程
-    add() {
-      switch (this.type1) {
-        case "数学类":
-          this.course.type1Id = 1;
-          break;
-        case "算法类":
-          this.course.type1Id = 2;
-          break;
-        case "程序设计类":
-          this.course.type1Id = 3;
-          break;
-        case "人工智能类":
-          this.course.type1Id = 4;
-          break;
-      }
-      switch (this.type2) {
-        case "必修课":
-          this.course.type2Id = 1;
-          break;
-        case "选修课":
-          this.course.type2Id = 2;
-          break;
-        case "限选课":
-          this.course.type2Id = 3;
-          break;
-      }
-      switch (this.level) {
-        case "幼儿园":
-          this.course.level = 1;
-          break;
-        case "小学":
-          this.course.level = 2;
-          break;
-        case "初中":
-          this.course.level = 3;
-          break;
-        case "高中":
-          this.course.level = 4;
-          break;
-        case "专科":
-          this.course.level = 5;
-          break;
-        case "本科":
-          this.course.level = 6;
-          break;
-        case "硕士研究生":
-          this.course.level = 7;
-          break;
-        case "博士研究生":
-          this.course.level = 8;
-          break;
-      }
-      console.log(this.course);
-      this.course.teacherNo = this.userinfo.userNo;
-      for (let key in this.course) {
-        if (this.course[key] == null) {
-          this.warnMsg("请填写完整!");
-          return;
-        }
-      }
-      console.log(this.course);
-      this.$api.course.course
-        .add(this.course)
-        .then((res) => {
-          console.log("添加成功");
-          this.$message({
-            message: "添加成功",
-            type: "success",
+          suggests.push({
+            value: res.data[index].name,
+            id: res.data[index].id,
           });
-        })
-        .catch((err) => {
-          this.$message.error("添加失败");
-        });
-    },
-    //改变添加课程shili 的弹框显示 调用子组件
-    changevisable() {
-      this.$refs.addCourse.changevisable();
-    },
-    //改变添加课程实例记录的弹框显示
-    changeLogVisable() {
-      this.$refs.AddCourseCinstanceLog.handleClosecinstanceLogdia();
-    },
-    visable() {
-      this.adddialogVisible = !this.adddialogVisible;
-    },
-    toOtherPath(path, id) {
-      // this.$api.course.courseProblemType.findCourseProblemType(id).then((res1) => {
-      //   this.$store.commit("setcourseProblemTypeList", res1.data);
-      // })
-      this.$router.push({
-        path: path,
-        query: {
-          id: id,
-        },
+        }
+        // console.log(suggests);
+        this.allCourse = suggests;
       });
     },
-  },
+    handleCourseSelect(item) {
+      this.addInstanceInform.course = item;
+      console.log(item);
+    },
+    // 课程实例
+    chandgeAddInstanceVisible() {
+      // this.addInstanceInform = {
+      //   avatar: null,
+      // };
+      this.addInstanceDialogVisible = !this.addInstanceDialogVisible;
+    },
+    // 关闭表单 清空表单项
+    closeAddInstanceVisible() {
+      this.addInstanceInform = {
+        image: null,
+      };
+      this.program = false;
+      this.addInstanceDialogVisible = !this.addInstanceDialogVisible;
+    },
+    // 封面上传
+    beforeImageUpload(file) {
+      // const isJPG = file.type === 'image/jpeg';
+      const isJPG = true;
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      // if (!isJPG) {
+      //   this.$message.error('上传头像图片只能是 JPG 格式!');
+      // }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    },
+    handleImageSuccess(res, file) {
+      // this.addInstanceInform.avatar = URL.createObjectURL(file.raw);
+      console.log("上传成功的回调", res);
+      this.addInstanceInform.image = res.data;
+      console.log(this.addInstanceInform.image);
+    },
+    findAllTeachingType() {
+      let suggests = [];
+      this.$api.metadata.type.findAll().then((res) => {
+        for (let index = 0; index < res.data.length; index++) {
+          suggests.push({
+            value: res.data[index].name,
+            id: res.data[index].id,
+          });
+        }
+        // console.log(suggests);
+        this.allTeachingType = suggests;
+      });
+    },
+    checkHoursOfWeek(rule, value, callback) {
+      // console.log(value);
+      if (!value) {
+        callback();
+      } 
+      if (this.isInterger(value) && value > 0 ) {
+          callback();
+      }
+      return callback(new Error("请输入大于0的整数"));
+    },
+
+    checkGrade(rule, value, callback) {
+      // console.log(value);
+      if (!value) {
+        callback();
+      } 
+      if (value%0.5 ==0 && value > 0) {
+          callback(); 
+      }
+      return callback(new Error("请输入0.5的倍数"));
+    },
+
+    submitAddInstance() {
+      this.$confirm("确认提交吗？", "提示", {}).then(() => {
+        this.editLoading = true;
+        let params = Object.assign({}, this.addInstanceInform);
+        this.$api.course.cinstance.add(params).then((res) => {
+          this.editLoading = false;
+          if (res.code == 200) {
+            console.log(res.data);
+            let cid = res.data;
+            this.sumbmitLanguage(cid);
+            this.$message({
+              message: "申请成功,等待审核中···",
+              type: "success",
+            });
+            this.chandgeAddInstanceVisible();
+            this.addCourseInform = [];
+            this.getAllInstance();
+          } else {
+            this.$message({
+              message: "操作失败, " + res.msg,
+              type: "error",
+            });
+          }
+        });
+      });
+    },
+
+    // 增加课程
+    chandgeAddCourseVisible() {
+      this.addCourseDialogVisible = !this.addCourseDialogVisible;
+    },
+    submitAddCourse() {
+      this.$confirm("确认提交吗？", "提示", {}).then(() => {
+        this.editLoading = true;
+        let params = Object.assign({}, this.addCourseInform);
+        this.$api.course.course.add(params).then((res) => {
+          this.editLoading = false;
+          if (res.code == 200) {
+            this.$message({
+              message: "申请成功,等待审核中···",
+              type: "success",
+            });
+            this.chandgeAddCourseVisible();
+            this.closeAddInstanceVisible();
+          } else {
+            this.$message({
+              message: "操作失败, " + res.msg,
+              type: "error",
+            });
+          }
+        });
+      });
+    },
+    // 课程层次 本科等
+    findAllLevel() {
+      let suggests = [];
+      this.$api.metadata.level.findAll().then((res) => {
+        for (let index = 0; index < res.data.length; index++) {
+          suggests.push({
+            value: res.data[index].name,
+            id: res.data[index].id,
+          });
+        }
+        console.log(suggests);
+        this.allLevel = suggests;
+      });
+    },
+    // 课程方向 人工智能等
+    findAllDirection() {
+      let suggests = [];
+      this.$api.metadata.direction.findAll().then((res) => {
+        for (let index = 0; index < res.data.length; index++) {
+          suggests.push({
+            value: res.data[index].name,
+            id: res.data[index].id,
+          });
+        }
+        // console.log(suggests);
+        this.allDirection = suggests;
+      });
+    },
+    // 课程要求（必修等）
+    findAllRequirement() {
+      let suggests = [];
+      this.$api.metadata.require.findAll().then((res) => {
+        for (let index = 0; index < res.data.length; index++) {
+          suggests.push({
+            value: res.data[index].name,
+            id: res.data[index].id,
+          });
+        }
+        // console.log(suggests);
+        this.ALLRequirement = suggests;
+      });
+    },
+    findAllLanguage() {
+      console.log("in");
+      let suggests = [];
+      this.$api.course.language.findAllLanguage().then((res) => {
+        for (let index = 0; index < res.data.length; index++) {
+          suggests.push({
+            value: res.data[index].name,
+            id: res.data[index].id,
+          });
+        }
+        // console.log(suggests);
+        this.allLanguage = suggests;
+      });
+    },
+
+    handleSelectIsProgram(item) {
+      // console.log(this.addInstanceInform.isProgram);
+      console.log(item);
+      if(item == "1") {
+        this.program = false;
+      } else {
+        this.program = true;
+      }
+    },
+    handleSelectLanguage(value) {
+      console.log(value);
+      this.langlist = value;
+      // console.log(this.langlist);
+      
+    },
+    // 回显用
+    findLanguageByCid(cid){
+      this.$api.course.language.findCinstanceLanguage({cid: cid}).then((res) => {
+      let data = res.data
+      let list = [];
+      for (let index = 0; index < data.length; index++) {
+                list.push(data[index].id)
+      };
+      // console.log(list);
+      this.langlist = list;
+      })
+    },
+    sumbmitLanguage(cid) {
+      let list = [];
+      for (let index = 0; index < this.langlist.length; index++) {
+                list.push({cinstanceId: cid, languageId: this.langlist[index]})
+      };
+      console.log(list);
+      this.$api.course.language.addCinstanceLanguage(list).then((res) => {
+      })
+    
+    },
+    // 删除未审核的课程实例
+    handleDelete(item) {
+      this.$confirm("确认删除吗？", "提示", {}).then(() => {
+        this.editLoading = true;
+        this.$api.course.cinstance.del({id:item.id}).then((res) => {
+          this.editLoading = false;
+          if (res.code == 200) {
+            this.$message({
+              message: "删除成功",
+              type: "success",
+            });
+            this.getAllInstance();
+          } else {
+            this.$message({
+              message: "操作失败, " + res.msg,
+              type: "error",
+            });
+          }
+        });
+      });
+
+    },
+
+    // 编辑课程实例
+    chandgeEditInstanceVisible(item) {
+      // console.log(item.id);
+      this.findLanguageByCid(item.id);
+      this.editInstanceForm = JSON.parse(JSON.stringify(item));
+      this.editInstanceDialogVisible = true;
+    },
+    closeEditInstanceForm() {
+      this.editInstanceForm = {};
+      this.langlist = [];
+      this.editInstanceDialogVisible = false;
+    },
+
+    submitEditInstance() {
+      this.$confirm("确认提交吗？", "提示", {}).then(() => {
+        this.editLoading = true;
+        let params = Object.assign({}, this.editInstanceForm);
+        this.$api.course.cinstance.updateInstance(params).then((res) => {
+          this.editLoading = false;
+          this.sumbmitLanguage(this.editInstanceForm.id);
+          if (res.code == 200) {
+            this.$message({
+              message: "修改成功",
+              type: "success",
+            });
+            this.getAllInstance();
+            this.closeEditInstanceForm();
+          } else {
+            this.$message({
+              message: "修改失败, " + res.msg,
+              type: "error",
+            });
+          }
+        });
+      });
+
+      
+    },
+
+
+  }
 };
 </script>
 <style >
-
 .box-card {
-  margin-top: 10px;
-  text-align: left;
-  background-color: #f7f7f7;
-}
-.parent {
-  position: relative;
-  text-align: left;
-  padding-top: 20px;
-}
-.kid {
-  position: absolute;
-  top: 20px;
-  min-height: 100%;
-  width: 100%;
-  background-color: #fff;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  margin-bottom: 5vh;
-}
-.griddiv {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 200px);
-  grid-template-rows: repeat(auto-fill, 200px);
-  grid-row-gap: 30px; /* 行间距 */
-  grid-column-gap: 50px; /* 列间距 */
-}
-.grid {
-  position: relative;
-  min-height: 200px;
-  min-width: 250px;
-  border: 15px solid #f3f4f6;
-  /* box-shadow: 5px 5px 16px 0 rgba(0,0,0,0.2); */
-  overflow: hidden;
-  transition: all ease-in 1s;
-}
-.grid:hover {
-  /* box-shadow: 15px 10px 16px 0 rgba(0,0,0,0.3); */
-  box-shadow: 5px 4px 16px 0 rgba(0, 0, 0, 0.12);
-  cursor: pointer;
-}
-.grid .delete {
-  font-weight: 700;
-  cursor: pointer;
-  top: 4px;
-  left: 4px;
-  position: absolute;
-  display: none;
-}
-.grid .status {
-  font-weight: 700;
-  /* cursor: pointer; */
-  top: 4px;
-  right: 4px;
-  position: absolute;
-}
-.grid img {
-  z-index: 1;
-  width: 100%;
+  width: 300px;
   height: 100%;
+  margin-right: 50px;
+  margin-bottom: 30px;
+  border-radius: 4px;
+  float: left;
 }
-.gridtext {
-  position: absolute;
-  /* z-index:2; */
+
+.card-header {
+  padding: 5px;
+  overflow: hidden;
+}
+
+.card-body {
   width: 100%;
-  bottom: 0;
-  /* padding: 5px; */
-  background-color: rgba(255, 255, 255, 0.473);
-  padding: 5px 0;
-  font-weight: 500;
-  color: rgb(255, 255, 255);
-  text-align: center;
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  overflow: hidden;
 }
-.gridtext a {
-  color: #000;
-  font-size: 0.9em;
-  font-weight: 700;
-  font-family: "宋体", "Times New Roman", Times, serif;
+
+.card-footer {
+  padding: 0px;
+  overflow: hidden;
+  float: right;
 }
-.grid:hover .delete {
-  display: block;
+/* .el-input {
+  width: 100%;
+} */
+.el-input-text {
+  width: 65%;
+}
+
+.details-lable {
+  font-style: normal;
+  color: #3d3838;
+  font: bolder;
+  margin: 2px;
+  height: 20px;
+}
+.details-content {
+  font-style: normal;
+  color: #000000;
+  margin: 2px;
+}
+
+.time {
+  font-style: normal;
+  font: bolder;
+  margin: 2px;
+  /* font-size: 13px; */
+  color: #999;
 }
 </style>
