@@ -1,11 +1,14 @@
 <template>
   <div class="homediv" style="display: flex; height: 100vh">
     <el-container>
+
       <el-header>
         程序设计智慧教学平台
         <span></span>
       </el-header>
+
       <el-container>
+        
         <el-aside class="aside" width="10%">
           <ul>
 
@@ -51,6 +54,7 @@
             </router-link>
           </ul>
         </el-aside>
+
         <el-main class="main">
           <!-- <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item
@@ -60,9 +64,13 @@
               >{{ item.name | routeToName }}</el-breadcrumb-item
             >
           </el-breadcrumb> -->
+
+
+
           <router-view></router-view>
         </el-main>
       </el-container>
+
       <footer class="footer">
         <p>©2020-2021 | 赣南师范大学 大数据与计算智能研究组</p>
       </footer>
@@ -91,10 +99,9 @@ export default {
       }
     }
 
-    console.log(this.hasKey("home:selfcenter:view"));
-    console.log(this.hasMenu("/home"));
-
-    console.log(this.$store.state.user.userInfo);
+    // console.log(this.hasKey("home:selfcenter:view"));
+    // console.log(this.hasMenu("/home"));
+    // console.log(this.$store.state.user.userInfo);
   },
   computed: {
     userinfo() {

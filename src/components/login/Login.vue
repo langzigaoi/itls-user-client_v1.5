@@ -143,7 +143,10 @@ export default {
         }
         this.$store.commit("recoverUserData", data);
         localStorage.setItem("uInfo", JSON.stringify(res.data));
-        this.$router.push("/home");
+        if(res.data.principal.identity == 1) {
+          this.$router.push("/home/studentselfcenter");
+        }
+        this.$router.push("/home/teacherselfcenter");
       });
     },
     _isMobile() {
