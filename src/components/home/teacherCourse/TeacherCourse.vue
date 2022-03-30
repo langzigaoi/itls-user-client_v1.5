@@ -369,8 +369,6 @@
                   </el-row>
                 </el-form-item>
 
-
-
               </el-col>
             </el-row>
 
@@ -387,11 +385,6 @@
           </div>
         </el-form>
       </el-dialog>
-
-
-
-
-
 
 
       <!-- 增加课程实例-->
@@ -1160,8 +1153,19 @@ export default {
           }
         });
       });
+    },
 
-      
+    handleInto(item) {
+      console.log(item);
+      let path = "/course"
+      let id = item.id
+      this.$router.push({
+        path: path,
+        query: {
+          id: id
+        }
+      })
+
     },
 
 

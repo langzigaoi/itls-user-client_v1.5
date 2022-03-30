@@ -44,6 +44,7 @@ ul {
     } */
 .container{
   max-width: 98%;
+  height: 90%;
   margin:0 auto;
   padding:20px 10px;
   text-align: left;

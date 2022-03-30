@@ -30,12 +30,27 @@ const routes = [
     component: () => import('@/components/login/Login'),
   },
 
+  // 教师教授课程、学生教师个人中心等
   {
     path: '/home',
     name: 'Home',
     component: () => import('@/components/home/Home'),
     // redirect: '/home/',
     children: [
+      // 教师个人中心
+      {
+        path: 'teacherselfcenter',
+        name: 'TeacherSelfCenter',
+        component: () => import('@/components/home/selfCenter/TeacherSelfCenter'),
+      },
+      // 学生个人中心
+      {
+        path: 'studentselfcenter',
+        name: 'StudentSelfCenter',
+        component: () => import('@/components/home/selfCenter/StudentSelfCenter'),
+      },
+
+      // 教师教授课程页面（课程实例列表、添加课程实例、编辑课程实例、添加课程等）
       {
         path: 'teacherCourse',
         name: 'TeacherCourse',
@@ -48,19 +63,7 @@ const routes = [
           }
         ]
       },
-
-      {
-        path: 'teacherselfcenter',
-        name: 'TeacherSelfCenter',
-        component: () => import('@/components/home/selfCenter/TeacherSelfCenter'),
-      },
-      {
-        path: 'studentselfcenter',
-        name: 'StudentSelfCenter',
-        component: () => import('@/components/home/selfCenter/StudentSelfCenter'),
-      },
-
-      
+      // 学生 学习课程页面（课程实例列表、选课等）
       {
         path: 'studentCourse',
         name: 'StudentCourse',
@@ -96,6 +99,8 @@ const routes = [
     ]
   },
 
+  
+  // 教师 课程实例内的内容
   {
     path: '/course',
     name: 'course',
@@ -425,6 +430,8 @@ const routes = [
       }
     ]
   },
+
+  // 学生 课程实例内容
   {
     path: '/studycourse',
     name: 'studycourse',

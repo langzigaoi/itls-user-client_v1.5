@@ -49,7 +49,7 @@
             
             <router-link to="/">
               <li>
-                <i class="el-icon-bicycle">退出</i>
+                <i class="el-icon-back">退出</i>
               </li>
             </router-link>
           </ul>
@@ -72,7 +72,7 @@
       </el-container>
 
       <footer class="footer">
-        <p>©2020-2021 | 赣南师范大学 大数据与计算智能研究组</p>
+        <p>©2020-2022 | 赣南师范大学 大数据与计算智能研究组</p>
       </footer>
     </el-container>
   </div>

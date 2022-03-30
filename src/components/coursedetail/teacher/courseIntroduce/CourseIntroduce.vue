@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div >
         <!-- 课程介绍{{this.$store.state.courseCinstanceId}}{{this.$store.state.user.userInfoinfo}} -->
         <!-- {{courseInstance}} -->
         <!-- 编辑 -->
@@ -353,7 +353,6 @@ export default {
     background: #fff;
     padding:15px;
     border-radius: 5px;
-    margin-bottom: 40px;
     font-size: 15px;
     text-align: left;
     margin-top: 5px;
