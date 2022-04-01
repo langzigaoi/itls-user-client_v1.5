@@ -662,7 +662,7 @@
 
             <div>
               <el-row type="flex" align="bottom" justify="end">
-                <el-button size="mini" @click="closeAddInstanceVisible"
+                <el-button size="mini" @click="closeAddCourseVisible"
                   >返回
                 </el-button>
                 <el-button type="primary" size="mini" @click="submitAddInstance"
@@ -1012,7 +1012,10 @@ export default {
 
     // 增加课程
     chandgeAddCourseVisible() {
-      this.addCourseDialogVisible = !this.addCourseDialogVisible;
+      this.addCourseDialogVisible = true;
+    },
+    closeAddCourseVisible() {
+    this.addCourseDialogVisible = false;
     },
     submitAddCourse() {
       this.$confirm("确认提交吗？", "提示", {}).then(() => {
