@@ -135,7 +135,7 @@
         <el-form
           ref="editInstanceForm"
           :model="editInstanceForm"
-          :rules="addInstanceRules"
+          :rules="editInstanceRules"
           style="text-align:center"
           
         >
@@ -173,7 +173,7 @@
               </el-col>
 
               <el-col :span="9">
-                <el-form-item label="课程名称" label-width="70px">
+                <el-form-item label="课程名称" label-width="80px" prop="courseId">
                   <el-row type="flex">
                     <el-select
                       disabled
@@ -194,7 +194,7 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="主 讲 人" label-width="70px">
+                <el-form-item label="主 讲 人" label-width="80px" prop="lecturer">
                   <el-row type="flex">
                     <el-input
                       style="width: 205px"
@@ -205,7 +205,7 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="开始时间" label-width="70px">
+                <el-form-item label="开始时间" label-width="80px" prop="startYear">
                   <el-row type="flex">
                     <el-date-picker
                       disabled
@@ -224,7 +224,7 @@
                 <el-form-item
                   label="周 学 时"
                   prop="hoursOfWeek"
-                  label-width="70px"
+                  label-width="80px"
                 >
                   <el-row type="flex">
                     <el-input
@@ -240,7 +240,7 @@
 
                 
 
-                <el-form-item label="需要编程" label-width="70px">
+                <el-form-item label="需要编程" label-width="80px" prop="isProgram">
                   <el-row type="flex">
                     <div>
                       <el-select
@@ -273,7 +273,7 @@
                   </el-row>
                 </el-form-item>  -->
 
-                <el-form-item label="教学类型" label-width="70px">
+                <el-form-item label="教学类型" label-width="80px" prop="teachingTypeId">
                   <el-row type="flex">
                     <el-select
                       size="small"
@@ -291,7 +291,7 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="学   期" label-width="70px">
+                <el-form-item label="学   期" label-width="80px" prop="semester">
                   <el-row type="flex">
                     <div>
                       <el-select
@@ -312,7 +312,7 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="结束时间" label-width="70px">
+                <el-form-item label="结束时间" label-width="80px" prop="endYear">
                   <el-row type="flex">
                     <el-date-picker
                       disabled
@@ -328,7 +328,7 @@
                   </el-row>
                 </el-form-item>
               
-                <el-form-item label="学分" prop="grade" label-width="70px" >
+                <el-form-item label="学分" label-width="80px" prop="grade" >
                 
                   <el-row type="flex">
                     <el-input
@@ -340,7 +340,7 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="编程语言" label-width="70px">
+                <el-form-item label="编程语言" label-width="80px" prop="langlist">
                   <el-row type="flex">
                     <div>
                       <el-select
@@ -370,7 +370,7 @@
             <el-row type="flex" justify="center">
               <el-col :span="5"></el-col>
               <el-col :span="19">
-                <el-form-item label="课程简介" label-width="70px">
+                <el-form-item label="课程简介" label-width="80px" prop="intro">
                   <el-row type="flex">
                     <el-input
                       style="width: 570px"
@@ -447,7 +447,7 @@
               </el-col>
 
               <el-col :span="9">
-                <el-form-item label="课程名称" label-width="70px">
+                <el-form-item label="课程名称" label-width="80px" prop="name">
                   <el-row type="flex">
                     <el-select
                       style="width: 205px"
@@ -478,7 +478,7 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="主讲人" label-width="70px">
+                <el-form-item label="主讲人" label-width="80px" prop="lecturer">
                   <el-row type="flex">
                     <el-input
                       style="width: 205px"
@@ -489,7 +489,7 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="开始时间" label-width="70px">
+                <el-form-item label="开始时间" label-width="80px" prop="startYear">
                   <el-row type="flex">
                     <el-date-picker
                       style="width: 205px"
@@ -504,11 +504,7 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item
-                  label="周学时"
-                  prop="hoursOfWeek"
-                  label-width="70px"
-                >
+                <el-form-item label="周学时" prop="hoursOfWeek" label-width="80px" >
                   <el-row type="flex">
                     <el-input
                       style="width: 205px"
@@ -519,7 +515,7 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="需要编程" label-width="70px">
+                <el-form-item label="需要编程" label-width="80px" prop="isProgram">
                   <el-row type="flex">
                     <div>
                       <el-select
@@ -551,7 +547,7 @@
                   </el-row>
                 </el-form-item>  -->
 
-                <el-form-item label="教学类型" label-width="70px">
+                <el-form-item label="教学类型" label-width="80px" prop="teachingTypeId">
                   <el-row type="flex">
                     <el-select
                       size="small"
@@ -569,7 +565,7 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="学期" label-width="70px">
+                <el-form-item label="学期" label-width="80px" prop="semester">
                   <el-row type="flex">
                     <div>
                       <el-select
@@ -589,7 +585,7 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="结束时间" label-width="70px">
+                <el-form-item label="结束时间" label-width="80px" prop="endYear">
                   <el-row type="flex">
                     <el-date-picker
                       style="width: 205px"
@@ -604,7 +600,7 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="学分" prop="grade" label-width="70px">
+                <el-form-item label="学分" label-width="80px"  prop="grade">
                   <el-row type="flex">
                     <el-input
                       style="width: 205px"
@@ -615,7 +611,7 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="编程语言" label-width="70px">
+                <el-form-item label="编程语言" label-width="80px" prop="langlist">
                   <el-row type="flex">
                     <div>
                       <el-select
@@ -649,7 +645,7 @@
               </el-col>
 
               <el-col :span="19">
-                 <el-form-item label="课程简介" label-width="70px">
+                 <el-form-item label="课程简介" label-width="80px" prop="intro">
                   <el-row type="flex">
                     <el-input
                       style="width: 570px"
@@ -685,8 +681,9 @@
         :visible.sync="addCourseDialogVisible"
         :close-on-click-modal="false"
         destroy-on-close
+        
       >
-        <el-form ref="courseForm" v-model="addCourseInform">
+        <el-form ref="courseForm" v-model="addCourseInform" >
           <el-row type="flex" align="middle" justify="center">
             <el-col :span="12">
               <!-- <el-form-item label="" label-width="80px">
@@ -716,7 +713,7 @@
                 </el-select>
               </el-form-item>
 
-              <el-form-item label="课程方向" label-width="80px">
+              <el-form-item label="课程方向" label-width="80px" >
                 <el-select
                   size="small"
                   v-model="addCourseInform.type1Id"
@@ -823,13 +820,34 @@ export default {
       pickerOptions: {
       },
       addInstanceRules: {
-        hoursOfWeek: [{ validator: this.checkHoursOfWeek, trigger: "blur" }],
-        grade: [{ validator: this.checkGrade, trigger: "blur" }],
+        name: [{required: true, message: "请选择", trigger: "blur"}],
+        lecturer: [{required: true, message: "请选择", trigger: "blur"}],
+        startYear: [{required: true, message: "请选择", trigger: "blur"}],
+        isProgram: [{required: true, message: "请选择", trigger: "blur"}],
+        teachingTypeId: [{required: true, message: "请选择", trigger: "blur"}],
+        semester: [{required: true, message: "请选择", trigger: "blur"}],
+        langlist: [{required: true, message: "请选择", trigger: "blur"}],
+        intro: [{required: true, message: "请输入", trigger: "blur"}],
+
+        hoursOfWeek: [{required: true, validator: this.checkHoursOfWeek, trigger: "blur" }],
+        grade: [{required: true, validator: this.checkGrade, trigger: "blur" }],
       },
       // 编辑课程实例
       editInstanceDialogVisible: false,
       editInstanceForm:{},
-      editInstanceRules: {},
+      editInstanceRules: {
+        courseId: [{required: true, message: "请选择", trigger: "blur"}],
+        lecturer: [{required: true, message: "请选择", trigger: "blur"}],
+        startYear: [{required: true, message: "请选择", trigger: "blur"}],
+        endYear: [{required: true, message: "请选择", trigger: "blur"}],
+        isProgram: [{required: true, message: "请选择", trigger: "blur"}],
+        teachingTypeId: [{required: true, message: "请选择", trigger: "blur"}],
+        semester: [{required: true, message: "请选择", trigger: "blur"}],
+        intro: [{required: true, message: "请输入", trigger: "blur"}],
+
+        hoursOfWeek: [{required: true, validator: this.checkHoursOfWeek, trigger: "blur" }],
+        grade: [{required: true, validator: this.checkGrade, trigger: "blur" }],
+      },
       
 
 
