@@ -14,7 +14,16 @@ export const findCourseInstance = async (params) => {
       params
   })
 }
-// 本用户课程实例操作记录
+// 课程实例列表（带分页）
+export const findList = (data) => {
+  return axios({
+      url: preUrl + 'findList',
+      method: 'post',
+      data
+  })
+}
+
+// 本用户课程实例
 export const findAllCourseInstance = (params) => {
   return axios({
       url: preUrl + 'findAllCourseInstance',

@@ -2,6 +2,7 @@
  * 系统接口
  */
 
+import * as choosing from './course/choosing'
  import * as cinstance from './course/cinstance'
  import * as course from './course/course'
  import * as resource from './course/resource'
@@ -17,6 +18,7 @@
  
  // 默认全部导出
  export {
+  choosing,
   cinstance,
   course,
   resource,

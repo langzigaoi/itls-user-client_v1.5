@@ -1,22 +1,11 @@
 <template>
-  <el-container>
-    <span class="tool-bar"> </span>
-    
-    
-    <el-main class="main">
-    
+<div class="content">
       <el-row>
         <el-col :span="5">
           <div>
             <el-avatar :size="120" :src="info.avatar"></el-avatar>
           </div>
 
-          <!-- <el-row type="flex" align="middle" justify="center">
-            <div>
-              
-              <span>{{ info.name }}</span>
-            </div>
-          </el-row> -->
         </el-col>
 
         <el-col :span="7">
@@ -27,14 +16,6 @@
               <span>{{ info.name }}</span>
             </div>
           </el-row>
-
-          <!-- <el-row>
-            <div>
-              <span>工号</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>{{ info.no }}</span>
-            </div>
-          </el-row> -->
 
           <el-row type="flex" class="el-row-margin">
             <div>
@@ -93,14 +74,6 @@
             </div>
           </el-row>
 
-          <!-- <el-row class="el-row-margin">
-            <div>
-              <span>职称</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>{{ info.titleName }}</span>
-            </div>
-          </el-row> -->
-
           <el-row class="el-row-margin">
             <div>
               <span>电话</span>
@@ -125,9 +98,7 @@
             </div>
           </el-row>
         </el-col>
-        <!-- <el-col :span="4"> </el-col> -->
       </el-row>
-    </el-main>
 
     <el-dialog
       width="80%"
@@ -167,11 +138,6 @@
                 ></i>
               </el-upload>
             </div>
-            <!-- <el-row type="flex" align="middle" justify="center">
-              <div>
-                <span>{{ infoForm.name }}</span>
-              </div>
-            </el-row> -->
             
           </el-col>
           <el-col :span="8">
@@ -186,13 +152,7 @@
                 </div>
               </el-row>
             </el-form-item>
-            <!-- <el-form-item label="工号" label-width="70px">
-            <el-row>
-              <div>
-                <el-input :disabled="true" v-model="infoForm.no"></el-input>
-              </div>
-            </el-row>
-          </el-form-item> -->
+      
             <el-form-item label="昵称" label-width="70px">
               <el-row type="flex" style="el-row">
                 <div>
@@ -264,25 +224,6 @@
               </el-row>
             </el-form-item>
 
-            <!-- <el-form-item label="职称">
-              <el-row>
-                <el-select
-                  size="small"
-                  v-model="infoForm.titleName"
-                  placeholder="请选择"
-                  @change="handleTitleSelect"
-                >
-                  <el-option
-                    v-for="item in allTitle"
-                    :key="item.value"
-                    :label="item.value"
-                    :value="item.id"
-                  >
-                  </el-option>
-                </el-select>
-              </el-row>
-            </el-form-item> -->
-
             <el-form-item label="电话" prop="telNum">
               <el-row>
                 <div>
@@ -325,8 +266,7 @@
         </el-row>
 
         <div>
-          <!-- <el-row type="flex" align="bottom" justify="end"> -->
-          <el-button
+         <el-button
             size="mini"
             @click="handleInfoFormVisible"
           >取消
@@ -337,7 +277,6 @@
             @click="submitInfoForm"
           >确定
           </el-button>
-          <!-- </el-row> -->
         </div>
       </el-form>
     </el-dialog>
@@ -358,7 +297,6 @@
       </el-form>
       
       <div>
-          <!-- <el-row type="flex" align="bottom" justify="end"> -->
           <el-button
             size="mini"
             @click="handlePasswdVisible"
@@ -375,7 +313,8 @@
     </el-dialog>
 
    
-  </el-container>
+  <!-- </el-container> -->
+  </div>
 
 
 </template>
@@ -599,7 +538,7 @@ export default {
 
 
 <style scoped>
-.main {
+.content {
   margin-top: 100px;
 }
 

@@ -1,14 +1,11 @@
 <template>
-  <el-container>
-    <span class="tool-bar"> </span>
+  <div class="content">
     
-    
-    <el-main class="main">
-    
+      
       <el-row>
         <el-col :span="5">
           <div>
-            <el-avatar :size="120" :src="info.avatar"></el-avatar>
+            <el-avatar shape="square" fit="contain" :size="120" :src="info.avatar"></el-avatar>
           </div>
 
           <!-- <el-row type="flex" align="middle" justify="center">
@@ -125,9 +122,7 @@
             </div>
           </el-row>
         </el-col>
-        <!-- <el-col :span="4"> </el-col> -->
       </el-row>
-    </el-main>
 
     <el-dialog
       width="80%"
@@ -375,9 +370,8 @@
     </el-dialog>
 
    
-  </el-container>
 
-
+  </div>
 </template>
 <script>
 import {time, isEmail, isMobile} from "@/utils/global-functions"
@@ -599,7 +593,7 @@ export default {
 
 
 <style scoped>
-.main {
+.content {
   margin-top: 100px;
 }
 

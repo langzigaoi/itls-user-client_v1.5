@@ -1,183 +1,379 @@
 <template>
-  <div class="parent">
-    <div class="choice">
-      <el-button @click="changevisable" type="primary">选择课程</el-button>
+  <div>
+        <!--工具栏-->
+        <el-row>
+          <el-col :span="12" align="right">
+            <el-tabs
+              v-model="flag"
+              type="card"
+              @tab-click="handleFind"
+              class="mlef-20"
+            >
+              <el-tab-pane label="课程广场" name="0"></el-tab-pane>
+              <el-tab-pane label="我的课程" name="1"></el-tab-pane>
+            </el-tabs>
+          </el-col>
+          <el-col :span="12">
+            <el-form :inline="true" :model="filters">
+              <el-form-item>
+                <el-input
+                  size="small"
+                  v-model="filters.name"
+                  placeholder="名称"
+                ></el-input>
+              </el-form-item>
 
-      <el-dialog
-        title="选择课程"
-        :visible.sync="addcoursedialogVisible"
-        width="100%"
-        top="0"
-      >
-        <div class="form">
-          <el-form>
-            <el-form-item label="课程名称" :label-width="formLabelWidth">
-              <el-select
-                v-model="searchName.courseName"
-                filterable
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="item in courseList"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.name"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="辅导老师" :label-width="formLabelWidth">
-              <el-select
-                v-model="searchName.teacherName"
-                filterable
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="item in teacherList"
-                  :key="item.no"
-                  :label="item.name"
-                  :value="item.name"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="changevisable">取 消</el-button>
-            <el-button type="primary" @click="search()">搜索</el-button>
-          </span>
-        </div>
+              <el-form-item>
+                <el-button size="mini" type="primary">查询</el-button>
+              </el-form-item>
 
-        <el-divider></el-divider>
-        <label><h3>搜索到的相关课程</h3></label>
-        <div>
-          <el-card class="box-card" v-loading="loading">
-            <div slot="header" class="clearfix"></div>
-            <div class="griddiv">
-              <div class="grid" v-for="course in searchList" :key="course.id">
-                <img :src="course.image" alt="" />
-                <div class="gridtext">
-                  <p
-                    style="color: #000"
-                    @click="searchChangevisable"
-                    type="info"
-                  >
-                    {{ searchName.courseName }}
-                  </p>
-                  <!-- 课程详细信息弹框 -->
-                  <el-dialog
-                    title="课程信息"
-                    :visible.sync="searchCoursedialogVisible"
-                    width="50%"
-                  >
-                    <div class="all">
-                      <div class="img">
-                        <img :src="course.image" alt="" />
-                      </div>
-                      <div class="info" style="text-align: center">
-                        <table style="width: 70%; margin: auto">
-                          <tr>
-                            <td>课程名:</td>
-                            <td>
-                              <a>{{ searchName.courseName }}</a>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>开讲人:</td>
-                            <td>
-                              <a>{{ searchName.teacherName }}</a>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>开课时间:</td>
-                            <td>
-                              <a>{{
-                                dateFormate(new Date(course.startYear))
-                              }}</a>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>结束时间:</td>
-                            <td>
-                              <a>{{ dateFormate(new Date(course.endYear)) }}</a>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td colSpan="2">
-                              <el-button type="success" round @click="submit()"
-                                >立即参加</el-button
-                              >
-                            </td>
-                          </tr>
-                        </table>
-                      </div>
-                    </div>
-                  </el-dialog>
+            </el-form>
+          </el-col>
+        </el-row>
+
+        <el-card
+          class="box-card"
+          style="padding: 0"
+          :body-style="{ padding: '15px' }"
+          v-for="(item, index) in tableFliter"
+          :key="index"
+        >
+          <div class="card-header" align="center">
+            <div class="fl-left" style="width: 60%; padding-top: 5px">
+              </div>
+          </div>
+
+          <div class="card-body">
+            <div style="width: 50%">
+              <el-image
+                :src="item.image"
+                fit="fill"
+                style="width: 250px; height: 180px"
+              >
+                <div slot="placeholder" class="image-slot">
+                  加载中<span class="dot">...</span>
                 </div>
+              </el-image>
+            </div>
+            <div style="width: 80%" align="left">
+              <el-row >
+                <el-col :span="10">
+                  <el-row>
+                    <div class="details-lable">课程名称:</div>
+                  </el-row>
+                  <el-row>
+                    <div class="details-lable"> 主讲人:</div>
+                  </el-row>
+                  <el-row>
+                    <div class="details-lable">开始时间:</div>
+                  </el-row>
+                </el-col>
+
+                <el-col :span="14">
+                  <el-row>
+                    <div class="details-lable">{{ item.courseName }}</div>
+                  </el-row>
+                  <el-row>
+                    <div class="details-lable">{{ item.teacherName }}</div>
+                  </el-row>
+                  <el-row>
+                    <div class="time">"{{ time(item.startYear) }}"</div>
+                  </el-row>
+                </el-col>
+              </el-row>
+            </div>
+
+            <div class="card-footer">
+              <div style="float: right; padding: 3px 0" type="text">
+                <el-button
+                  v-show="flag == 0 "
+                  size="mini"
+                  type="primary"
+                  @click="chandgeViewVisible(item)"
+                >详情</el-button>
+                <el-button
+                  v-show="flag == 1"
+                  size="mini"
+                  type="primary"
+                  @click="handleInto(item)"
+                >进入课程</el-button>
+                <!-- <el-button
+                  v-show="isPub == 0"
+                  size="mini"
+                  type="danger"
+                  @click="handleDelete(item)"
+                >删除</el-button> -->
+        
               </div>
             </div>
-          </el-card>
-        </div>
-      </el-dialog>
-    </div>
 
-    <el-divider></el-divider>
+            <!-- 编辑课程实例-->
+            <el-dialog
+              title="课程详情"
+              width="60%"
+              :visible.sync="viewVisible"
+              :close-on-click-modal="false"
+              destroy-on-close
+            >
+              <el-form
+                ref="viewCinstanceForm"
+                :model="viewCinstanceForm"
+                style="text-align:center"
+                
+              >
+                <div>
+                  <el-row type="flex" justify="center">
+                    <el-col :span="5">
+                      <div>
+                          <img
+                            v-if="viewCinstanceForm.image"
+                            :src="viewCinstanceForm.image"
+                            style="max-width: 100px"
+                            class="avatar"
+                          />                         
+                      </div>
+                    </el-col>
 
-    <div class="routers">
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <div class="grid-content bg-purple">
-            <router-link to="/home/studentCourse/hasOpenCourse"
-              ><el-button type="primary">已开设课程</el-button></router-link
-            >
+                    <el-col :span="9">
+                      <el-form-item label="课程名称" label-width="70px">
+                        <el-row type="flex">
+                          <el-input 
+                          style="width: 205px"
+                            size="small"
+                            v-model="viewCinstanceForm.courseName">
+                          </el-input>
+                        </el-row>
+                      </el-form-item>
+
+                      <el-form-item label="主 讲 人" label-width="70px">
+                        <el-row type="flex">
+                          <el-input
+                            style="width: 205px"
+                            size="small"
+                            v-model="viewCinstanceForm.teacherName"
+                            placeholder="请输入内容"
+                          ></el-input>
+                        </el-row>
+                      </el-form-item>
+
+                      <el-form-item label="开始时间" label-width="70px">
+                        <el-row type="flex">
+                          <el-date-picker
+                            style="width: 205px"
+                            size="small"
+                            align="left"
+                            v-model="viewCinstanceForm.startYear"
+                            type="date"
+                            placeholder="选择日期"
+                          >
+                          </el-date-picker>
+                        </el-row>
+                      </el-form-item>
+
+                      <el-form-item
+                        label="周学时"
+                        label-width="70px"
+                      >
+                        <el-row type="flex">
+                          <el-input
+                            style="width: 205px"
+                            size="small"
+                            v-model="viewCinstanceForm.hoursOfWeek"
+                            placeholder="请输入内容"
+                          ></el-input>
+                        </el-row>
+                      </el-form-item>
+                
+                      <el-form-item label="需要编程" label-width="70px">
+                        <el-row type="flex">
+                          <div>
+                        
+                            <el-select
+                              size="small"
+                              v-model="viewCinstanceForm.isProgram"
+                              placeholder="请选择"
+                              @change="changeIsProgram()"
+                            >
+                              <el-option
+                                v-for="item in programOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                              >
+                              </el-option>
+                            </el-select>
+                          </div>
+                        </el-row>
+                      </el-form-item>
+                     
+                    </el-col>
+
+                    <el-col :span="10">
+                  
+                      <el-form-item label="教学类型" label-width="70px">
+                        <el-row type="flex">
+                          <el-input 
+                            style="width: 205px"
+                            size="small"
+                            v-model="viewCinstanceForm.teachingTypeName">
+                          </el-input>
+                         
+                        </el-row>
+                      </el-form-item>
+
+                      <el-form-item label="学期" label-width="70px">
+                        <el-row type="flex">
+                          <div>
+                            <el-select
+                              size="small"
+                              v-model="viewCinstanceForm.semester"
+                              placeholder="请选择"
+                            >
+                              <el-option
+                                v-for="item in semesterOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                              >
+                              </el-option>
+                            </el-select>
+                          </div>
+                        </el-row>
+                      </el-form-item>
+
+                      <el-form-item label="结束时间" label-width="70px">
+                        <el-row type="flex">
+                          <el-date-picker
+                            style="width: 205px"
+                            size="small"
+                            align="left"
+                            v-model="viewCinstanceForm.endYear"
+                            type="date"
+                            placeholder="选择日期"
+                          >
+                          </el-date-picker>
+                        </el-row>
+                      </el-form-item>
+                    
+                      <el-form-item label="学分"  label-width="70px" >
+                        <el-row type="flex">
+                          <el-input
+                            style="width: 205px"
+                            size="small"
+                            v-model="viewCinstanceForm.grade"
+                            placeholder="请输入内容"
+                          ></el-input>
+                        </el-row>
+                      </el-form-item>
+
+                      <el-form-item label="编程语言" label-width="70px">
+                        <el-row type="flex">                         
+                          <el-input
+                              size="small"
+                              style="width: 205px"
+                              v-model="lang"
+                            >
+                          </el-input>
+                          
+                        </el-row>
+                      </el-form-item>
+
+                    </el-col>
+                  </el-row>
+
+                  <el-row type="flex" justify="center">
+                    <el-col :span="5"></el-col>
+                    <el-col :span="19">
+                      <el-form-item label="课程简介" label-width="70px">
+                        <el-row type="flex">
+                          <el-input
+                            style="width: 570px"
+                            size="small"
+                            type="textarea"
+                            :rows="4"
+                            v-model="viewCinstanceForm.intro"
+                            placeholder="请输入内容"
+                          ></el-input>
+                        </el-row>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+
+                  <div>
+                    <el-row type="flex" align="bottom" justify="end">
+                      <el-button size="mini" @click="closeView"
+                        >返回
+                      </el-button>
+                      <el-button type="primary" size="mini" @click="handleChoose(item)"
+                        >选课</el-button
+                      >
+                    </el-row>
+                  </div>
+                </div>
+              </el-form>
+            </el-dialog>
+
+
           </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="grid-content bg-purple">
-            <router-link to="/home/studentCourse/isLearningCourse"
-              ><el-button type="primary">正在学习课程</el-button></router-link
-            >
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="grid-content bg-purple">
-            <router-link to="/home/studentCourse/toStartLearn"
-              ><el-button type="primary">即将开始学习</el-button></router-link
-            >
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="grid-content bg-purple">
-            <router-link to="/home/studentCourse/completeCourse"
-              ><el-button type="primary">已经完成课程</el-button></router-link
-            >
-          </div>
-        </el-col>
-      </el-row>
-    </div>
-    <router-view></router-view>
+
+        </el-card>
+
+    
   </div>
+
 </template>
 <script>
+import { time, isInterger, isEmail } from "@/utils/global-functions";
+
 export default {
   data() {
     return {
-      loading: true,
-      courses: [],
-      addcoursedialogVisible: false,
-      searchCoursedialogVisible: false,
-      coursescistance: [],
-      courseList: [], //所有课程
-      teacherList: [], //所有教师
-      searchList: [], //符合条件的课程
-      searchName: {
-        courseName: null,
-        teacherName: null,
+      pageRequest: { pageNum: 1, pageSize: 9 },
+      pageResult: {},
+      filters: {
+        name: "",
       },
-      formLabelWidth: "80px",
+      tableData: [],
+      courseId: null,
+      flag: "1",
+
+      viewVisible: false,
+      viewCinstanceForm:{},
+      langlist: [],
+      lang: "",
+      semesterOptions: [
+        {
+          value: 1,
+          label: "第一学期",
+        },
+        {
+          value: 2,
+          label: "第二学期",
+        },
+      ],
+      programOptions: [
+        {
+          value: 1,
+          label: "是",
+        },
+        {
+          value: 0,
+          label: "否",
+        },
+      ],
+
+
     };
   },
   computed: {
+    tableFliter() {
+      return this.tableData.filter((item) => {
+        return (
+          String(item.courseName).toLowerCase().indexOf(this.filters.name) > -1
+        );
+      });
+    },
+
     userinfo() {
       return this.$store.state.user.userInfo;
     },
@@ -186,147 +382,133 @@ export default {
     },
   },
   mounted() {
-    this.getcourses();
-    this.getcoursescinstance();
-    this.getAllCourse();
-    this.getAllteacher();
+    this.handleFind();
+
   },
   methods: {
-    //获取所有课程
-    getcourses() {
-      this.$api.course.course
-        .findAllCourse()
-        .then((res) => {
-          this.courses = res.data;
-        })
-        .catch((err) => {
-          this.courses = [];
-        });
+    // 获取分页数据
+    findPage(data) {
+      if (data !== null) {
+        this.pageRequest = data.pageRequest;
+      }
+      this.pageRequest.params = [
+        { name: "courseId", value: this.courseId },
+        
+      ];
+      this.$api.course.cinstance.findList(this.pageRequest).then((res) => {
+        this.pageResult = res.data;
+        
+        let list = [];
+        for (let index = 0; index < res.data.content.length; index++) {
+          console.log(res.data.content[index].id);
+          list.push(res.data.content[index])
+        }
+        console.log(list);
+        this.tableData = list;
+      })
+      .then(data != null ? data.callback : "");
     },
-    getAllCourse() {
-      this.$api.search.getcourse
-        .getcourse()
-        .then((res) => {
-          this.courseList = res.data;
-          console.log(this.courseList);
-        })
-        .catch((err) => {
-          this.courseList = [];
-        });
+    // 个人课程实例数据
+    findCinstance() {
+      this.$api.course.cinstance.findAllCourseInstance().then((res) => {
+        console.log(res.data);
+        this.tableData = res.data;
+      })
+      .catch((err) =>{
+        this.tableData = [];
+      })
+        
     },
-    getcoursescinstance() {
-      this.loading = true;
-      console.log("课程实例");
-      this.$api.course.cinstance
-        .findAllCourseInstance({ teacherNo: this.userinfo.id })
-        .then((res) => {
-          this.coursescistance = res.data;
-          this.loading = false;
-        })
-        .catch((err) => {
-          this.loading = false;
-          this.coursescistance = [];
-        });
+    handleFind() {
+      // console.log(this.flag);
+      if(this.flag == "0") {
+        this.findPage(null);
+      } 
+      if(this.flag == "1") {
+        this.findCinstance();
+      }
     },
-    //获取所有老师的信息
-    getAllteacher() {
-      this.$api.search.getcourse
-        .getteachers()
-        .then((res) => {
-          this.teacherList = res.data;
-          console.log(this.teacherList);
-        })
-        .catch((err) => {
-          this.teacherList = [];
-        });
+
+    // 查询实例对应的语言
+    findLanguageByCid(cid){
+      this.$api.course.language.findCinstanceLanguage({cid: cid}).then((res) => {
+      let data = res.data
+      let list = [];
+      for (let index = 0; index < data.length; index++) {
+        list.push(data[index].name)
+      };
+      // this.langlist = list;
+      this.lang = list.join(',');
+      })
     },
-    //搜索有关课程实例
-    search() {
-      console.log("相关课程");
-      let courseName = this.searchName.courseName;
-      let teacherName = this.searchName.teacherName;
-      this.$api.search.getcourse
-        .searchcourse({ courseName: courseName, teacherName: teacherName })
-        .then((res) => {
-          this.searchList = res.data;
-          console.log(res.data);
-        })
-        .catch((err) => {
-          this.searchList = [];
-        });
+    chandgeViewVisible(item) {
+      this.findLanguageByCid(item.id)
+      this.viewCinstanceForm = JSON.parse(JSON.stringify(item));
+      this.viewVisible = !this.viewVisible;
+
+    },  
+    closeView() {
+      this.viewCinstanceForm = {};
+      this.langlist = [];
+      this.viewVisible = false;
     },
-    //提交选课
-    submit() {
-      console.log("提交选课");
-      let stuNo = this.userinfo.userNo;
-      let insId = this.searchList[0].id;
-      this.$api.search.getcourse
-        .add({ indId: insId, stuNo: stuNo })
-        .then((res) => {
-          console.log("添加成功");
-          this.$message({
-            message: "添加成功",
-            type: "success",
+
+    handleChoose(item) {
+      console.log(item.id);
+      this.$confirm("确认提交吗？", "提示", {}).then(() => {
+        this.$api.course.choosing.chooseCourseInstance( {cinstanceId: item.id} )
+          .then((res) => {
+            // this.findCinstance();
+            this.$message({
+              message: "选择成功",
+              type: "success",
+            });
+            this.closeView();
+          })
+          .catch((err) => {
+            this.$message.error();
           });
-        })
-        .catch((err) => {
-          this.$message.error("添加失败");
-        });
+        
+      });
     },
-    //改变添加课程的弹框显示
-    changevisable() {
-      this.addcoursedialogVisible = !this.addcoursedialogVisible;
+
+    handleInto(item) {
+      console.log(item);
+      let path = "/studycourse"
+      let id = item.id
+      this.$router.push({
+        path: path,
+        query: {
+          id: id
+        }
+      })
+
     },
-    searchChangevisable() {
-      this.searchCoursedialogVisible = !this.searchCoursedialogVisible;
-    },
+
+
+
   },
 };
 </script>
 <style >
 .box-card {
-  margin-top: 10px;
-  text-align: left;
-}
-.parent {
-  position: relative;
-  text-align: left;
-  padding-top: 20px;
-}
-.kid {
-  position: absolute;
-  top: 0;
-  min-height: 100%;
-  width: 100%;
-  background-color: #fff;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  margin-bottom: 5vh;
-}
-.gridtext p {
-  cursor: pointer;
-}
-.all {
-  position: relative;
-  width: 100%;
-  height: 200px;
-}
-.all div {
-  display: inline-block;
-}
-.all .img {
-  width: 40%;
+  width: 300px;
   height: 100%;
+  margin-right: 50px;
+  margin-bottom: 30px;
+  border-radius: 4px;
+  float: left;
 }
-.all .info {
-  position: absolute;
-  width: 50%;
-  height: 200px;
-  top: 0;
+
+.time {
+  font-style: normal;
+  font: bolder;
+  margin: 2px;
+  /* font-size: 13px; */
+  color: #999;
 }
-.all .info table {
-  border-spacing: 10px 10px;
+.details-lable{
 }
-.all .info table td {
-  font-size: 20px;
-}
+
+
 </style>

@@ -55,13 +55,13 @@ const routes = [
         path: 'teacherCourse',
         name: 'TeacherCourse',
         component: () => import('@/components/home/teacherCourse/TeacherCourse'),
-        children: [
-          {
-            path: 'knowledge',
-            name: 'Knowledge',
-            component: () => import('@/components/home/teacherCourse/Knowledge'),
-          }
-        ]
+        // children: [
+        //   {
+        //     path: 'knowledge',
+        //     name: 'Knowledge',
+        //     component: () => import('@/components/home/teacherCourse/Knowledge'),
+        //   }
+        // ]
       },
       // 学生 学习课程页面（课程实例列表、选课等）
       {
@@ -72,7 +72,6 @@ const routes = [
           //学生课程
           {
             path: '',
-            redirect: 'hasOpenCourse'
           },
           {
             path: 'hasOpenCourse',
@@ -435,6 +434,8 @@ const routes = [
   {
     path: '/studycourse',
     name: 'studycourse',
+    redirect: '/studycourse/courseintroduce',
+
     component: () => import('@/components/coursedetail/student/home'),
     // redirect:'/course/student',
     children: [

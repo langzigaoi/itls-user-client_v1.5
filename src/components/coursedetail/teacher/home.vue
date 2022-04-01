@@ -222,9 +222,9 @@
       </div>
       
     </div>
-    <!-- <footer class="footer">
+    <footer class="footer">
         <p>©2020-2021 | 赣南师范大学 大数据与计算智能研究组</p>
-      </footer> -->
+      </footer>
   </div>
 </template>
 

@@ -2,7 +2,7 @@
   <div class="homediv" style="display: flex; height: 100vh">
     <el-container>
 
-      <el-header>
+      <el-header class="header">
         程序设计智慧教学平台
         <span></span>
       </el-header>
@@ -187,7 +187,31 @@ export default {
 .el-checkbox__input.is-checked + .el-checkbox__label {
   color: #14889a;
 }
-.el-header,
+
+.header {
+  position: relative;
+  width: 100%;
+  height: 30px;  
+  background-color: #14889a;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  /**垂直居中*/
+  justify-content: center;
+  /**水平居中*/
+  font-size: 20px;
+}
+
+.main {
+  flex: 9;
+  position: absolute;
+  left: 150px;
+  right: 0;
+  top: 60px;
+  bottom: 30px;
+  overflow-y: scroll;
+}
+
 .el-footer {
   background-color: #14889a;
   color: #ffffff;
@@ -240,9 +264,7 @@ export default {
 .el-aside ul li:first-child {
   padding-top: 20px;
 }
-.main {
-  flex: 9;
-}
+
 /* .el-aside {
     background-color: #D3DCE6;
     color: #333;

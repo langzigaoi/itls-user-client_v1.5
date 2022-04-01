@@ -1,10 +1,9 @@
 <template>
-  <el-container>
-    <!-- <el-header>
-
-    </el-header> -->
-    <el-main>
-      <div class="page-container">
+<div>
+  <!-- <el-container>
+    
+    <el-main> -->
+      <!-- <div class="page-container"> -->
         <!--工具栏-->
         <el-row>
           <el-col :span="12" align="right">
@@ -123,7 +122,7 @@
           </div>
 
         </el-card>
-      </div>
+      <!-- </div> -->
 
       <!-- 编辑课程实例-->
       <el-dialog
@@ -137,6 +136,8 @@
           ref="editInstanceForm"
           :model="editInstanceForm"
           :rules="addInstanceRules"
+          style="text-align:center"
+          
         >
           <div>
             <el-row type="flex" justify="center">
@@ -193,6 +194,17 @@
                   </el-row>
                 </el-form-item>
 
+                <el-form-item label="主 讲 人" label-width="70px">
+                  <el-row type="flex">
+                    <el-input
+                      style="width: 205px"
+                      size="small"
+                      v-model="editInstanceForm.lecturer"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+
                 <el-form-item label="开始时间" label-width="70px">
                   <el-row type="flex">
                     <el-date-picker
@@ -209,45 +221,47 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="结束时间" label-width="70px">
-                  <el-row type="flex">
-                    <el-date-picker
-                      disabled
-                      style="width: 205px"
-                      size="small"
-                      align="left"
-                      v-model="editInstanceForm.endYear"
-                      type="date"
-                      placeholder="选择日期"
-                      :picker-options="pickerOptions"
-                    >
-                    </el-date-picker>
-                  </el-row>
-                </el-form-item>
-
-                <el-form-item label="主讲人" label-width="70px">
+                <el-form-item
+                  label="周 学 时"
+                  prop="hoursOfWeek"
+                  label-width="70px"
+                >
                   <el-row type="flex">
                     <el-input
                       style="width: 205px"
                       size="small"
-                      v-model="editInstanceForm.lecturer"
+                      v-model="editInstanceForm.hoursOfWeek"
                       placeholder="请输入内容"
                     ></el-input>
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="课程简介" label-width="70px">
+                
+
+                
+
+                <el-form-item label="需要编程" label-width="70px">
                   <el-row type="flex">
-                    <el-input
-                      style="width: 205px"
-                      size="small"
-                      type="textarea"
-                      :rows="6"
-                      v-model="editInstanceForm.intro"
-                      placeholder="请输入内容"
-                    ></el-input>
+                    <div>
+                      <el-select
+                        size="small"
+                        v-model="editInstanceForm.isProgram"
+                        placeholder="请选择"
+                        @change="handleSelectIsProgram"
+                      >
+                        <el-option
+                          v-for="item in programOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                    </div>
                   </el-row>
                 </el-form-item>
+
+                
               </el-col>
 
               <el-col :span="10">
@@ -277,7 +291,7 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="学期" label-width="70px">
+                <el-form-item label="学   期" label-width="70px">
                   <el-row type="flex">
                     <div>
                       <el-select
@@ -298,22 +312,24 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item
-                  label="周学时"
-                  prop="hoursOfWeek"
-                  label-width="70px"
-                >
+                <el-form-item label="结束时间" label-width="70px">
                   <el-row type="flex">
-                    <el-input
+                    <el-date-picker
+                      disabled
                       style="width: 205px"
                       size="small"
-                      v-model="editInstanceForm.hoursOfWeek"
-                      placeholder="请输入内容"
-                    ></el-input>
+                      align="left"
+                      v-model="editInstanceForm.endYear"
+                      type="date"
+                      placeholder="选择日期"
+                      :picker-options="pickerOptions"
+                    >
+                    </el-date-picker>
                   </el-row>
                 </el-form-item>
-
-                <el-form-item label="学分" prop="grade" label-width="70px">
+              
+                <el-form-item label="学分" prop="grade" label-width="70px" >
+                
                   <el-row type="flex">
                     <el-input
                       style="width: 205px"
@@ -321,27 +337,6 @@
                       v-model="editInstanceForm.grade"
                       placeholder="请输入内容"
                     ></el-input>
-                  </el-row>
-                </el-form-item>
-
-                <el-form-item label="需要编程" label-width="70px">
-                  <el-row type="flex">
-                    <div>
-                      <el-select
-                        size="small"
-                        v-model="editInstanceForm.isProgram"
-                        placeholder="请选择"
-                        @change="handleSelectIsProgram"
-                      >
-                        <el-option
-                          v-for="item in programOptions"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value"
-                        >
-                        </el-option>
-                      </el-select>
-                    </div>
                   </el-row>
                 </el-form-item>
 
@@ -372,6 +367,24 @@
               </el-col>
             </el-row>
 
+            <el-row type="flex" justify="center">
+              <el-col :span="5"></el-col>
+              <el-col :span="19">
+                <el-form-item label="课程简介" label-width="70px">
+                  <el-row type="flex">
+                    <el-input
+                      style="width: 570px"
+                      size="small"
+                      type="textarea"
+                      :rows="4"
+                      v-model="editInstanceForm.intro"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
             <div>
               <el-row type="flex" align="bottom" justify="end">
                 <el-button size="mini" @click="closeEditInstanceForm"
@@ -389,7 +402,7 @@
 
       <!-- 增加课程实例-->
       <el-dialog
-        title="新建课程实例"
+        title="课程申请"
         width="60%"
         :visible.sync="addInstanceDialogVisible"
         :close-on-click-modal="false"
@@ -465,6 +478,17 @@
                   </el-row>
                 </el-form-item>
 
+                <el-form-item label="主讲人" label-width="70px">
+                  <el-row type="flex">
+                    <el-input
+                      style="width: 205px"
+                      size="small"
+                      v-model="addInstanceInform.lecturer"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+
                 <el-form-item label="开始时间" label-width="70px">
                   <el-row type="flex">
                     <el-date-picker
@@ -480,44 +504,42 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="结束时间" label-width="70px">
-                  <el-row type="flex">
-                    <el-date-picker
-                      style="width: 205px"
-                      size="small"
-                      align="left"
-                      v-model="addInstanceInform.endYear"
-                      type="date"
-                      placeholder="选择日期"
-                      :picker-options="pickerOptions"
-                    >
-                    </el-date-picker>
-                  </el-row>
-                </el-form-item>
-
-                <el-form-item label="主讲人" label-width="70px">
+                <el-form-item
+                  label="周学时"
+                  prop="hoursOfWeek"
+                  label-width="70px"
+                >
                   <el-row type="flex">
                     <el-input
                       style="width: 205px"
                       size="small"
-                      v-model="addInstanceInform.lecturer"
+                      v-model="addInstanceInform.hoursOfWeek"
                       placeholder="请输入内容"
                     ></el-input>
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="课程简介" label-width="70px">
+                <el-form-item label="需要编程" label-width="70px">
                   <el-row type="flex">
-                    <el-input
-                      style="width: 205px"
-                      size="small"
-                      type="textarea"
-                      :rows="5"
-                      v-model="addInstanceInform.intro"
-                      placeholder="请输入内容"
-                    ></el-input>
+                    <div>
+                      <el-select
+                        size="small"
+                        v-model="addInstanceInform.isProgram"
+                        placeholder="请选择"
+                        @change="handleSelectIsProgram"
+                      >
+                        <el-option
+                          v-for="item in programOptions"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                    </div>
                   </el-row>
                 </el-form-item>
+
               </el-col>
 
               <el-col :span="10">
@@ -567,18 +589,18 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item
-                  label="周学时"
-                  prop="hoursOfWeek"
-                  label-width="70px"
-                >
+                <el-form-item label="结束时间" label-width="70px">
                   <el-row type="flex">
-                    <el-input
+                    <el-date-picker
                       style="width: 205px"
                       size="small"
-                      v-model="addInstanceInform.hoursOfWeek"
-                      placeholder="请输入内容"
-                    ></el-input>
+                      align="left"
+                      v-model="addInstanceInform.endYear"
+                      type="date"
+                      placeholder="选择日期"
+                      :picker-options="pickerOptions"
+                    >
+                    </el-date-picker>
                   </el-row>
                 </el-form-item>
 
@@ -590,27 +612,6 @@
                       v-model="addInstanceInform.grade"
                       placeholder="请输入内容"
                     ></el-input>
-                  </el-row>
-                </el-form-item>
-
-                <el-form-item label="需要编程" label-width="70px">
-                  <el-row type="flex">
-                    <div>
-                      <el-select
-                        size="small"
-                        v-model="addInstanceInform.isProgram"
-                        placeholder="请选择"
-                        @change="handleSelectIsProgram"
-                      >
-                        <el-option
-                          v-for="item in programOptions"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value"
-                        >
-                        </el-option>
-                      </el-select>
-                    </div>
                   </el-row>
                 </el-form-item>
 
@@ -638,8 +639,28 @@
                   </el-row>
                 </el-form-item>
 
+              </el-col>
+            </el-row>
 
+          
+            <el-row type="flex" justify="center">
 
+              <el-col :span="5">
+              </el-col>
+
+              <el-col :span="19">
+                 <el-form-item label="课程简介" label-width="70px">
+                  <el-row type="flex">
+                    <el-input
+                      style="width: 570px"
+                      size="small"
+                      type="textarea"
+                      :rows="4"
+                      v-model="addInstanceInform.intro"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
               </el-col>
             </el-row>
 
@@ -739,8 +760,10 @@
           </div>
         </el-form>
       </el-dialog>
-    </el-main>
-  </el-container>
+
+      <!-- </el-main>
+    </el-container> -->
+  </div>
 </template>
 <script>
 import { time, isInterger, isEmail } from "@/utils/global-functions";
@@ -805,12 +828,8 @@ export default {
       },
       // 编辑课程实例
       editInstanceDialogVisible: false,
-      editInstanceForm:{
-
-      },
-      editInstanceRules: {
-
-      },
+      editInstanceForm:{},
+      editInstanceRules: {},
       
 
 
@@ -825,9 +844,7 @@ export default {
         );
       });
     },
-    userinfo() {
-      return this.$store.state.user.userInfo;
-    },
+    
   },
 
   mounted() {
@@ -957,7 +974,7 @@ export default {
           if (res.code == 200) {
             console.log(res.data);
             let cid = res.data;
-            this.sumbmitLanguage(cid);
+            this.submitLanguage(cid);
             this.$message({
               message: "申请成功,等待审核中···",
               type: "success",
@@ -1085,7 +1102,7 @@ export default {
       this.langlist = list;
       })
     },
-    sumbmitLanguage(cid) {
+    submitLanguage(cid) {
       let list = [];
       for (let index = 0; index < this.langlist.length; index++) {
                 list.push({cinstanceId: cid, languageId: this.langlist[index]})
@@ -1137,7 +1154,7 @@ export default {
         let params = Object.assign({}, this.editInstanceForm);
         this.$api.course.cinstance.updateInstance(params).then((res) => {
           this.editLoading = false;
-          this.sumbmitLanguage(this.editInstanceForm.id);
+          this.submitLanguage(this.editInstanceForm.id);
           if (res.code == 200) {
             this.$message({
               message: "修改成功",
@@ -1197,9 +1214,7 @@ export default {
   overflow: hidden;
   float: right;
 }
-/* .el-input {
-  width: 100%;
-} */
+
 .el-input-text {
   width: 65%;
 }
@@ -1224,4 +1239,20 @@ export default {
   /* font-size: 13px; */
   color: #999;
 }
+
+
+.el-form-item label:after {
+        content: "";
+        display: inline-block;
+        width: 100%;
+}
+
+.el-form-item__label {
+        text-align: justify;
+        height: 50px;
+}
+    
+/* .el-form-item.is-required .el-form-item__label:before {
+        content: none !important;
+} */
 </style>
