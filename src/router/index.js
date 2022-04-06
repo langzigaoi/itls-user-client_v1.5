@@ -109,6 +109,21 @@ const routes = [
     children: [
 
       {
+        path: 'studentList',
+        name: 'studentList',
+        component: () =>
+          import('@/components/coursedetail/teacher/dashboard/StudentList'),
+        meta: { title: '学生列表' }
+      },
+
+
+
+
+
+
+
+
+      {
         path: 'problemChoice',
         name: 'problemChoice',
         component: () =>
@@ -189,13 +204,7 @@ const routes = [
           }
         ]
       },
-      {
-        path: 'student',
-        name: 'student',
-        component: () =>
-          import('@/components/coursedetail/teacher/dashboard/CinstanceStudentView'),
-        meta: { title: '选课学生' }
-      },
+      
       {
         path: 'courseintroduce',
         name: 'courseintroduce',

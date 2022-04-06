@@ -8,65 +8,60 @@
       </el-header>
 
       <el-container>
-        
-        <el-aside class="aside" width="10%">
-          <ul>
+        <el-aside class="aside" width="150px">
+          <el-menu
+              :router="true"
+              :unique-opened="true"
+              align="left"
+              class="menu"
+              text-color="#0d0e0f"
+              active-text-color="#14889a"
+           > 
+              <!-- 教师 -->
+              <el-menu-item
+                v-if="hasMenu('/home/teacherselfcenter')"
+                style="min-width: auto"
+                index="/home/teacherselfcenter"
+              >
+              <i class="el-icon-user"></i>个人中心
+              </el-menu-item>
 
-            <router-link
-              v-if="hasMenu('/home/teacherselfcenter')"
-              to="/home/teacherselfcenter">
-              <li :class="{ active: onRoutes.path == '/home/teacherselfcenter' }">
-                <i class="el-icon-user"> 个人中心</i>
-              </li>
-            </router-link>
+              <el-menu-item
+                v-if="hasMenu('/home/teacherCourse')"
+                style="min-width: auto"
+                index="/home/teachercourse"
+              >
+              <i class="el-icon-star-off"></i>教授课程
+              </el-menu-item>
 
-            <router-link v-if="hasMenu('/home/studentselfcenter')" to="/home/studentselfcenter">
-              <li :class="{ active: onRoutes.path == '/home/studentselfcenter' }">
-                <i class="el-icon-user"> 个人中心</i>
-              </li>
-            </router-link>
+              <!-- 学生 -->
+              <el-menu-item
+                v-if="hasMenu('/home/studentselfcenter')"
+                style="min-width: auto"
+                index="/home/studentselfcenter"
+              >
+              <i class="el-icon-user"></i>个人中心
+              </el-menu-item>
 
-            <!-- {{userinfo}} -->
-            <!-- <router-link to="/home/teachercourse"><li>教授课程<i class="el-icon-date"></i></li></router-link>
-              <router-link to="/home/studentCourse"><li>学习课程<i class="el-icon-document"></i></li></router-link> -->
-            <router-link
-              v-if="hasMenu('/home/teacherCourse')"
-              to="/home/teachercourse"
-            >
-              <li :class="{ active: onRoutes.path == '/home/teachercourse' }">
-                <i class="el-icon-date"> 教授课程</i>
-              </li>
-            </router-link>
+              <el-menu-item
+                v-if="hasMenu('/home/studentCourse')"
+                style="min-width: auto"
+                index="/home/studentCourse"
+              >
+              <i class="el-icon-star-off"></i>学习课程
+              </el-menu-item>
 
-            <router-link
-              v-if="hasMenu('/home/studentCourse')"
-              to="/home/studentCourse"
-            >
-              <li :class="{ active: onRoutes.path == '/home/studentCourse' }">
-                <i class="el-icon-document"> 学习课程</i>
-              </li>
-            </router-link>
-            
-            <router-link to="/">
-              <li>
-                <i class="el-icon-back">退出</i>
-              </li>
-            </router-link>
-          </ul>
+              <el-menu-item
+                style="min-width: auto"
+                index="/"
+              >
+              <i class="el-icon-arrow-left"></i>退出
+              </el-menu-item>
+
+            </el-menu>
         </el-aside>
 
         <el-main class="main">
-          <!-- <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item
-              v-for="(item, index) in navPath"
-              :to="item.path"
-              :key="index"
-              >{{ item.name | routeToName }}</el-breadcrumb-item
-            >
-          </el-breadcrumb> -->
-
-
-
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -112,7 +107,16 @@ export default {
       return this.$route.path;
     },
   },
-  methods: {},
+  methods: {
+    toOtherPathOthers(path) {
+      this.$router.push({
+        path: path,
+        query: {
+          courseid: this.courseInstance.courseId,
+        },
+      });
+    },
+  },
   //路由名称转换的过滤器
   filters: {
     routeToName: (url) => {
@@ -208,7 +212,7 @@ export default {
   left: 150px;
   right: 0;
   top: 60px;
-  bottom: 30px;
+  bottom: 32px;
   overflow-y: scroll;
 }
 
@@ -239,45 +243,8 @@ export default {
   letter-spacing: 5px;
 }
 .aside {
-  min-width: 130px;
-}
-.el-aside ul {
-  flex: 1;
-  background-color: #ffffff;
-  height: 100%;
-  font-size: 0.7em;
 }
 
-.el-aside ul li {
-  padding: 10px 0 10px 0;
-  padding-bottom: 20px;
-  /* border-bottom: 2px solid #663366; */
-  color: #0d0e0f;
-  font-size: 14px;
-}
-
-.el-aside ul li:hover {
-  background-color: #7bcce04d;
-  /* color: blue; */
-}
-
-.el-aside ul li:first-child {
-  padding-top: 20px;
-}
-
-/* .el-aside {
-    background-color: #D3DCE6;
-    color: #333;
-    text-align: center;
-
-  } */
-/*   
-  .el-main {
-    background-color: #E9EEF3;
-    color: #333;
-    text-align: center;
-    line-height: 160px;
-  } */
 .active {
   /* color: #14889a; */
   background-color: #7bcce04d;

@@ -463,18 +463,20 @@
                       >
                       </el-option>
                     </el-select>
-                    <el-tooltip
+                    <!-- <el-tooltip
                       class="item"
                       effect="dark"
                       content="没有想要的课程？请点击"
                       placement="right-start"
-                    >
+                    > -->
                       <el-button
-                        icon="el-icon-question"
                         type="text"
                         @click="chandgeAddCourseVisible"
-                      ></el-button>
-                    </el-tooltip>
+                      >
+                      <i class="el-icon-info" ></i>
+                      
+                      </el-button>
+                    <!-- </el-tooltip> -->
                   </el-row>
                 </el-form-item>
 
@@ -662,7 +664,7 @@
 
             <div>
               <el-row type="flex" align="bottom" justify="end">
-                <el-button size="mini" @click="closeAddCourseVisible"
+                <el-button size="mini" @click="closeAddInstanceVisible"
                   >返回
                 </el-button>
                 <el-button type="primary" size="mini" @click="submitAddInstance"
@@ -747,7 +749,7 @@
           </el-row>
           <div>
             <el-row type="flex" align="bottom" justify="end">
-              <el-button size="mini" @click="chandgeAddCourseVisible"
+              <el-button size="mini" @click="closeAddCourseVisible"
                 >返回
               </el-button>
               <el-button type="primary" size="mini" @click="submitAddCourse"
@@ -823,6 +825,7 @@ export default {
         name: [{required: true, message: "请选择", trigger: "blur"}],
         lecturer: [{required: true, message: "请选择", trigger: "blur"}],
         startYear: [{required: true, message: "请选择", trigger: "blur"}],
+        endYear: [{required: true, message: "请选择", trigger: "blur"}],
         isProgram: [{required: true, message: "请选择", trigger: "blur"}],
         teachingTypeId: [{required: true, message: "请选择", trigger: "blur"}],
         semester: [{required: true, message: "请选择", trigger: "blur"}],
@@ -834,7 +837,7 @@ export default {
       },
       // 编辑课程实例
       editInstanceDialogVisible: false,
-      editInstanceForm:{},
+      editInstanceForm: {},
       editInstanceRules: {
         courseId: [{required: true, message: "请选择", trigger: "blur"}],
         lecturer: [{required: true, message: "请选择", trigger: "blur"}],
@@ -1012,7 +1015,7 @@ export default {
 
     // 增加课程
     chandgeAddCourseVisible() {
-      this.addCourseDialogVisible = true;
+      this.addCourseDialogVisible = !this.addCourseDialogVisible;
     },
     closeAddCourseVisible() {
     this.addCourseDialogVisible = false;

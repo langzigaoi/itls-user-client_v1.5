@@ -1,194 +1,224 @@
 <template>
-  <div class="home">
-    <div class="chead" style="padding: 20px 0; color: #fff">
-      {{ courseInstance.courseName }} &nbsp;&nbsp;
-      {{ this.dateFormate(new Date(courseInstance.startYear)) }}~
-      {{ this.dateFormate(new Date(courseInstance.endYear)) }}
-      &nbsp;&nbsp;第{{ courseInstance.semester }}学期
-    </div>
-    <div class="cmainbig">
-      <div class="caside">
-        <!-- <silde-bar></silde-bar> -->
-        <el-menu
-          :default-active="menuIndex"
-          :collapse="isCollapse"
-          style="min-height: 90vh; min-width: 157px"
-          :router="true"
-          :unique-opened="true"
-          background-color="#ffffff"
-          text-color="#0d0e0f"
-          active-text-color="#14889a"
-          align="left"
-        >
-          <el-submenu index="1">
-            <template slot="title">
-              <i class="fa fa-pie-chart"></i>
-              <span style="font-size: 1em">  仪表盘</span>
-            </template>
-            <el-menu-item
-              index="/studycourse/taskanalysis"
-              style="min-width: auto"
-              >作业统计分析</el-menu-item
-            >
-            <el-menu-item
-              index="/studycourse/testanalysis"
-              style="min-width: auto"
-              >测试统计分析</el-menu-item
-            >
-            <el-menu-item
-              index="/studycourse/experimentanalysis"
-              style="min-width: auto"
-              >实验统计分析</el-menu-item
-            >
-            <el-menu-item index="" style="min-width: auto"
-              >知识路径分析</el-menu-item
-            >
-            <el-menu-item index="" style="min-width: auto"
-              >网络时空统计</el-menu-item
-            >
-            <el-menu-item index="" style="min-width: auto"
-              >个性化推荐</el-menu-item
-            >
-          </el-submenu>
-          <el-submenu index="">
-            <template slot="title">
-              <i class="fa fa-book"></i>
-              <span style="font-size: 1em">  课程介绍</span>
-            </template>
-            <el-menu-item
-              index="/studycourse/courseintroduce"
-              style="min-width: auto"
-            >
-              <i class="fa fa-file-text"></i> <span>基本信息</span>
-            </el-menu-item>
-            <el-menu-item
-              index="/studycourse/coursetarget"
-              style="min-width: auto"
-            >
-              <i class="fa fa-tag"></i>课程目标</el-menu-item
-            >
-            <el-menu-item
-              index="/studycourse/examineevaluate"
-              style="min-width: auto"
-              >考核评价</el-menu-item
-            >
-          </el-submenu>
-          <!-- v-if="hasMenu('/studycourse/students')" -->
-          <!-- <el-menu-item  index="/studycourse/students"><i class="fa fa-file-text"></i> <span>选课学生</span>
-          </el-menu-item> -->
-          <!-- v-if="hasMenu('/studycourse/teachingteam')" -->
-          <el-menu-item
-            index="/studycourse/teachingteam"
-            style="min-width: auto"
-          >
-            <i class="fa fa-users" aria-hidden="true"></i>
-            <span>  教学团队</span></el-menu-item
-          >
-          <el-menu-item
-            v-if="hasMenu('/studycourse/coursecontent')"
-            index="/studycourse/coursecontent"
-            style="min-width: auto"
-          >
-            <i class="fa fa-file-powerpoint-o"></i><span>课程内容</span>
-          </el-menu-item>
-          <el-submenu index="2">
-            <template slot="title">
-              <span style="font-size: 1em"
-                ><i class="fa fa-table" aria-hidden="true"></i> 作业与测验</span
+  <div class="homediv" style="display: flex; height: 100vh">
+    <el-container>
+      <el-header class="head"> 
+        <el-row>
+          <el-col>
+            <div class="system">程序设计智慧教学平台</div>
+          </el-col>
+          <el-col>
+            <div class="course">{{ courseInstance.courseName }}
+              &nbsp;&nbsp;{{this.dateFormate(new Date(courseInstance.startYear))}}~{{ this.dateFormate(new Date(courseInstance.endYear)) }} &nbsp;&nbsp;
+              第{{courseInstance.semester}}学期</div>
+          </el-col>
+        </el-row>
+        
+
+        </el-header>
+
+      <el-container>
+        <el-aside class="aside" >
+          <el-menu
+            :default-active="menuIndex"
+            :collapse="isCollapse"
+            style="width: 160px"
+            :router="true"
+            :unique-opened="true"
+            background-color="#ffffff"
+            text-color="#0d0e0f"
+            active-text-color="#14889a"
+            align="left" >
+          
+              <el-submenu index="1" style="width: 160px">
+                <template title slot="title">
+                  <i class="el-icon-odometer"></i>
+                  <span >  仪表盘</span>
+                </template>
+
+                <el-menu-item
+                  index="/studycourse/taskanalysis"
+                  >作业统计分析</el-menu-item
+                >
+                <el-menu-item
+                  index="/studycourse/testanalysis"
+                  >测试统计分析</el-menu-item
+                >
+                <el-menu-item
+                  index="/studycourse/experimentanalysis"
+                  >实验统计分析</el-menu-item
+                >
+                <el-menu-item index="" 
+                  >知识路径分析</el-menu-item
+                >
+                <el-menu-item index="" 
+                  >网络时空统计</el-menu-item
+                >
+                <el-menu-item index="" 
+                  >个性化推荐</el-menu-item
+                >
+             </el-submenu>
+
+             <el-submenu index="" style="width: 160px" >
+                <template slot="title">
+                  <i class="el-icon-reading"></i>
+                  <span style="font-size: 1em">  课程介绍</span>
+                </template>
+
+                <el-menu-item
+                  index="/studycourse/courseintroduce"
+                  style="min-width: auto"
+                >
+                  <i class="el-icon-tickets"></i> <span>基本信息</span>
+                </el-menu-item>
+                <el-menu-item
+                  index="/studycourse/coursetarget"
+                  style="min-width: auto"
+                >
+                  <i class="el-icon-data-board"></i>课程目标</el-menu-item
+                >
+                <el-menu-item
+                  index="/studycourse/examineevaluate"
+                  style="min-width: auto"
+                  >
+                  <i class="el-icon-news"></i>考核评价</el-menu-item
+                >
+              </el-submenu>
+
+              <el-menu-item
+                index="/studycourse/teachingteam"
+                style="width: 160px"
               >
-            </template>
-            <el-menu-item
-              index="/studycourse/coursehomework"
-              style="min-width: auto"
-              ><span>作业</span></el-menu-item
-            >
-            <el-menu-item
-              index="/studycourse/coursestudenttest"
-              style="min-width: auto"
-              ><span>测验</span></el-menu-item
-            >
-          </el-submenu>
-          <!-- v-if="hasMenu('/studycourse/coursetest')" -->
-          <el-menu-item
-            v-if="hasMenu('/studycourse/coursetest')"
-            index="/studycourse/courseExperiment"
-            style="min-width: auto"
-            ><i class="fa fa-cubes"></i>
-            <span>  课程实验</span>
-          </el-menu-item>
-          <el-submenu index="3">
-            <template slot="title">
-              <!-- <i class="el-icon-odometer"></i> -->
-              <span style="font-size: 1em"
-                ><i class="fa fa-table" aria-hidden="true"></i> 课程考试</span
+                <i class="el-icon-user" aria-hidden="true"></i>
+                <span>  教学团队</span></el-menu-item
               >
-            </template>
-            <!-- v-if="hasMenu('/studycourse/courseexam')" -->
-            <el-menu-item index="/studycourse/unitexam" style="min-width: auto"
-              ><span>单元考试</span></el-menu-item
-            >
-            <el-menu-item
-              index="/studycourse/midsemester"
-              style="min-width: auto"
-              ><span>期中考试</span></el-menu-item
-            >
-            <el-menu-item index="/studycourse/finalexam" style="min-width: auto"
-              ><span>期末考试</span></el-menu-item
-            >
-          </el-submenu>
-          <!-- v-if="hasMenu('/studycourse/courseitem')" -->
-          <el-menu-item index="/studycourse/courseitem" style="min-width: auto"
-            ><span
-              ><i class="fa fa-hdd-o" aria-hidden="true"></i> 课程项目</span
-            ></el-menu-item
-          >
-          <el-menu-item index="" style="min-width: auto"
-            ><span>  知识图谱</span></el-menu-item
-          >
-          <el-submenu index="5">
-            <template slot="title">
-              <span style="font-size: 1em"
-                ><i class="fa fa-table" aria-hidden="true"></i> 讨论区</span
+              <el-menu-item
+                v-if="hasMenu('/studycourse/coursecontent')"
+                index="/studycourse/coursecontent"
+                style="width: 160px"
               >
-            </template>
-            <el-menu-item
-              index="/studycourse/commentstu"
-              style="min-width: auto"
-              ><span>讨论区主界面</span></el-menu-item
-            >
-            <el-menu-item
-              index="/studycourse/stutoteacher"
-              style="min-width: auto"
-              ><span>老师答疑区</span></el-menu-item
-            >
-          </el-submenu>
-          <el-menu-item index="/home/studentcourse" style="min-width: auto"
-            ><span>  回到主页</span></el-menu-item
-          >
-        </el-menu>
-      </div>
-      <div class="cmain">
-        <!-- <v-tags></v-tags> -->
-        <!-- <breadbox></breadbox>   -->
-        <!-- <keep-alive> -->
-        <router-view></router-view>
-        <!-- </keep-alive> -->
-      </div>
-    </div>
-     <footer class="footer">
+                <i class="el-icon-notebook-1"></i><span>课程内容</span>
+              </el-menu-item>
+
+              <el-submenu index="2">
+                <template slot="title">
+                  <span style="font-size: 1em"
+                    ><i class="el-icon-edit-outline" aria-hidden="true"></i> 作业与测验</span
+                  >
+                </template>
+                <el-menu-item
+                  index="/studycourse/coursehomework"
+                  style="width: 160px"
+                  >
+                  <i class="el-icon-edit"></i>作业</el-menu-item
+                >
+                <el-menu-item
+                  index="/studycourse/coursestudenttest"
+                  style="width: 160px"
+                  >
+                  <i class="el-icon-edit"></i>测验</el-menu-item
+                >
+              </el-submenu>
+
+              <el-menu-item
+                v-if="hasMenu('/studycourse/coursetest')"
+                index="/studycourse/courseExperiment"
+                style="width: 160px"
+                ><i class="el-icon-suitcase"></i>
+                <span>  课程实验</span>
+              </el-menu-item>
+
+              <el-submenu index="3">
+                <template slot="title">       
+                  <span style="font-size: 1em"
+                    ><i class="el-icon-finished" aria-hidden="true"></i> 课程考试</span
+                  >
+                </template>
+              
+                <el-menu-item index="/studycourse/unitexam" 
+                    style="width: 160px"
+                  >
+                  <i class="el-icon-finished"></i>单元考试</el-menu-item
+                >
+                <el-menu-item
+                  index="/studycourse/midsemester"
+                  style="width: 160px"
+                  >
+                  <i class="el-icon-finished"></i>期中考试</el-menu-item
+                >
+                <el-menu-item index="/studycourse/finalexam" 
+                   style="width: 160px"
+                  >
+                  <i class="el-icon-finished"></i>期末考试</el-menu-item
+                >
+              </el-submenu>
+
+              <el-menu-item index="/studycourse/courseitem" style="width: 160px"
+                >
+                <i class="el-icon-office-building"></i> 课程项目</el-menu-item
+              >
+
+              <el-menu-item index="" style="width: 160px"
+                >
+                <i class="el-icon-share"></i>知识图谱</el-menu-item
+              >
+
+              <el-submenu index="5">
+                <template slot="title">
+                  <i class="el-icon-s-comment" aria-hidden="true"></i> 讨论区
+                </template>
+                <el-menu-item
+                  index="/studycourse/commentstu"
+                  style="min-width: auto"
+                  >
+                  <i class="el-icon-chat-round"></i>讨论区主界面</el-menu-item
+                >
+                <el-menu-item
+                  index="/studycourse/stutoteacher"
+                  style="min-width: auto"
+                  >
+                  <i class="el-icon-chat-line-round"></i>老师答疑区</el-menu-item
+                >
+              </el-submenu>
+
+              <el-menu-item index="/home/studentcourse" 
+                  style="min-width: auto"
+                >
+                <i class="el-icon-arrow-left"></i>回到主页</el-menu-item
+              >
+
+
+
+
+
+
+
+
+
+          </el-menu>
+          
+            
+        </el-aside>
+
+        <el-main class="main">
+          <router-view></router-view>
+        </el-main>
+      </el-container>
+
+      <footer class="foot">
         <p>©2020-2022 | 赣南师范大学 大数据与计算智能研究组</p>
       </footer>
+    </el-container>
   </div>
 </template>
 
 <script>
 import vTags from "../../common/Tags";
-// import Breadbox from "./BreadBox.vue";
-// import sildeBar from "./subcomponent/SildeBar";
-
 export default {
-  // components: { Breadbox, vTags, sildeBar },
-  components: { vTags },
+  components: { 
+    vTags 
+  },
+  computed: {},
+
   data() {
     return {
       menuIndex: this.$route.path,
@@ -197,7 +227,7 @@ export default {
       courseInstance: {}, //显示在head的信息
     };
   },
-  computed: {},
+
   mounted() {
     // 刷新时获取用户数据
     if (!this.$store.state.user.userInfo.isLogin) {
@@ -209,18 +239,16 @@ export default {
         this.$store.commit("recoverUserData", data);
       }
     }
-
-    console.log(this.hasKey("home:selfcenter:view"));
-    console.log(this.hasMenu("/home"));
-
-    console.log(this.$store.state.user.userInfo);
-
-    console.log("课程实例的id：", this.$route.query.id);
+    // console.log(this.hasKey("home:selfcenter:view"));
+    // console.log(this.hasMenu("/home"));
+    // console.log(this.$store.state.user.userInfo);
+    // console.log("课程实例的id：", this.$route.query.id);
     //this.courseId=this.$route.params.courseid;
     if (this.$route.query.id)
       this.$store.commit("setcourseCinstanceIdFun", this.$route.query.id); //保存课程实例的id后面 子组件要用到
     this.findACourseInstance();
   },
+
   methods: {
     //获取课程实例详情 显示head里面
     findACourseInstance() {
@@ -245,78 +273,85 @@ export default {
 };
 </script>
 <style scoped>
-.home {
-  width: 100%;
-  /* display: flex; */
-  display: flex;
-  flex-direction: column;
-}
-.home /deep/.el-submenu__title:hover {
-   background-color: #b9dbe0 !important; 
-}
-.el-menu-item:hover{
-  background-color: #b9dbe0 !important;
-}
-.el-menu-item:is-active{
-  background-color: #14889a !important;
-}
-.el-menu-item[data-v-edab3ee2] {
-    border: 1px  #14889a;
-}
-.chead {
+.head {
+  position: relative;
   width: 100%;
   background-color: #14889a;
-} 
-.el-button--primary {
-    color: #FFF;
-    background-color: #14889a;
-    border-color: #14889a;
-}
-.cmainbig {
-  /* flex: 1; */
+  color: #ffffff;
   display: flex;
-  /* grid-template-columns: repeat(100px,auto-fill); */
-  grid-template-columns: 10% 90%;
-  /* 可以保证caside和cmain的高度一样 */
-  min-height: 0;
-  /* display: flex; */
-  align-items: stretch;
-  width: 100%;
+  align-items: center;
+  /**垂直居中*/
+  justify-content: center;
+  /**水平居中*/
+}
+.system {
+  font-size: 20px;
+  margin-bottom: 3px;
+
+}
+.course {
+  font-size: 15px;
+  
+  margin-bottom: 1px;
+  
+
 }
 
-.caside {
-  background-color: #14889a;
-  flex: 1;
+.aside {
+  /* min-width: 130px;
+  max-width: 130px; */
+  max-height: 87vh;
+  max-width: 170px;
+  overflow-y: scroll;
 }
-.caside:hover {
-  background-color: #14889a;
-}
-.cmain {
-   /* overflow-y: scroll;  */
-   flex: 9;
+.el-aside::-webkit-scrollbar {
+     display: none;
 }
 
-.el-menu {
-    /* border: 1px solid #ccc; */
-    box-shadow: 3px 3px 5px #ccc;
+.submenu {
+  height: 50px;
+
 }
 .el-menu-item {
-  border: 1px  #14889a;
+  min-width: auto;
+}
+.el-submenu /deep/ .el-submenu__title:hover {
+  background-color: #b9dbe0 !important;
+}
+.el-menu-item:hover {
+  background-color: #b9dbe0 !important;
+}
+.el-menu-item:is-active {
+  background-color: #14889a !important;
 }
 
-.cfoot {
-  margin-top: auto;
-  background-color: #dee1e6;
+
+.main {
+  flex: 9;
+  position: absolute;
+  left: 150px;
+  right: 0;
+  top: 60px;
+  bottom: 42px;
+  overflow-y: scroll;
 }
 
-.footer {
-    background-color: #14889a;
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    /**垂直居中*/
-    justify-content: center;
-    /**水平居中*/
-    padding: 15px;
-  }
+.foot {
+  background-color: #14889a;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  /**垂直居中*/
+  justify-content: center;
+  /**水平居中*/
+  padding: 5px;
+  height: 30px;
+}
+.footer p {
+  font-size: 0.6em;
+  font-family: "宋体", Cochin, Georgia, Times, "Times New Roman", serif;
+  letter-spacing: 5px;
+}
+
+
 </style>

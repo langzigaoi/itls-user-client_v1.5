@@ -6,7 +6,7 @@ import axios from '../../axios'
 
  const preUrl = "/course/choosing/";
 
-// 获取课程实例详情
+// 学生 选课
 export const chooseCourseInstance = (params) => {
   return axios({
       url: preUrl + 'stuChoose',
@@ -14,4 +14,29 @@ export const chooseCourseInstance = (params) => {
       params
   })
 }
+
+// 获取学生列表
+export const findByCid = (params) => {
+  return axios({
+    url: preUrl + 'findByCid',
+    method: 'get',
+    params
+  })
+}
+
+// 退选已选课的学生
+export const remove = (data) => {
+  return axios({
+    url: preUrl + 'remove',
+    method: 'post',
+    data
+  })
+}
+
+
+
+
+
+
+
 

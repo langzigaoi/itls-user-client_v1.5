@@ -4,16 +4,9 @@ import axios from '../../axios'
 * 课程与课程实例-选课学生管理
 */
 
-const preUrl = "/course/coursechosingstu/"
+const preUrl = "/course/choosing/"
 
-// 获取选课学生列表
-export const findInfoByInd_id = (params) => {
-  return axios({
-    url: preUrl + 'findInfoByInd_id',
-    method: 'get',
-    params
-  })
-}
+
 
 // 获取用户信息
 export const getUserInfo = params => {

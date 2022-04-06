@@ -8,7 +8,7 @@ import * as choosing from './course/choosing'
  import * as resource from './course/resource'
  import * as section from './course/section'
  import * as week from './course/week'
- import * as coursechosingstu from './course/cousrechosingstu'
+ import * as coursechoosing from './course/cousrechoosing'
  import * as sectionhomework from './course/sectionhomework'
  import * as sectiontest from './course/sectiontest'
  import * as courseProblemType from './course/courseProblemType'
@@ -24,7 +24,7 @@ import * as choosing from './course/choosing'
   resource,
   section,
   week,
-  coursechosingstu,
+  coursechoosing,
   sectionhomework,
   sectiontest,
   courseProblemType,

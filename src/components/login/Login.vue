@@ -16,6 +16,7 @@
           v-model="loginForm.account"
           auto-complete="off"
           placeholder="学号/工号"
+          prop="account"
         ></el-input>
       </el-form-item>
 
@@ -25,6 +26,7 @@
           v-model="loginForm.password"
           auto-complete="off"
           placeholder="密码"
+          prop="password"
         ></el-input>
       </el-form-item>
 
@@ -35,6 +37,7 @@
               v-model="loginForm.captcha"
               placeholder="验证码, 单击图片刷新"
               style="width: 100%"
+              prop="captch"
             >
             </el-input>
           </el-form-item>
@@ -83,6 +86,11 @@ export default {
         password: "",
         captcha: "",
         src: "",
+      },
+      fieldRules:{
+        account: [{ required: true }],
+        password: [{ required: true }],
+        captcha: [{ required: true }],
       },
 
       verification: null,
