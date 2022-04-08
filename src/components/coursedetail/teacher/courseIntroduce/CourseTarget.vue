@@ -175,4 +175,36 @@ export default {
   text-align: center;
   line-height: 30px;
 }
+/* 更改element-UI按钮样式 */
+.el-button--primary {
+  color: #fff;
+  background-color: #14889a;
+  border-color: #14889a;
+}
+.el-button--primary:hover {
+  background-color: #61b6c4;
+  border-color: #61b6c4;
+}
+.el-button--primary:focus {
+  background-color: #14889a;
+  border-color: #14889a;
+}
+.el-button--default:hover {
+  color: #14889a;
+  border-color: #14889a;
+}
+.el-input__inner:focus {
+  border-color: #14889a;
+}
+.el-select .el-input__inner:focus {
+  border-color: #14889a;
+}
+.el-select .el-input.is-focus .el-input__inner:focus {
+  border-color: #14889a;
+}
+.el-select-dropdown__item.selected {
+  color: #14889a;
+  font-weight: 700;
+}
+
 </style>
