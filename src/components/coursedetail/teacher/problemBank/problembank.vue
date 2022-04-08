@@ -134,4 +134,21 @@
     margin-top: auto;
     background-color: #DEE1E6;
   }
+  .el-button--primary {
+    color: #FFF;
+    background-color: #14889a;
+    border-color: #14889a;
+}
+  .el-button--primary:hover {
+  background-color: #61b6c4;
+  border-color: #61b6c4;
+}
+.el-button--primary:focus {
+  background-color: #14889a;
+  border-color: #14889a;
+}
+.el-button--default:hover {
+  color: #14889a;
+  border-color: #14889a;
+}
 </style>

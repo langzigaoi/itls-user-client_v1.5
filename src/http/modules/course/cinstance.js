@@ -65,3 +65,12 @@ export const getIslearningCourse = (params) => {
     params
   })
 }
+
+// 发布课程实例
+export const release = async (params) => {
+  return axios({
+      url: preUrl + 'release',
+      method: 'patch',
+      params
+  })
+}

@@ -7,7 +7,7 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>课程目标</span>
-          <el-button style="float: right; padding: 3px 0" type="text" @click="openDialog">添加</el-button>
+          <el-button style="float: right; padding: 8px 10px 8px 10px" type="primary" @click="openDialog">添加</el-button>
         </div>
         <!-- 显示课程目标 -->
         <div v-for="(item, index) in allinfo" :key="index" class="text item" 

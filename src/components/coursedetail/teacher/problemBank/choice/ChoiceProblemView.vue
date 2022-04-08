@@ -1,8 +1,8 @@
 <template>
     <div style="margin-top:2vh; margin-bottom:30vh; text-align:left; padding-left:20px;" >
         <!-- 选择题{{courseId}} -->
-        <el-button @click="$refs.addDialog.changeDialogVisible()">新增题目</el-button>
-        <el-button @click="$refs.useractionLog.changedialogVisible()" :courseId.sync="courseId" v-if="haveValue">操作记录</el-button>
+        <el-button type="primary" @click="$refs.addDialog.changeDialogVisible()">新增题目</el-button>
+        <el-button type="primary" @click="$refs.useractionLog.changedialogVisible()" :courseId.sync="courseId" v-if="haveValue">操作记录</el-button>
         <!-- <router-link class="addbtn"  :to="{path: '/problemBank/ChoiceExcel', query: {courseId: courseId}}">导入导出文件</router-link> -->
         <add-dialog :courseId="courseId" ref="addDialog" updateList="updateList"></add-dialog>
         <choice-pro-list :courseId.sync="courseId" ref="listDialog" v-if="haveValue" > </choice-pro-list>
@@ -67,5 +67,22 @@ export default {
     border-radius: 4px;
     float: left;
     
+}
+.el-button--primary {
+    color: #FFF;
+    background-color: #14889a;
+    border-color: #14889a;
+}
+.el-button--primary:hover {
+  background-color: #61b6c4;
+  border-color: #61b6c4;
+}
+.el-button--primary:focus {
+  background-color: #14889a;
+  border-color: #14889a;
+}
+.el-button--default:hover {
+  color: #14889a;
+  border-color: #14889a;
 }
 </style>
