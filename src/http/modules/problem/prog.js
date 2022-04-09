@@ -5,6 +5,21 @@ import axios from '../../axios'
  */ 
 
  const preUrl = "/problem/program/";
+
+ export const findPage = (data) => {
+  return axios({
+    url: preUrl + 'findPage',
+    method: 'post',
+    data
+  })
+}
+export const findPerPage = (data) => {
+  return axios({
+    url: preUrl + 'findPerPage',
+    method: 'post',
+    data
+  })
+}
  
 
  // 编程题列表 已审核且未删除

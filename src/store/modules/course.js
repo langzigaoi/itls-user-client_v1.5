@@ -1,7 +1,9 @@
 export default {
     state: {
       courseCinstanceId:0,
-      courseProblemTypeList: []
+      courseProblemTypeList: [],
+      courseId: 0,
+      knowledge: [],
     },
     getters: {
    
@@ -12,6 +14,12 @@ export default {
       },
       setcourseProblemTypeList(state, data) {
         state.courseProblemTypeList = data;
+      },
+      setcourseId(state, data) {
+        state.courseId = data;
+      },
+      setknowledge(state, data) {
+        state.knowledge = data;
       },
     },
     actions: {

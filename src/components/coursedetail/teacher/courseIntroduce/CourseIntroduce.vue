@@ -1,276 +1,266 @@
 <template>
-  <div>
-  
+  <div class="outside" style="padding:10px ">
     <el-dialog
-        title="编辑课程实例"
-        width="60%"
-        :visible.sync="editInstanceDialogVisible"
-        :close-on-click-modal="false"
-        destroy-on-close
+      title="编辑课程实例"
+      width="60%"
+      :visible.sync="editInstanceDialogVisible"
+      :close-on-click-modal="false"
+      destroy-on-close
+    >
+      <el-form
+        ref="editInstanceForm"
+        :model="editInstanceForm"
+        :rules="addInstanceRules"
+        style="text-align: center"
       >
-        <el-form
-          ref="editInstanceForm"
-          :model="editInstanceForm"
-          :rules="addInstanceRules"
-          style="text-align:center"
-          
-        >
-          <div>
-            <el-row type="flex" justify="center">
-              <el-col :span="5">
-                <div>
-                  <el-upload
-                    class="avatar-uploader"
-                    :action="uploadimgurl"
-                    :show-file-list="false"
-                    :on-success="handleImageSuccess"
-                    name="image"
-                    with-credentials
-                    :before-upload="beforeImageUpload"
-                  >
-                    <img
-                      v-if="editInstanceForm.image"
-                      :src="editInstanceForm.image"
-                      style="max-width: 100px"
-                      class="avatar"
-                    />
-                    <i
-                      v-else
-                      class="el-icon-plus avatar-uploader-icon"
-                      style="
-                        min-width: 100px;
-                        border: 1px solid #ccc;
-                        min-height: 100px;
-                        line-height: 100px;
-                      "
-                    ></i>
-                  </el-upload>
-                </div>
-              </el-col>
-
-              <el-col :span="9">
-                <el-form-item label="课程名称" label-width="70px">
-                  <el-row type="flex">
-                   <el-input
-                      disabled
-                      style="width: 205px"
-                      size="small"
-                      v-model="editInstanceForm.courseName"
-                      placeholder="请输入内容"
-                    ></el-input>
-                    
-                  </el-row>
-                </el-form-item>
-
-                <el-form-item label="主 讲 人" label-width="70px">
-                  <el-row type="flex">
-                    <el-input
-                      style="width: 205px"
-                      size="small"
-                      v-model="editInstanceForm.lecturer"
-                      placeholder="请输入内容"
-                    ></el-input>
-                  </el-row>
-                </el-form-item>
-
-                <el-form-item label="开始时间" label-width="70px">
-                  <el-row type="flex">
-                    <el-date-picker
-                      disabled
-                      style="width: 205px"
-                      size="small"
-                      align="left"
-                      v-model="editInstanceForm.startYear"
-                      type="date"
-                      placeholder="选择日期"
-                      :picker-options="pickerOptions"
-                    >
-                    </el-date-picker>
-                  </el-row>
-                </el-form-item>
-
-                <el-form-item
-                  label="周 学 时"
-                  prop="hoursOfWeek"
-                  label-width="70px"
+        <div>
+          <el-row type="flex" justify="center">
+            <el-col :span="5">
+              <div>
+                <el-upload
+                  class="avatar-uploader"
+                  :action="uploadimgurl"
+                  :show-file-list="false"
+                  :on-success="handleImageSuccess"
+                  name="image"
+                  with-credentials
+                  :before-upload="beforeImageUpload"
                 >
-                  <el-row type="flex">
-                    <el-input
-                      style="width: 205px"
-                      size="small"
-                      v-model="editInstanceForm.hoursOfWeek"
-                      placeholder="请输入周学时"
-                    ></el-input>
-                  </el-row>
-                </el-form-item>
+                  <img
+                    v-if="editInstanceForm.image"
+                    :src="editInstanceForm.image"
+                    style="max-width: 100px"
+                    class="avatar"
+                  />
+                  <i
+                    v-else
+                    class="el-icon-plus avatar-uploader-icon"
+                    style="
+                      min-width: 100px;
+                      border: 1px solid #ccc;
+                      min-height: 100px;
+                      line-height: 100px;
+                    "
+                  ></i>
+                </el-upload>
+              </div>
+            </el-col>
 
-                
+            <el-col :span="9">
+              <el-form-item label="课程名称" label-width="70px">
+                <el-row type="flex">
+                  <el-input
+                    disabled
+                    style="width: 205px"
+                    size="small"
+                    v-model="editInstanceForm.courseName"
+                    placeholder="请输入内容"
+                  ></el-input>
+                </el-row>
+              </el-form-item>
 
-                
+              <el-form-item label="主 讲 人" label-width="70px">
+                <el-row type="flex">
+                  <el-input
+                    style="width: 205px"
+                    size="small"
+                    v-model="editInstanceForm.lecturer"
+                    placeholder="请输入内容"
+                  ></el-input>
+                </el-row>
+              </el-form-item>
 
-                <el-form-item label="需要编程" label-width="70px">
-                  <el-row type="flex">
-                    <div>
-                      <el-select
-                        size="small"
-                        v-model="editInstanceForm.isProgram"
-                        placeholder="请选择"
-                        @change="handleSelectIsProgram"
-                      >
-                        <el-option
-                          v-for="item in programOptions"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value"
-                        >
-                        </el-option>
-                      </el-select>
-                    </div>
-                  </el-row>
-                </el-form-item>
+              <el-form-item label="开始时间" label-width="70px">
+                <el-row type="flex">
+                  <el-date-picker
+                    disabled
+                    style="width: 205px"
+                    size="small"
+                    align="left"
+                    v-model="editInstanceForm.startYear"
+                    type="date"
+                    placeholder="选择日期"
+                    :picker-options="pickerOptions"
+                  >
+                  </el-date-picker>
+                </el-row>
+              </el-form-item>
 
-                
-              </el-col>
+              <el-form-item
+                label="周 学 时"
+                prop="hoursOfWeek"
+                label-width="70px"
+              >
+                <el-row type="flex">
+                  <el-input
+                    style="width: 205px"
+                    size="small"
+                    v-model="editInstanceForm.hoursOfWeek"
+                    placeholder="请输入周学时"
+                  ></el-input>
+                </el-row>
+              </el-form-item>
 
-              <el-col :span="10">
-                <el-form-item label="教学类型" label-width="70px">
-                  <el-row type="flex">
+              <el-form-item label="需要编程" label-width="70px">
+                <el-row type="flex">
+                  <div>
                     <el-select
                       size="small"
-                      v-model="editInstanceForm.teachingTypeId"
+                      v-model="editInstanceForm.isProgram"
+                      placeholder="请选择"
+                      @change="handleSelectIsProgram"
+                    >
+                      <el-option
+                        v-for="item in programOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </div>
+                </el-row>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="10">
+              <el-form-item label="教学类型" label-width="70px">
+                <el-row type="flex">
+                  <el-select
+                    size="small"
+                    v-model="editInstanceForm.teachingTypeId"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in allTeachingType"
+                      :key="item.value"
+                      :label="item.value"
+                      :value="item.id"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-row>
+              </el-form-item>
+
+              <el-form-item label="学   期" label-width="70px">
+                <el-row type="flex">
+                  <div>
+                    <el-select
+                      disabled
+                      size="small"
+                      v-model="editInstanceForm.semester"
                       placeholder="请选择"
                     >
                       <el-option
-                        v-for="item in allTeachingType"
+                        v-for="item in semesterOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </div>
+                </el-row>
+              </el-form-item>
+
+              <el-form-item label="结束时间" label-width="70px">
+                <el-row type="flex">
+                  <el-date-picker
+                    disabled
+                    style="width: 205px"
+                    size="small"
+                    align="left"
+                    v-model="editInstanceForm.endYear"
+                    type="date"
+                    placeholder="选择日期"
+                    :picker-options="pickerOptions"
+                  >
+                  </el-date-picker>
+                </el-row>
+              </el-form-item>
+
+              <el-form-item label="学分" prop="grade" label-width="70px">
+                <el-row type="flex">
+                  <el-input
+                    style="width: 205px"
+                    size="small"
+                    v-model="editInstanceForm.grade"
+                    placeholder="请输入学分"
+                  ></el-input>
+                </el-row>
+              </el-form-item>
+
+              <el-form-item label="编程语言" label-width="70px">
+                <el-row type="flex">
+                  <div>
+                    <el-select
+                      :disabled="program"
+                      multiple
+                      size="small"
+                      v-model="langlist"
+                      @change="handleSelectLanguage"
+                      placeholder="请选择"
+                      clearable
+                    >
+                      <el-option
+                        v-for="item in allLanguage"
                         :key="item.value"
                         :label="item.value"
                         :value="item.id"
                       >
                       </el-option>
                     </el-select>
-                  </el-row>
-                </el-form-item>
+                  </div>
+                </el-row>
+              </el-form-item>
+            </el-col>
+          </el-row>
 
-                <el-form-item label="学   期" label-width="70px">
-                  <el-row type="flex">
-                    <div>
-                      <el-select
-                        disabled
-                        size="small"
-                        v-model="editInstanceForm.semester"
-                        placeholder="请选择"
-                      >
-                        <el-option
-                          v-for="item in semesterOptions"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value"
-                        >
-                        </el-option>
-                      </el-select>
-                    </div>
-                  </el-row>
-                </el-form-item>
+          <el-row type="flex" justify="center">
+            <el-col :span="5"></el-col>
+            <el-col :span="19">
+              <el-form-item label="课程简介" label-width="70px">
+                <el-row type="flex">
+                  <el-input
+                    style="width: 570px"
+                    size="small"
+                    type="textarea"
+                    :rows="4"
+                    v-model="editInstanceForm.intro"
+                    placeholder="请输入内容"
+                  ></el-input>
+                </el-row>
+              </el-form-item>
+            </el-col>
+          </el-row>
 
-                <el-form-item label="结束时间" label-width="70px">
-                  <el-row type="flex">
-                    <el-date-picker
-                      disabled
-                      style="width: 205px"
-                      size="small"
-                      align="left"
-                      v-model="editInstanceForm.endYear"
-                      type="date"
-                      placeholder="选择日期"
-                      :picker-options="pickerOptions"
-                    >
-                    </el-date-picker>
-                  </el-row>
-                </el-form-item>
-              
-                <el-form-item label="学分" prop="grade" label-width="70px" >
-                
-                  <el-row type="flex">
-                    <el-input
-                      style="width: 205px"
-                      size="small"
-                      v-model="editInstanceForm.grade"
-                      placeholder="请输入学分"
-                    ></el-input>
-                  </el-row>
-                </el-form-item>
-
-                <el-form-item label="编程语言" label-width="70px">
-                  <el-row type="flex">
-                    <div>
-                      <el-select
-                       :disabled="program"
-                        multiple
-                        size="small"
-                        v-model="langlist"
-                        @change="handleSelectLanguage"
-                        placeholder="请选择"
-                        clearable
-                      >
-                        <el-option
-                          v-for="item in allLanguage"
-                          :key="item.value"
-                          :label="item.value"
-                          :value="item.id"
-                        >
-                        </el-option>
-                      </el-select>
-                    </div>
-                  </el-row>
-                </el-form-item>
-
-              </el-col>
+          <div>
+            <el-row type="flex" align="bottom" justify="end">
+              <el-button size="mini" @click="closeEditInstanceForm"
+                >返回
+              </el-button>
+              <el-button type="primary" size="mini" @click="submitEditInstance"
+                >确定</el-button
+              >
             </el-row>
-
-            <el-row type="flex" justify="center">
-              <el-col :span="5"></el-col>
-              <el-col :span="19">
-                <el-form-item label="课程简介" label-width="70px">
-                  <el-row type="flex">
-                    <el-input
-                      style="width: 570px"
-                      size="small"
-                      type="textarea"
-                      :rows="4"
-                      v-model="editInstanceForm.intro"
-                      placeholder="请输入内容"
-                    ></el-input>
-                  </el-row>
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-            <div>
-              <el-row type="flex" align="bottom" justify="end">
-                <el-button size="mini" @click="closeEditInstanceForm"
-                  >返回
-                </el-button>
-                <el-button type="primary" size="mini" @click="submitEditInstance"
-                  >确定</el-button
-                >
-              </el-row>
-            </div>
           </div>
-        </el-form>
-      </el-dialog>
+        </div>
+      </el-form>
+    </el-dialog>
 
-      
     <!-- 展示 -->
     <div v-show="!isEdit" class="tcommonBox">
       <header>
-        <h1>
-          课程介绍
-        </h1>
       </header>
-       <el-row>
+      <el-row>
         <el-col :span="5">
           <div>
-            <el-avatar shape="square" fit="contain" :size="120" :src="courseInstance.image"></el-avatar>
+            <el-avatar
+              shape="square"
+              fit="contain"
+              :size="120"
+              :src="courseInstance.image"
+            ></el-avatar>
           </div>
         </el-col>
 
@@ -295,7 +285,7 @@
             <div>
               <span>主讲人</span>
               <el-divider direction="vertical"></el-divider>
-              <span>{{ courseInstance.lecturer}}</span>
+              <span>{{ courseInstance.lecturer }}</span>
             </div>
           </el-row>
 
@@ -303,8 +293,8 @@
             <div>
               <span>起止日期</span>
               <el-divider direction="vertical"></el-divider>
-            <span>{{ dateFormate(new Date(courseInstance.startYear)) }}</span
-            >~<span>{{ dateFormate(new Date(courseInstance.endYear)) }}</span>
+              <span>{{ dateFormate(new Date(courseInstance.startYear)) }}</span
+              >~<span>{{ dateFormate(new Date(courseInstance.endYear)) }}</span>
             </div>
           </el-row>
 
@@ -320,7 +310,7 @@
             <div>
               <span>需要编程</span>
               <el-divider direction="vertical"></el-divider>
-              <span v-if="courseInstance.isProgram==1">是</span>
+              <span v-if="courseInstance.isProgram == 1">是</span>
               <span v-else>否</span>
             </div>
           </el-row>
@@ -331,20 +321,20 @@
               type="primary"
               :disabled="this.courseInstance.isRelease === 1"
               @click="chandgeEditInstanceVisible()"
-            >编辑
+              >编辑
             </el-button>
             <el-button
               size="mini"
               type="danger"
               :disabled="this.courseInstance.isRelease === 1"
               @click="releaseCinstance()"
-            >发布
+              >发布
             </el-button>
           </div>
         </el-col>
 
         <el-col :span="12">
-          <el-row class="el-row-margin">  
+          <el-row class="el-row-margin">
             <div>
               <span>教学类型</span>
               <el-divider direction="vertical"></el-divider>
@@ -372,9 +362,10 @@
             <div>
               <span>编程语言</span>
               <el-divider direction="vertical"></el-divider>
-              <span v-for="(value, index) in languageList" :key="index">&nbsp;{{ value.name }}语言
-              <span v-if="index != languageList.length - 1">、</span>&nbsp;
-            </span>
+              <span v-for="(value, index) in languageList" :key="index"
+                >&nbsp;{{ value.name }}语言
+                <span v-if="index != languageList.length - 1">、</span>&nbsp;
+              </span>
             </div>
           </el-row>
 
@@ -382,19 +373,22 @@
             <div>
               <span>课程简介</span>
               <el-divider direction="vertical"></el-divider>
-              <span>{{ courseInstance.intro}}</span>
+              <span>{{ courseInstance.intro }}</span>
             </div>
           </el-row>
         </el-col>
       </el-row>
     </div>
-    </div>
+  </div>
 </template>
 <script>
 import { baseUrl, avatarUrl } from "@/utils/global";
 export default {
   data() {
     return {
+
+
+
       infoForm: {},
       // 编辑页面显示标记
       editInfoFormVisible: false,
@@ -404,16 +398,7 @@ export default {
       dialogTableVisible: false,
       courseProblem: [],
       problemList: [],
-      sexOptions: [
-        {
-          value: "男",
-          label: "男",
-        },
-        {
-          value: "女",
-          label: "女",
-        },
-      ],
+      
       // 时间选择器
       pickerOptions: {
         disabledDate(time) {},
@@ -426,7 +411,7 @@ export default {
       checkLanguage: [],
       program: false,
       infoFormRules: {
-        telNum: [{ validator: this.checkTel, trigger: 'blur' }],
+        telNum: [{ validator: this.checkTel, trigger: "blur" }],
         email: [{ validator: this.checkEmail, trigger: "blur" }],
       },
 
@@ -478,19 +463,18 @@ export default {
       program: false,
       cinstanceLanguage: [],
       // 时间选择器
-      pickerOptions: {
-      },
+      pickerOptions: {},
       addInstanceRules: {
         hoursOfWeek: [{ validator: this.checkHoursOfWeek, trigger: "blur" }],
         grade: [{ validator: this.checkGrade, trigger: "blur" }],
       },
-       // 编辑课程实例
+      // 编辑课程实例
       editInstanceDialogVisible: false,
-      editInstanceForm:{},
+      editInstanceForm: {},
       editInstanceRules: {},
     };
   },
-  
+
   mounted() {
     this.findACourseInstance();
     this.findAllLanguage();
@@ -505,14 +489,13 @@ export default {
         );
       });
     },
-    
   },
   methods: {
-     //自增序列
+    //自增序列
     indexMethod(index) {
       return index + 1;
     },
-    
+
     isedit() {
       this.isEdit = true;
       this.checkLanguage = this.languageList;
@@ -546,15 +529,15 @@ export default {
         this.courseInstance.image = res.data;
       }
     },
-     handleTitleSelect(item) {
+    handleTitleSelect(item) {
       this.infoForm.title = item;
       // console.log(item);
     },
 
-     handleSelectIsProgram(item) {
+    handleSelectIsProgram(item) {
       // console.log(this.addInstanceInform.isProgram);
       console.log(item);
-      if(item == "1") {
+      if (item == "1") {
         this.program = false;
       } else {
         this.program = true;
@@ -568,35 +551,40 @@ export default {
       this.editInstanceDialogVisible = true;
     },
     // 回显用
-    findLanguageByCid(cid){
-      this.$api.course.language.findCinstanceLanguage({cid: cid}).then((res) => {
-      let data = res.data
-      let list = [];
-      for (let index = 0; index < data.length; index++) {
-                list.push(data[index].id)
-      };
-      // console.log(list);
-      this.langlist = list;
-      })
+    findLanguageByCid(cid) {
+      this.$api.course.language
+        .findCinstanceLanguage({ cid: cid })
+        .then((res) => {
+          let data = res.data;
+          let list = [];
+          for (let index = 0; index < data.length; index++) {
+            list.push(data[index].id);
+          }
+          // console.log(list);
+          this.langlist = list;
+        });
     },
     //发布课程实例
-     releaseCinstance() {
-      this.$confirm("发布后将不能再进行编辑，确认发布吗？", "提示", {}).then(() => {
-      this.$api.course.cinstance
-          .release({ id: this.$store.state.course.courseCinstanceId })
-          .then((res) => {
-            if (res.msg == "发布成功") {
-                  this.$message({ message: res.msg, type: "success" });
-                  this.findACourseInstance()
-                } else {
-                  this.$message({
-                    message: res.msg ,type: "error",
-                  });
-                }
-          });
-      });
+    releaseCinstance() {
+      this.$confirm("发布后将不能再进行编辑，确认发布吗？", "提示", {}).then(
+        () => {
+          this.$api.course.cinstance
+            .release({ id: this.$store.state.course.courseCinstanceId })
+            .then((res) => {
+              if (res.msg == "发布成功") {
+                this.$message({ message: res.msg, type: "success" });
+                this.findACourseInstance();
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: "error",
+                });
+              }
+            });
+        }
+      );
     },
-     // 获取课程编程语言
+    // 获取课程编程语言
     findCinstanceLanguage(id) {
       this.$api.course.language
         .findCinstanceLanguage({ cid: id })
@@ -627,7 +615,6 @@ export default {
       console.log(value);
       this.langlist = value;
       // console.log(this.langlist);
-      
     },
     findAllTeachingType() {
       let suggests = [];
@@ -685,7 +672,7 @@ export default {
         this.allLanguage = suggests;
       });
     },
-   
+
     // 修改课程编程语言
     updateCinstanceLanguage() {
       let cinstanceLanguage = [];
@@ -712,24 +699,21 @@ export default {
     submitLanguage(cid) {
       let list = [];
       for (let index = 0; index < this.langlist.length; index++) {
-                list.push({cinstanceId: cid, languageId: this.langlist[index]})
-      };
+        list.push({ cinstanceId: cid, languageId: this.langlist[index] });
+      }
       console.log(list);
-      this.$api.course.language.addCinstanceLanguage(list).then((res) => {
-      })
-    
+      this.$api.course.language.addCinstanceLanguage(list).then((res) => {});
     },
-     handleInto(item) {
+    handleInto(item) {
       console.log(item);
-      let path = "/course"
-      let id = item.id
+      let path = "/course";
+      let id = item.id;
       this.$router.push({
         path: path,
         query: {
-          id: id
-        }
-      })
-
+          id: id,
+        },
+      });
     },
     submitEditInstance() {
       this.$confirm("确认提交吗？", "提示", {}).then(() => {
@@ -744,7 +728,7 @@ export default {
               type: "success",
             });
             // this.getAllInstance();
-            this.findACourseInstance()
+            this.findACourseInstance();
             this.closeEditInstanceForm();
           } else {
             this.$message({
@@ -755,14 +739,14 @@ export default {
         });
       });
     },
-     // 编辑
+    // 编辑
     submitInfoForm: function () {
       this.$refs.infoForm.validate((valid) => {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
             this.editLoading = true;
             let params = Object.assign({}, this.infoForm);
-           
+
             this.$api.user.selfCenter.save(params).then((res) => {
               this.editLoading = false;
               if (res.code == 200) {
@@ -867,6 +851,11 @@ export default {
 };
 </script>
 <style scoped>
+.outside{
+  text-align: center;
+}
+
+
 .tcommonBox {
   white-space: normal;
   word-wrap: break-word;
@@ -875,7 +864,6 @@ export default {
   background: #fff;
   padding: 15px;
   border-radius: 5px;
-  font-size: 20px;
   text-align: left;
   margin-top: 15px;
 }
@@ -974,7 +962,6 @@ userInfoBox li {
 }
 /*个人设置*/
 
-
 .userInfoBox .leftTitle {
   display: inline-block;
   width: 100px;
@@ -1020,7 +1007,7 @@ userInfoBox li {
 .userInfoBox .fa-asterisk {
   color: #df2050;
 }
-header{
-    border-top: 1px;
+header {
+  border-top: 1px;
 }
 </style>

@@ -5,14 +5,18 @@
   <div class="outside" style="padding:50px " >
 
     <com-table 
-      :data="tableData"
+      :data="pageResults"
       :columns="columns"
+      :delFlag="true"
+      :showOperation="true"
+      @findPage="findPage"
+      @handleRemove="handleRemove"
 
     ></com-table>
     
 
 
-    <el-table
+    <!-- <el-table
       ref="multipleTable"
       :data="tableData"
       @selection-change="handleSelectionChange"
@@ -37,11 +41,6 @@
         label="序号"
         :index="indexMethod"
       ></el-table-column>
-      <!--  <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column label="日期" width="120">
-        <template slot-scope="scope">{{ scope.row.date }}</template>
-      </el-table-column>
-      <el-table-column prop="address" label="地址" show-overflow-tooltip></el-table-column> -->
       <el-table-column
         prop="stuNo"
         label="学号/教工号"
@@ -53,24 +52,18 @@
         sortable
       >
       </el-table-column>
-      <!-- <el-table-column prop="usrUserInfo.email" label="邮箱"> </el-table-column>
-      <el-table-column prop="usrUserInfo.telNum" label="电话" width="120"> </el-table-column>
-      <el-table-column prop="isAssistant" label="职务">
-        <template slot-scope="scope">
-          {{scope.row.isAssistant | isAssistantFilter}}
-        </template>
-      </el-table-column> -->
+    
       <el-table-column label="操作" >
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="danger"
             @click="handleRemove(scope.$index, scope.row)"
-            >退选</el-button
+            >移除</el-button
           >
         </template>
       </el-table-column>
-    </el-table>
+    </el-table> -->
     
 
   </div>
@@ -84,15 +77,14 @@ export default {
     },
     data() {
     return {
-      tableData: [],
       record: {},
+      pageRequest: { pageNum: 1, pageSize: 10 },
+      pageResults: {},
+
 
       columns: [
-        // {prop:"", label:"", minWidth:150},
-        // {prop:"courseId", label:"课程id", minWidth:150},
         { prop: "stuNo", label: "学号", minWidth: 150, align: "center" },
-        { prop: "usrUserInfo.name", label: "名字", minWidth: 150, align: "center" },
-        // // {prop:"knowledgeId", label:"知识点id", minWidth:50},
+        { prop: "name", label: "名字", minWidth: 150, align: "center" },
         
       ],
 
@@ -101,52 +93,36 @@ export default {
     };
   },
   methods: {
-    // 自增排序
-    indexMethod: function (index) {
-      return index + 1;
-    },
-
-    findInfoByCid() {
+    // 分页查询
+    findPage(data) {
+      if (data !== null) {
+        this.pageRequest = data.pageRequest;
+      }
+      this.pageRequest.params = [
+        { name: "cinstanceId", value: this.$store.state.course.courseCinstanceId },
+      ];
+      // console.log(this.pageRequest);
       this.$api.course.choosing
-        .findByCid({ cid: this.$store.state.course.courseCinstanceId })
+        .findPage(this.pageRequest)
         .then((res) => {
-          this.tableData = res.data;
-          console.log(this.tableData);
-        });
-    },
-
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+          // console.log(res.data);
+          this.pageResults = res.data;
+          // console.log(this.pageResults);
+        })
+        .then(data != null ? data.callback : "");
     },
 
     // 删除
-    handleRemove: function (index, row) {
-      this.remove(row.stuNo);
+    handleRemove(data) {
+      // console.log("diaodaole");
+      console.log(data.params);
+      this.$api.course.choosing.remove(data.params)
+      .then(data != null ? data.callback : "");
     },
-    remove(no) {
-      this.$confirm("确认提交吗？", "提示", {}).then(() => {
-        let params = [];
-        let noArray = (no + "").split(",");
-        // console.log(noArray);
-        for (var i = 0; i < noArray.length; i++) {
-          params.push({
-            stuNo: noArray[i],
-            indId: this.$store.state.course.courseCinstanceId,
-          });
-        }
-        console.log(params);
-        this.$api.course.choosing
-          .remove(params)
-          .then((res) => {
-            console.log(res.data);
-            this.findInfoByCid();
-            this.$message({ message: "操作成功", type: "success" });
-          })
-          .catch((err) => {
-            this.$message.err("退选失败");
-          });
-      });
-    },
+
+
+
+
   },
   filters: {
     isAssistantFilter(isAssistant) {
@@ -160,13 +136,14 @@ export default {
     },
   },
   mounted() {
-    this.findInfoByCid();
+    // this.findInfoByCid();
+    // this.findPage();
   },
 };
 </script>
 <style scoped>
 .outside{
   text-align: center;
-
 }
+
 </style>

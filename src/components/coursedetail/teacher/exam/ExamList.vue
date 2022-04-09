@@ -1,41 +1,26 @@
 <template>
 <div>
-  <!-- <el-container>
-    
-    <el-main> -->
-      <!-- <div class="page-container"> -->
-        <!--工具栏-->
         <el-row>
           <el-col :span="12" align="right">
             <el-tabs
-              v-model="isPub"
+              v-model="examType"
               type="card"
-              @tab-click="getAllInstance"
+              @tab-click="getAllExam"
               class="mlef-20"
             >
-              <el-tab-pane label="待审核" name="0"></el-tab-pane>
-              <el-tab-pane label="我的课程" name="1"></el-tab-pane>
+              <el-tab-pane label="单元测试" name="1"></el-tab-pane>
+              <el-tab-pane label="期中测试" name="2"></el-tab-pane>
+              <el-tab-pane label="期末测试" name="3"></el-tab-pane>
+
             </el-tabs>
           </el-col>
           <el-col :span="12">
-            <el-form :inline="true" :model="filters">
-              <el-form-item>
-                <el-input
-                  size="small"
-                  v-model="filters.name"
-                  placeholder="名称"
-                ></el-input>
-              </el-form-item>
-
-              <el-form-item>
-                <el-button size="mini" type="primary">查询</el-button>
-              </el-form-item>
-
+            <el-form :inline="true" :model="filters">               
               <el-form-item>
                 <el-button
                   size="mini"
                   type="primary"
-                  @click="chandgeAddInstanceVisible"
+                  @click="chandgeAddExamVisible"
                   >新增</el-button
                 >
               </el-form-item>
@@ -43,86 +28,10 @@
           </el-col>
         </el-row>
 
-        <el-card
-          class="box-card"
-          style="padding: 0"
-          :body-style="{ padding: '15px' }"
-          v-for="(item, index) in tableFliter"
-          :key="index"
-        >
-          <div class="card-header" align="center">
-            <div class="fl-left" style="width: 60%; padding-top: 5px">
-              <!-- <h3 class="clear-pm">{{ item.courseName }}</h3> -->
-            </div>
-          </div>
+       
 
-          <div class="card-body">
-            <div style="width: 50%">
-              <el-image
-                :src="item.image"
-                fit="fill"
-                style="width: 250px; height: 180px"
-              >
-                <div slot="placeholder" class="image-slot">
-                  加载中<span class="dot">...</span>
-                </div>
-              </el-image>
-            </div>
-            <div style="width: 80%" align="left">
-              <el-row >
-                <el-col :span="10">
-                  <el-row>
-                    <div class="details-lable">课程名称:</div>
-                  </el-row>
-                  <!-- <el-row>
-                    <div class="details-lable">课程简介:</div>
-                  </el-row> -->
-                  <el-row>
-                    <div class="details-lable">申请时间:</div>
-                  </el-row>
-                </el-col>
 
-                <el-col :span="14">
-                  <el-row>
-                    <div class="details-lable">{{ item.courseName }}</div>
-                  </el-row>
-                  <!-- <el-row>
-                    <div class="details-lable">{{ item.intro }}</div>
-                  </el-row> -->
-                  <el-row>
-                    <div class="time">"{{ time(item.createTime) }}"</div>
-                  </el-row>
-                </el-col>
-              </el-row>
-            </div>
 
-            <div class="card-footer">
-              <div style="float: right; padding: 3px 0" type="text">
-                <el-button
-                  v-show="isPub == 0 "
-                  size="mini"
-                  type="primary"
-                  @click="chandgeEditInstanceVisible(item)"
-                >编辑</el-button>
-                <el-button
-                  v-show="isPub == 1"
-                  size="mini"
-                  type="primary"
-                  @click="handleInto(item)"
-                >进入课程</el-button>
-                <el-button
-                  v-show="isPub == 0"
-                  size="mini"
-                  type="danger"
-                  @click="handleDelete(item)"
-                >删除</el-button>
-        
-              </div>
-            </div>
-          </div>
-
-        </el-card>
-      <!-- </div> -->
 
       <!-- 编辑课程实例-->
       <el-dialog
@@ -771,6 +680,13 @@ import { baseUrl } from "@/utils/global";
 export default {
   data() {
     return {
+        examType: "1",
+
+
+
+
+
+
       isPub: "1",
       // 课程实例数据
       allIstance: [],
@@ -885,12 +801,12 @@ export default {
     },
     //获取所有课程实例
     getAllInstance() {
-      // console.log(this.isPub);
+      console.log(this.isPub);
       this.loading = true;
       this.$api.course.cinstance
         .findAllCourseInstance({ isPub: this.isPub })
         .then((res) => {
-          // console.log(res.data);
+          console.log(res.data);
           this.tableData = res.data;
           this.loading = false;
         })
@@ -915,7 +831,7 @@ export default {
     },
     handleCourseSelect(item) {
       this.addInstanceInform.course = item;
-      // console.log(item);
+      console.log(item);
     },
     // 课程实例
     chandgeAddInstanceVisible() {
@@ -949,7 +865,7 @@ export default {
       // this.addInstanceInform.avatar = URL.createObjectURL(file.raw);
       console.log("上传成功的回调", res);
       this.addInstanceInform.image = res.data;
-      // console.log(this.addInstanceInform.image);
+      console.log(this.addInstanceInform.image);
     },
     findAllTeachingType() {
       let suggests = [];
@@ -993,7 +909,7 @@ export default {
         this.$api.course.cinstance.add(params).then((res) => {
           this.editLoading = false;
           if (res.code == 200) {
-            // console.log(res.data);
+            console.log(res.data);
             let cid = res.data;
             this.submitLanguage(cid);
             this.$message({
@@ -1052,7 +968,7 @@ export default {
             id: res.data[index].id,
           });
         }
-        // console.log(suggests);
+        console.log(suggests);
         this.allLevel = suggests;
       });
     },
@@ -1109,7 +1025,7 @@ export default {
       }
     },
     handleSelectLanguage(value) {
-      // console.log(value);
+      console.log(value);
       this.langlist = value;
       // console.log(this.langlist);
       
@@ -1197,7 +1113,7 @@ export default {
     },
 
     handleInto(item) {
-      // console.log(item);
+      console.log(item);
       let path = "/course"
       let id = item.id
       this.$router.push({
@@ -1274,7 +1190,12 @@ export default {
         height: 50px;
 }
     
+/* .el-form-item.is-required .el-form-item__label:before {
+        content: none !important;
+} */
 
-
+.el-tabs__item.is-active {
+  color: #14889A;
+}
 
 </style>
