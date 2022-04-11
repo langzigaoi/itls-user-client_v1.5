@@ -205,6 +205,7 @@
               >
                 <el-row type="flex">
                   <el-input
+                    disabled
                     style="width: 205px"
                     size="small"
                     v-model="editInstanceForm.hoursOfWeek"
@@ -294,6 +295,7 @@
               <el-form-item label="学分" prop="grade" label-width="70px">
                 <el-row type="flex">
                   <el-input
+                    disabled
                     style="width: 205px"
                     size="small"
                     v-model="editInstanceForm.grade"

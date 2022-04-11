@@ -6,16 +6,17 @@
     <section style="width: 90%; margin: 2% auto" @mouseleave="mouseleave()">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>课程目标</span>
-          <el-button style="float: right; padding: 8px 10px 8px 10px" type="primary" @click="openDialog">添加</el-button>
+          <span> </span>
+          <el-button size="mini" type="primary" @click="openAddDialog"
+            >添加</el-button
+          >
         </div>
         <!-- 显示课程目标 -->
-        <div v-for="(item, index) in allinfo" :key="index" class="text item" 
-          style="border-bottom: 1px solid #ddd; margin: 2%; text-indent: 2em; line-height: 40px" 
+        <!-- <div v-for="(item, index) in allinfo" :key="index" class="text item" 
+          style="border-bottom: 1px solid #ddd; margin: 2%; text-indent: 2em; line-height: 60px" 
           @mouseenter="showDelBtn(index)" 
           @mouseleave="hideDelBtn(index)">
           <span >
-            <!-- 课程目标编辑 -->
             <div v-if="index == current1 && isEdit">
               {{index+1}}、<el-input
                 type="textarea"
@@ -34,23 +35,82 @@
               <i class="fa fa-trash" v-if="hover && index==current" style="color: red; cursor: pointer;" @click="deleteObj(index)"></i>
               <i class="fa fa-edit" v-if="hover && index==current" style="color: green; cursor: pointer" @click="editObj(index)"></i>
             </div>
+            <el-button size="mini" type="primary" @click="updateTarget(index)">编辑</el-button>
+            <el-button size="mini" type="danger" @click="current1 = -1">删除</el-button>
           </span>
-        </div>
+          
+        </div> -->
+        <el-table
+          :data="allinfo"
+          style="width: 100%"
+          :row-style="{ height: '70px' }"
+        >
+          <el-table-column label="课程目标 (最多可添加五条)" width="1000">
+            <template slot-scope="scope">
+              <i class="el-icon-star-on"></i>
+              <span style="margin-left: 10px">{{ scope.row.name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="openUpdateDialog(scope.$index, scope.row)"
+                >编辑</el-button
+              >
+              <el-button
+                size="mini"
+                type="danger"
+                @click="deleteObj(scope.$index, scope.row)"
+                >删除</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
       </el-card>
       <el-dialog
-        title="添加"
-        :visible.sync="DialogVisible"
+        title="添加课程目标"
+        :visible.sync="addDialogVisible"
         width="500px"
-        center>
+        center
+      >
         <el-input
           type="textarea"
           :rows="4"
           placeholder="请输入内容"
-          v-model="textarea">
+          v-model="addtextarea"
+        >
         </el-input>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="DialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="addTarget">确 定</el-button>
+          <el-button size="mini" @click="addDialogVisible = false"
+            >取 消</el-button
+          >
+          <el-button size="mini" type="primary" @click="addTarget"
+            >确 定</el-button
+          >
+        </span>
+      </el-dialog>
+
+      <el-dialog
+        title="编辑课程目标"
+        :visible.sync="updateDialogVisible"
+        width="500px"
+        center
+      >
+        <el-input
+          type="textarea"
+          :rows="4"
+          placeholder="请输入内容"
+          v-model="updatetextarea"
+        >
+        </el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button size="mini" @click="updateDialogVisible = false"
+            >取 消</el-button
+          >
+          <el-button size="mini" type="primary" @click="updateTarget"
+            >确 定</el-button
+          >
         </span>
       </el-dialog>
     </section>
@@ -63,105 +123,124 @@ export default {
     return {
       allinfo: [], //存放课程目标查询回来的所有信息
       targets: [], //所有课程目标
-      DialogVisible: false, //用于表示dialog显示与否
-      textarea: '', //用于
+      addDialogVisible: false, //用于表示添加dialog显示与否
+      updateDialogVisible: false, //用于表示编辑dialog显示与否
+      addtextarea: "", //用于
+      updatetextarea: "", //用于
       hover: false, //用于鼠标悬浮时显示
       current: -1, //表示当前操作位置
       isEdit: false, //是否编辑
-      target: '', //用于存放修改的课程项目
+      target: "", //用于存放修改的课程项目
       current1: -1, //表示当前修改位置
-    }
+      updateId: -1,
+    };
   },
-  mounted(){
-        this.findCinstanceTargets();
+  mounted() {
+    this.findCinstanceTargets();
   },
   methods: {
     // 获取课程实例的课程目标
     findCinstanceTargets() {
-      this.$api.course.target.findAllTargets({cinstance_id: this.$store.state.course.courseCinstanceId}).then( res => {
-        // console.log(res.data);
-        this.allinfo = res.data
-      })
+      this.$api.course.target
+        .findAllTargets({
+          cinstance_id: this.$store.state.course.courseCinstanceId,
+        })
+        .then((res) => {
+          // console.log(res.data);
+          this.allinfo = res.data;
+        });
     },
     //显示鼠标悬浮时的样式
     showDelBtn(index) {
-      this.current = index
-      this.hover = true
+      this.current = index;
+      this.hover = true;
     },
     //隐藏鼠标悬浮时的样式
     hideDelBtn(index) {
-      this.current = index
-      this.hover = false
+      this.current = index;
+      this.hover = false;
     },
     // 鼠标按下编辑课程目标
-    editObj(index){
-      this.target = this.allinfo[index].name
-      this.current1 = index
-      this.isEdit = true
+    editObj(index) {
+      this.target = this.allinfo[index].name;
+      this.current1 = index;
+      this.isEdit = true;
     },
     // 鼠标离开课程目标显示块元素
     mouseleave() {
       // this.current1 = -1
     },
+    // 打开增加课程目标的弹窗
+    openAddDialog() {
+      this.addtextarea = "";
+      this.addDialogVisible = true;
+    },
+    // 打开编辑课程目标的弹窗
+    openUpdateDialog(index, row) {
+      this.updatetextarea = row.name;
+      this.updateId = row.id;
+      this.updateDialogVisible = true;
+    },
     // 确定修改课程目标
-    updateTarget(index) {
-      console.log(this.target);
-      if(this.target == this.allinfo[index].name) {
-        this.isEdit = false
-        return
-      }else if(this.target == null || this.target =='') {
-        this.warnMsg('课程目标不能为空')
-      }else {
-        this.$api.course.target.updateTarget({name: this.target, id: this.allinfo[index].id}).then( res => {
-        this.succMsg(res.msg)
-        this.isEdit = false
-        this.findCinstanceTargets()
-      })
+    updateTarget() {
+      console.log(this.updatetextarea);
+      if (this.updatetextarea == null || this.updatetextarea == "") {
+        this.warnMsg("课程目标不能为空");
+      } else {
+        this.$api.course.target
+          .updateTarget({ name: this.updatetextarea, id: this.updateId })
+          .then((res) => {
+            this.succMsg(res.msg);
+            this.updateDialogVisible = false;
+            this.findCinstanceTargets();
+          });
       }
     },
     // 删除课程目标
-    deleteObj(index) {
-      this.$api.course.target.delTarget({id: this.allinfo[index].id}).then( res => {
-        this.succMsg(res.msg)
-        this.findCinstanceTargets()
-      })
-    },
-    // 打开增加课程目标的弹窗
-    openDialog() {
-      this.textarea = ''
-      this.DialogVisible = true
+    deleteObj(index, row) {
+      this.$confirm("确认删除吗？", "提示", {}).then(() => {
+        this.$api.course.target.delTarget({ id: row.id }).then((res) => {
+          this.succMsg(res.msg);
+          this.findCinstanceTargets();
+        });
+      });
     },
     // 添加课程目标
     addTarget() {
-      console.log(this.textarea);
-      if(this.textarea == null || this.textarea == '') {
-        this.warnMsg('课程目标不能为空')
-      }else {
-        this.$api.course.target.addTarget({cinstance_id: this.$store.state.course.courseCinstanceId, name: this.textarea}).then( res => {
-          this.succMsg(res.msg)
-          this.DialogVisible = false
-          this.findCinstanceTargets()
-        })
+      console.log(this.addtextarea);
+      if (this.addtextarea == null || this.addtextarea == "") {
+        this.warnMsg("课程目标不能为空");
+      } else {
+        this.$api.course.target
+          .addTarget({
+            cinstance_id: this.$store.state.course.courseCinstanceId,
+            name: this.addtextarea,
+          })
+          .then((res) => {
+            this.succMsg(res.msg);
+            this.addDialogVisible = false;
+            this.findCinstanceTargets();
+          });
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
 .el-button--text {
-    color: #14889a;
-    background: 0 0;
-    padding-left: 0;
-    padding-right: 0;
+  color: #14889a;
+  background: 0 0;
+  padding-left: 0;
+  padding-right: 0;
 }
-.tcommonBox{
+.tcommonBox {
   white-space: normal;
   word-wrap: break-word;
   word-break: break-all;
   position: relative;
   background: #fff;
-  padding:15px;
+  padding: 15px;
   border-radius: 5px;
   margin-bottom: 40px;
   font-size: 15px;
@@ -206,5 +285,4 @@ export default {
   color: #14889a;
   font-weight: 700;
 }
-
 </style>
