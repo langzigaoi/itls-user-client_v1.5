@@ -117,6 +117,30 @@ const routes = [
       },
 
 
+      {
+        path: 'examList',
+        name: 'examList',
+        component: () =>
+          import('@/components/coursedetail/teacher/exam/ExamList'),
+        meta: { title: '考试列表' }
+      },
+
+      {
+        path: 'choiceList',
+        name: 'choiceList',
+        component: () =>
+          import('@/components/coursedetail/teacher/problemBank/choice/ChoiceList'),
+        meta: { title: '题库-选择题列表' }
+      },
+      {
+        path: 'programList',
+        name: 'programList',
+        component: () =>
+          import('@/components/coursedetail/teacher/problemBank/prog/ProgramList'),
+        meta: { title: '题库-编程题列表' }
+      },
+
+
 
 
 
@@ -258,49 +282,49 @@ const routes = [
         path: 'unitExam',
         name: 'unitexam',
         component: () =>
-          import('@/components/coursedetail/teacher/courseExam/UnitExam'),
+          import('@/components/coursedetail/teacher/exam/UnitExam'),
         meta: { title: '单元考试' }
       },
       {
         path: 'addUnitExam',
         name: 'addUnitExam',
         component: () =>
-          import('@/components/coursedetail/teacher/courseExam/AddUnitExam'),
+          import('@/components/coursedetail/teacher/exam/AddUnitExam'),
         meta: { title: '添加单元考试' }
       },
       {
         path: 'updateUnitExam',
         name: 'UpdateUnitExam',
         component: () =>
-          import('@/components/coursedetail/teacher/courseExam/UpdateUnitExam'),
+          import('@/components/coursedetail/teacher/exam/UpdateUnitExam'),
         meta: { title: '修改单元考试' }
       },
       {
         path: 'addMidsemesterExam',
         name: 'addMidsemesterExam',
         component: () =>
-          import('@/components/coursedetail/teacher/courseExam/AddMidseMesterExam'),
+          import('@/components/coursedetail/teacher/exam/AddMidseMesterExam'),
         meta: { title: '添加期中考试' }
       },
       {
         path: 'addFinalExam',
         name: 'addFinalExam',
         component: () =>
-          import('@/components/coursedetail/teacher/courseExam/AddFinalExam'),
+          import('@/components/coursedetail/teacher/exam/AddFinalExam'),
         meta: { title: '添加期末考试' }
       },
       {
         path: 'midsemester',
         name: 'midsemester',
         component: () =>
-          import('@/components/coursedetail/teacher/courseExam/MidseMester'),
+          import('@/components/coursedetail/teacher/exam/MidseMester'),
         meta: { title: '期中考试' }
       },
       {
         path: 'finalExam',
         name: 'finalExam',
         component: () =>
-          import('@/components/coursedetail/teacher/courseExam/FinalExam'),
+          import('@/components/coursedetail/teacher/exam/FinalExam'),
         meta: { title: '期末考试' }
       },
       {
@@ -439,6 +463,9 @@ const routes = [
     ]
   },
 
+
+
+
   // 学生 课程实例内容
   {
     path: '/studycourse',
@@ -558,28 +585,28 @@ const routes = [
         path: 'unitexam',
         name: 'unitexam',
         component: () =>
-          import('@/components/coursedetail/student/courseExam/UnitExam'),
+          import('@/components/coursedetail/student/exam/UnitExam'),
         meta: { title: '单元考试' }
       },
       {
         path: 'beginUnitExam',
         name: 'beginUnitExam',
         component: () =>
-          import('@/components/coursedetail/student/courseExam/DoUnitExam'),
+          import('@/components/coursedetail/student/exam/DoUnitExam'),
         meta: { title: '考试界面' }
       },
       {
         path: 'midsemester',
         name: 'midsemester',
         component: () =>
-          import('@/components/coursedetail/student/courseExam/MidseMester'),
+          import('@/components/coursedetail/student/exam/MidseMester'),
         meta: { title: '期中考试' }
       },
       {
         path: 'finalexam',
         name: 'finalexam',
         component: () =>
-          import('@/components/coursedetail/student/courseExam/FinalExam'),
+          import('@/components/coursedetail/student/exam/FinalExam'),
         meta: { title: '期末考试' }
       },
 

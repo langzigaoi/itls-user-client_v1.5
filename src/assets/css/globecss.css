@@ -61,3 +61,69 @@ ul {
   font-weight: 700;
   margin: 10px 0;
 }
+
+.color-primary {
+  color: #14889A;
+}
+
+.el-checkbox__input .el-checkbox__inner {
+  background-color: #ffffff;
+  border-color: #909399;
+}
+.el-checkbox__input.is-checked .el-checkbox__inner {
+  background-color: #14889A;
+  border-color: #14889A;
+}
+
+.el-pager li.active {
+  color: #14889A;
+}
+
+.el-button--primary {
+  color: #fff;
+  background-color: #14889a;
+  border-color: #14889a;
+}
+.el-button--primary:hover {
+  background-color: #61b6c4;
+  border-color: #61b6c4;
+}
+.el-button--primary:focus {
+  background-color: #14889a;
+  border-color: #14889a;
+}
+.el-button--default:hover {
+  color: #14889a;
+  border-color: #14889a;
+}
+
+.el-cascader-node.in-active-path, .el-cascader-node.is-active, .el-cascader-node.is-selectable.in-checked-path {
+  /* color: #409EFF; */
+  color: #14889A;
+}
+.el-radio__input.is-checked .el-radio__inner {
+  border-color: #14889A;
+  background: #14889A;
+}
+
+.el-tabs__item:hover {
+  color: #14889A;
+}
+.el-tabs__item.is-active {
+  color: #14889A;
+}
+
+.el-form-item label:after {
+  content: "";
+  display: inline-block;
+  width: 100%;
+}
+.el-form-item__label {
+  text-align: justify;
+  height: 50px;
+}
+
+.el-form-item__label {
+  line-height: 25px;
+}
+

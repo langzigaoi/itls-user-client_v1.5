@@ -1,5 +1,5 @@
 <template>
-  <div class="homediv" style="display: flex; height: 100vh">
+  <div  style="display: flex; height: 100vh">
     <el-container>
       <el-header class="head"> 
         <el-row>
@@ -17,7 +17,7 @@
         </el-header>
 
       <el-container>
-        <el-aside class="aside" >
+        <el-aside class="aside" style="width:165px; " >
           <el-menu
             :default-active="menuIndex"
             style="width: 160px"
@@ -92,7 +92,7 @@
                 <i class="el-icon-notebook-1"></i><span>课程内容</span>
               </el-menu-item>
 
-              <el-submenu index="3">
+              <!-- <el-submenu index="3">
                 <template slot="title">
                   <span style="font-size: 1em"
                     ><i class="el-icon-edit-outline" aria-hidden="true"></i> 作业与测验</span
@@ -110,7 +110,7 @@
                   >
                   <i class="el-icon-edit"></i>测验</el-menu-item
                 >
-              </el-submenu>
+              </el-submenu> -->
 
               <el-menu-item
                 v-if="hasMenu('/studycourse/coursetest')"
@@ -126,6 +126,12 @@
                     ><i class="el-icon-finished" aria-hidden="true"></i> 课程考试</span
                   >
                 </template>
+
+                <el-menu-item index="/course/examList" 
+                    style="width: 160px"
+                  >
+                  <i class="el-icon-finished"></i>考试</el-menu-item
+                >
               
                 <el-menu-item index="/course/unitExam" 
                     style="width: 160px"
@@ -151,13 +157,31 @@
                     ><i class="el-icon-bank-card" aria-hidden="true"></i> 题库</span
                   >
                 </template>
-              
+                       
+                <el-menu-item index="/course/choiceList" 
+                    v-if="hasMenu('/course/problemChoice') && hasProblemType('单选题')"
+                    style="width: 160px"
+                    @click="toOtherPathWithId('/course/choiceList', $route.query.id)"
+                  >
+                  <i class="el-icon-thumb"></i>单选题</el-menu-item
+                >
+                <el-menu-item index="/course/programList" 
+                    v-if="hasProblemType('编程题')"
+                    style="width: 160px"
+                    @click="toOtherPathWithId('/course/programList', $route.query.id)"
+                  >
+                  <i class="el-icon-thumb"></i>编程题</el-menu-item
+                >
+
+
+
+
                 <el-menu-item index="/course/problemChoice" 
                     v-if="hasMenu('/course/problemChoice') && hasProblemType('单选题')"
                     style="width: 160px"
                     @click="toOtherPathWithId('/course/problemChoice', $route.query.id)"
                   >
-                  <i class="el-icon-thumb"></i>单选题</el-menu-item
+                  <i class="el-icon-thumb"></i>单选题(旧)</el-menu-item
                 >
                 <el-menu-item
                   index=""
@@ -178,7 +202,7 @@
                   >
                   <i class="el-icon-document"></i>填空题</el-menu-item
                 >
-                <el-menu-item index="/course/problemJudgment" 
+                <el-menu-item index="" 
                    style="width: 160px"
                    v-if="hasProblemType('判断题')"
                   >
@@ -226,7 +250,7 @@
                 <i class="el-icon-office-building"></i> 课程项目</el-menu-item
               >
 
-              <el-menu-item index="/course/teachercourse/knowledge" style="width: 160px"
+              <el-menu-item index="" style="width: 160px"
                 >
                 <i class="el-icon-share"></i>知识图谱</el-menu-item
               >
@@ -286,9 +310,10 @@ export default {
     return {
       menuIndex: this.$route.path,
       isCollapse: false,
-      //courseId:null,
       courseProblemTypeList: [], //课程实例题型
       courseInstance: null, //显示再head的信息
+
+      allKnowledge: [],
     };
   },
   computed: {},
@@ -306,6 +331,7 @@ export default {
     // console.log(this.hasMenu("/home"));
     // console.log(this.$store.state.user.userInfo);
     // console.log("课程实例的id：", this.$route.query.id);
+    // console.log("课程的id：", this.$store.state.course.courseId);
     //this.courseId=this.$route.params.courseid;
     if (this.$route.query.id) {
       this.$store.commit("setcourseCinstanceIdFun", this.$route.query.id); //保存课程实例的id后面 子组件要用到
@@ -316,6 +342,9 @@ export default {
       localStorage.setItem("CinstanceId", this.$route.query.id);
     }
     this.findACourseInstance();
+
+
+    this.getKnowledge( this.$store.state.course.courseId);
   },
   methods: {
     //获取课程实例详情 显示head里面
@@ -324,12 +353,15 @@ export default {
         .findCourseInstance({ id: this.$store.state.course.courseCinstanceId })
         .then((res) => {
           this.courseInstance = res.data;
+          // 存放课程id
+          this.$store.commit("setcourseId", this.courseInstance.courseId);
           this.$api.course.courseProblemType
             .findCourseProblemType(res.data.courseId)
             .then((res1) => {
               this.$store.commit("setcourseProblemTypeList", res1.data);
+
             });
-          console.log(this.courseInstance);
+          
           // this.$api.course.courseProblemType.findCourseProblemType(this.courseInstance.courseId).then((res1) => {
           //   this.$store.commit("setcourseProblemTypeList", res1.data);
           // })
@@ -368,6 +400,140 @@ export default {
         return true;
       } else return false;
     },
+
+    // 知识点处理
+    getChildren(parentId, arr) {
+      // console.log(parentId);
+      // console.log(arr);
+      // console.log('1');
+      let array = [];
+      for (let index = 0; index < arr.length; index++) {
+        if (arr[index].parentId === parentId) {
+          array.push(arr[index]);
+        }
+      }
+      return array;
+    },
+    beChildren(arr1, arr2) {
+      // console.log(arr1);
+      // console.log(arr2);
+      let k = 0;
+      for (let i = 0; i < arr1.length; i++) {
+        // console.log(arr1[k]);
+        // if (arr1[k] === [] || arr1[k] === undefined || arr1[k].length === 0 || arr1[k] === null) {
+        //   console.log(arr1[k]);
+        //   continue;
+        // }
+        for (let j = 0; j < arr1[i].length; j++) {
+          // console.log(arr2[k]);
+          if (arr2[k] !== [] && arr2[k] !== undefined && arr2[k].length !== 0) {
+            //&& arr1[k].value === arr2[k].parentId
+            arr1[i][j].children = arr2[k];
+          }
+          // console.log(arr1[i][j]);
+          // console.log(arr2[k]);
+          k++;
+        }
+      }
+      // console.log(arr1);
+      return arr1;
+    },
+    async getKnowledge(params) {
+      let deep1 = [];
+      let deep2 = [];
+      let deep3 = [];
+      let deep4 = [];
+      let deep5 = [];
+      let deep6 = [];
+      await this.$api.knowledge.knowledge
+        .findList({ courseId: params })
+        .then((res) => {
+          // console.log(res);
+          let data = res.data;
+          
+          for (let index = 0; index < data.length; index++) {
+            if (data[index].deep == 1) {
+              deep1.push({
+                value: data[index].id,
+                label: data[index].name,
+                parentId: data[index].parentId,
+              });
+            } else if (data[index].deep == 2) {
+              deep2.push({
+                value: data[index].id,
+                label: data[index].name,
+                parentId: data[index].parentId,
+              });
+            } else if (data[index].deep == 3) {
+              deep3.push({
+                value: data[index].id,
+                label: data[index].name,
+                parentId: data[index].parentId,
+              });
+            } else if (data[index].deep == 4) {
+              deep4.push({
+                value: data[index].id,
+                label: data[index].name,
+                parentId: data[index].parentId,
+              });
+            } else if (data[index].deep == 5) {
+              deep5.push({
+                value: data[index].id,
+                label: data[index].name,
+                parentId: data[index].parentId,
+              });
+            } else if (data[index].deep == 6) {
+              deep6.push({
+                value: data[index].id,
+                label: data[index].name,
+                parentId: data[index].parentId,
+              });
+            }
+          }
+        });
+      // console.log(deep1);
+      // console.log(deep2);
+      // console.log(deep3);
+      // console.log(deep4);
+      // console.log(deep5);
+      // console.log(deep6);
+      let newDeep2 = [];
+      for (let index = 0; index < deep2.length; index++) {
+        newDeep2.push(this.getChildren(deep2[index].value, deep3));
+      }
+      // console.log(newDeep2);
+      let newDeep3 = [];
+      for (let index = 0; index < deep3.length; index++) {
+        newDeep3.push(this.getChildren(deep3[index].value, deep4));
+      }
+      // console.log(newDeep3);
+      let newDeep4 = [];
+      for (let index = 0; index < deep4.length; index++) {
+        newDeep4.push(this.getChildren(deep4[index].value, deep5));
+      }
+      // console.log(newDeep4);
+      let newDeep5 = [];
+      for (let index = 0; index < deep5.length; index++) {
+        newDeep5.push(this.getChildren(deep5[index].value, deep6));
+      }
+      // console.log(newDeep5);
+      // let finalArry = []
+      // for (let index = 0; index < deep2.length; index++) {
+      //   finalArry.push()
+      // }
+      newDeep4 = this.beChildren(newDeep4, newDeep5);
+      newDeep3 = this.beChildren(newDeep3, newDeep4);
+      newDeep2 = this.beChildren(newDeep2, newDeep3);
+      // console.log(newDeep2);
+      for (let index = 0; index < newDeep2.length; index++) {
+        deep2[index].children = newDeep2[index];
+      }
+      console.log(deep2);
+      this.$store.commit("setknowledge", deep2);
+    },
+    
+
+    
   },
 };
 </script>
@@ -400,10 +566,10 @@ export default {
   /* min-width: 130px;
   max-width: 130px; */
   max-height: 87vh;
-  max-width: 170px;
   overflow-y: scroll;
-
+  border: #131212;
 }
+
 .el-aside::-webkit-scrollbar {
      display: none;
 }
@@ -452,6 +618,14 @@ export default {
   font-family: "宋体", Cochin, Georgia, Times, "Times New Roman", serif;
   letter-spacing: 5px;
 }
+
+.el-button--primary :hover {
+  color: #FFF !important;;
+  background-color: #14889A !important;;
+  border-color: #14889A !important;;
+}
+
+
 
 
 </style>

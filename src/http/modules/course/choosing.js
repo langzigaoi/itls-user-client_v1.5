@@ -24,6 +24,14 @@ export const findByCid = (params) => {
   })
 }
 
+export const findPage = (data) => {
+  return axios({
+    url: preUrl + 'findPageByCid',
+    method: 'post',
+    data
+  })
+}
+
 // 退选已选课的学生
 export const remove = (data) => {
   return axios({

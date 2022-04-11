@@ -1,7 +1,19 @@
 <template>
   <div>
+    <div >
+      <!-- <el-button
+        :size="size"
+        type="primary"
+        @click="handleAdd()"
+        style="float: left"
+        v-if="showBatchDelete & showOperation"
+      >批量导入</el-button> -->
+      
+      
+    </div>
+
     <el-table
-      :data="data"
+      :data="data.content"
       :highlight-current-row="highlightCurrentRow"
       @selection-change="selectionChange"
       @current-change="handleCurrentChange"
@@ -11,12 +23,16 @@
       :max-height="maxHeight"
       :size="size"
       :align="align"
+      :delFlag="delFlag"
+      :viewFlag="viewFlag"
+      :editFlag="editFlag"
+
       style="width: 100%"
       :stripe="stripe"
     >
       <el-table-column
         type="selection"
-        width="40"
+        width="30"
         v-if="showBatchDelete & showOperation"
       ></el-table-column>
 
@@ -46,7 +62,7 @@
 
       <el-table-column
         label="操作"
-        width="350"
+        width="250"
         fixed="right"
         v-if="showOperation"
         header-align="center"
@@ -55,19 +71,55 @@
         <template slot-scope="scope">
           <el-button 
             size="mini" 
+            type="primary" 
+            v-if=" viewFlag == true "
+            @click="view(scope.$index, scope.row)"
+          >查看</el-button>
+          <el-button 
+            size="mini" 
+            type="primary" 
+            v-if=" editFlag == true "
+            @click="edit(scope.$index, scope.row)"
+          >编辑</el-button>
+
+          <el-button 
+            size="mini" 
             type="danger" 
-            @click="handleDelete(scope.$index, scope.row)"
-          >退选 </el-button>
-
-
-
-
+            v-if=" delFlag == true "
+            @click="remove(scope.$index, scope.row)"
+          >移除</el-button>
         </template>
-
       </el-table-column>
 
-
     </el-table>
+
+    <div class="toolbar"  style="padding: 20px, 20px">
+      <el-button
+        :size="size"
+        type="danger"
+        @click="handleRemove(null)"
+        :disabled="this.selections.length === 0"
+        style="float: left"
+        v-if="delFlag == true"
+      >批量移除</el-button>
+
+      <el-pagination
+        layout="total, prev, pager, next, jumper "
+        @current-change="refreshPageRequest"
+        :current-page="pageRequest.pageNum"
+        :page-size="pageRequest.pageSize"
+        :total="data.totalSize"
+        style="float: right"
+      >
+      </el-pagination>
+    </div>
+
+   
+
+
+
+
+
   </div>
 </template>
 
@@ -75,11 +127,7 @@
   export default {
     props: {
       columns: Array, // 表格列配置
-      data: {}, // 表格分页数据
-      permsEdit: String,
-      permsPass: String, // 编辑权限标识
-      permsReject: String,
-      permsDelete: String, // 删除权限标识
+      data: { }, // 表格分页数据
       size: {
         // 尺寸样式
         type: String,
@@ -133,6 +181,25 @@
         type: String,
         default: "",
       },
+      
+      // 控制操控页面（全部 或 个人）
+      flag: {
+        type: String,
+        default: "1",
+      },
+      delFlag: {
+        type: Boolean,
+        default: false,
+      },
+      viewFlag: {
+        type: Boolean,
+        default: false,
+      },
+      editFlag: {
+        type: Boolean,
+        default: false,
+      },
+      
     },
 
     data() {
@@ -144,157 +211,149 @@
         },
         loading: false, // 加载标识
         selections: [], // 列表选中列
-        // status:""
+
+      
       };
     },
+    
+    mounted() {
+      this.findPage();
+    },
+
     methods: {
+      // 自增排序
+      indexMethod: function (index) {
+        return index + 1;
+      },
       // 分页查询
-      findPage: function () {
+      findPage () {
         this.loading = true;
-        let callback = (res) => {
+        let callback = (res) => {       
           this.loading = false;
+          // console.log(res);
         };
-        this.$emit("findPage", {
-          pageRequest: this.pageRequest,
-          callback: callback,
-        });
-        // console.log(s);
+        this.$emit("findPage", { pageRequest: this.pageRequest, callback: callback,});
+        // console.log(this.data);
+      },
+
+      findPersonPage () {
+        this.loading = true;
+        let callback = (res) => {       
+          this.loading = false;
+          // console.log(res);
+        };
+        this.$emit("findPersonPage", { pageRequest: this.pageRequest, callback: callback,});
+        // console.log(this.data);
+      },
+
+      // 选择切换
+      selectionChange: function (item) {
+        this.selections = item;
+        // console.log(item);
+        this.$emit("selectionChange", { selections: item });
+        // this.getSelected();
+      },
+      // 获取选中多选框的id
+      getSelected() {
+        let noList = this.selections.map((item) => item.stuNo).toString()
+        console.log(noList);
       },
       // 选择切换
-      selectionChange: function (selections) {
-        this.selections = selections;
-        this.$emit("selectionChange", { selections: selections });
-      },
-      // 选择切换
-      handleCurrentChange: function (val) {
+      handleCurrentChange(val) {
         this.$emit("handleCurrentChange", { val: val });
       },
       // 换页刷新
-      refreshPageRequest: function (pageNum) {
+      refreshPageRequest(pageNum) {
         this.pageRequest.pageNum = pageNum;
         console.log(this.pageRequest.pageNum);
         this.findPage();
       },
-      // 编辑
-      handleEdit: function (index, row) {
-        this.$emit("handleEdit", { index: index, row: row });
+
+      view(index, row) {
+        this.$emit("handleViewChange", row );
       },
 
-      // 批量通过
-      handleBatchPass: function () {
-        let ids = this.selections.map((item) => item.id).toString();
-        this.pass(ids);
+      edit(index, row) {
+        this.$emit("handleEditChange", row );
       },
-      // 通过
-      handlePass: function (index, row) {
-        this.pass(row.id);
-      },
-      pass: function (ids) {
-        this.$confirm("确认通过选中记录吗？", "提示", {
+
+      // 单个删除
+      remove(index, row) {
+        let params = [];
+        params.push(row);
+        console.log(params);
+        this.$confirm("确认移除选中记录吗？", "提示", {
           type: "warning",
+          confirmButtonClass:"conf",
         })
           .then(() => {
-            let params = [];
-            let idArray = (ids + "").split(",");
-            for (var i = 0; i < idArray.length; i++) {
-              params.push({ id: idArray[i] });
-            }
             this.loading = true;
             let callback = (res) => {
               if (res.code == 200) {
-                this.$message({ message: "审核成功", type: "success" });
-                this.findPage();
+                this.$message({ message: "操作成功", type: "success" });
+                // console.log(this.flag);
+                if (this.flag == "1") {
+                  this.findPage();
+                }
+                if (this.flag == "2") {
+                  this.findPersonPage();
+                }
               } else {
                 this.$message({ message: "操作失败, " + res.msg, type: "error" });
               }
               this.loading = false;
             };
-            this.$emit("handlePass", { params: params, callback: callback });
+            this.$emit("handleRemove", { params: params, callback: callback });
           })
           .catch(() => {});
       },
-
-      // 批量驳回
-      handleBatchReject: function () {
-        let ids = this.selections.map((item) => item.id).toString();
-        this.reject(ids);
-      },
-      // 驳回
-      handleReject: function (index, row) {
-        this.reject(row.id);
-      },
-      reject: function (ids) {
-        this.$confirm("确认驳回选中记录吗？", "提示", {
+      //批量删除
+      handleRemove(items) {
+        this.$confirm("确认移除选中记录吗？", "提示", {
           type: "warning",
+          confirmButtonClass:"conf",
+          
         })
           .then(() => {
             let params = [];
-            let idArray = (ids + "").split(",");
-            for (var i = 0; i < idArray.length; i++) {
-              params.push({ id: idArray[i] });
-            }
+            params = this.selections;
+            console.log(params);
             this.loading = true;
             let callback = (res) => {
               if (res.code == 200) {
-                this.$message({ message: "驳回成功", type: "success" });
-                this.findPage();
+                this.$message({ message: "操作成功", type: "success" });
+                if (this.flag == "1") {
+                  this.findPage();
+                }
+                if (this.flag == "2") {
+                  this.findPersonPage();
+                }
               } else {
                 this.$message({ message: "操作失败, " + res.msg, type: "error" });
               }
               this.loading = false;
             };
-            this.$emit("handleReject", { params: params, callback: callback });
+            this.$emit("handleRemove", { params: params, callback: callback });
           })
           .catch(() => {});
       },
 
-      // 删除
-      handleDelete: function (index, row) {
-        this.delete(row.id);
-      },
-      // 批量删除
-      handleBatchDelete: function () {
-        let ids = this.selections.map((item) => item.id).toString();
-        this.delete(ids);
-      },
-      // 删除操作
-      delete: function (ids) {
-        this.$confirm("确认删除选中记录吗？", "提示", {
-          type: "warning",
-        })
-          .then(() => {
-            let params = [];
-            let idArray = (ids + "").split(",");
-            for (var i = 0; i < idArray.length; i++) {
-              params.push({ id: idArray[i] });
-            }
-            this.loading = true;
-            let callback = (res) => {
-              if (res.code == 200) {
-                this.$message({ message: "删除成功", type: "success" });
-                this.findPage();
-              } else {
-                this.$message({ message: "操作失败, " + res.msg, type: "error" });
-              }
-              this.loading = false;
-            };
-            this.$emit("handleDelete", { params: params, callback: callback });
-          })
-          .catch(() => {});
-      },
-      indexMethod: function (index) {
-        return index + 1;
-      },
-
-      //测试用例相关
-      handleViewCheckpoint: function (id) {
-        this.$emit("handleViewCheckpoint", { id: id });
-      },
 
 
+      
+      
     },
   };
 </script>
 
-<style scoped>
+<style >
+.conf{
+  background: #14889A !important;
+  ;
+  size: mini;
+  
+}
+
+
+
 </style>

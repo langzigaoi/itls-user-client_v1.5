@@ -368,6 +368,9 @@ import { baseUrl } from "@/utils/global";
 export default {
   data() {
     return {
+
+
+
       infoForm: {},
       // 编辑页面显示标记
       editInfoFormVisible: false,
@@ -623,6 +626,11 @@ export default {
 };
 </script>
 <style scoped>
+.outside{
+  text-align: center;
+}
+
+
 .tcommonBox {
   white-space: normal;
   word-wrap: break-word;

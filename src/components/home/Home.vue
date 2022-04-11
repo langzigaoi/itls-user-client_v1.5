@@ -192,6 +192,9 @@ export default {
   color: #14889a;
 }
 
+.el-aside ul{
+  box-shadow: none;
+}
 .header {
   position: relative;
   width: 100%;
@@ -242,12 +245,19 @@ export default {
   font-family: "黑体", Cochin, Georgia, Times, "Times New Roman", serif;
   letter-spacing: 5px;
 }
-.aside {
-}
 
 .active {
   /* color: #14889a; */
   background-color: #7bcce04d;
   /* color: #111; */
+}
+
+
+.el-tabs__item:hover {
+  color: #14889A;
+}
+
+.el-tabs__item.is-active {
+  color: #14889A;
 }
 </style>

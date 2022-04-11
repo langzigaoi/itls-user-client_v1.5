@@ -15,6 +15,14 @@ export const findAll = (params) => {
   })
 }
 
+export const findPage = (data) => {
+  return axios({
+    url: preUrl + 'findPage',
+    method: 'post',
+    data
+  })
+}
+
 // 根据知识点获取题目
 export const findProblemChoice = (params) => {
   return axios({
@@ -24,34 +32,21 @@ export const findProblemChoice = (params) => {
   })
 }
 
-// export const getAUserList = (data) => {
-//   return axios({
-//     url: preUrl + 'getAUserList',
-//     method: 'post',
-//     data
-//   })
-// }
-// export const AdminSelectByStatus = (data) => {
-//   return axios({
-//     url: preUrl + 'AdminSelectByStatus',
-//     method: 'post',
-//     data
-//   })
-// }
-// export const AdminAudit = (data) => {
-//   return axios({
-//     url: preUrl + 'AdminAudit',
-//     method: 'post',
-//     data
-//   })
-// }
-
-// 查询选择题列表
+// 查询个人选择题列表
 export const findPersonList = (params) => {
   return axios({
     url: preUrl + 'findPer',
     method: 'post',
     params
+  })
+}
+
+// 查询个人选择题列表
+export const findPersonPage = (data) => {
+  return axios({
+    url: preUrl + 'findPerPage',
+    method: 'post',
+    data
   })
 }
 

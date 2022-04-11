@@ -37,24 +37,30 @@
 
                 <el-menu-item
                   index="/studycourse/taskanalysis"
-                  >作业统计分析</el-menu-item
+                  >
+                  <i class="el-icon-data-line"></i>作业统计分析</el-menu-item
                 >
                 <el-menu-item
                   index="/studycourse/testanalysis"
-                  >测试统计分析</el-menu-item
+                  >
+                  <i class="el-icon-data-line"></i>测试统计分析</el-menu-item
                 >
                 <el-menu-item
                   index="/studycourse/experimentanalysis"
-                  >实验统计分析</el-menu-item
+                  >
+                  <i class="el-icon-data-line"></i>实验统计分析</el-menu-item
                 >
                 <el-menu-item index="" 
-                  >知识路径分析</el-menu-item
+                  >
+                  <i class="el-icon-data-line"></i>知识路径分析</el-menu-item
                 >
                 <el-menu-item index="" 
-                  >网络时空统计</el-menu-item
+                  >
+                  <i class="el-icon-data-line"></i>网络时空统计</el-menu-item
                 >
                 <el-menu-item index="" 
-                  >个性化推荐</el-menu-item
+                  >
+                  <i class="el-icon-data-line"></i>个性化推荐</el-menu-item
                 >
              </el-submenu>
 
