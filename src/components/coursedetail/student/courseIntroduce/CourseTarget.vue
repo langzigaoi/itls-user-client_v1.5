@@ -4,15 +4,19 @@
       <h1>课程目标</h1>
     </header>
     <section style="width: 90%; margin: 2% auto">
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>课程目标</span>
-        </div>
-        <div v-for="(item, index) in allinfo" :key="index" class="text item" 
-          style="border-bottom: 1px solid #ddd; margin: 2%; text-indent: 2em"
+     <el-card>
+        <el-table
+          :data="allinfo"
+          style="width: 100%"
+          :row-style="{ height: '70px' }"
         >
-          {{index+1}}、{{item.name}}
-        </div>
+          <el-table-column label="课程目标 " width="1000">
+            <template slot-scope="scope">
+              <i class="el-icon-star-on"></i>
+              <span style="margin-left: 10px">{{ scope.row.name }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-card>
     </section>
   </div>

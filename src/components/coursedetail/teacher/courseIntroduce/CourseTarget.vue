@@ -3,43 +3,14 @@
     <header>
       <h1>课程目标</h1>
     </header>
-    <section style="width: 90%; margin: 2% auto" @mouseleave="mouseleave()">
-      <el-card class="box-card">
+    <section style="width: 90%; margin: 2% auto">
+      <el-card>
         <div slot="header" class="clearfix">
           <span> </span>
           <el-button size="mini" type="primary" @click="openAddDialog"
             >添加</el-button
           >
         </div>
-        <!-- 显示课程目标 -->
-        <!-- <div v-for="(item, index) in allinfo" :key="index" class="text item" 
-          style="border-bottom: 1px solid #ddd; margin: 2%; text-indent: 2em; line-height: 60px" 
-          @mouseenter="showDelBtn(index)" 
-          @mouseleave="hideDelBtn(index)">
-          <span >
-            <div v-if="index == current1 && isEdit">
-              {{index+1}}、<el-input
-                type="textarea"
-                :rows="3"
-                placeholder="请输入内容"
-                v-model="target"
-                style="width: 80%">
-              </el-input>
-              <div style="margin: 0 30%">
-                  <el-button @click="current1 = -1">取 消</el-button>
-                  <el-button type="primary" @click="updateTarget(index)">确 定</el-button>
-              </div>
-            </div>
-            <div v-else>
-              {{index+1}}、{{item.name }}
-              <i class="fa fa-trash" v-if="hover && index==current" style="color: red; cursor: pointer;" @click="deleteObj(index)"></i>
-              <i class="fa fa-edit" v-if="hover && index==current" style="color: green; cursor: pointer" @click="editObj(index)"></i>
-            </div>
-            <el-button size="mini" type="primary" @click="updateTarget(index)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="current1 = -1">删除</el-button>
-          </span>
-          
-        </div> -->
         <el-table
           :data="allinfo"
           style="width: 100%"
@@ -125,11 +96,9 @@ export default {
       targets: [], //所有课程目标
       addDialogVisible: false, //用于表示添加dialog显示与否
       updateDialogVisible: false, //用于表示编辑dialog显示与否
-      addtextarea: "", //用于
-      updatetextarea: "", //用于
-      hover: false, //用于鼠标悬浮时显示
+      addtextarea: "", //用于添加弹框
+      updatetextarea: "", //用于更新弹框
       current: -1, //表示当前操作位置
-      isEdit: false, //是否编辑
       target: "", //用于存放修改的课程项目
       current1: -1, //表示当前修改位置
       updateId: -1,
@@ -149,26 +118,6 @@ export default {
           // console.log(res.data);
           this.allinfo = res.data;
         });
-    },
-    //显示鼠标悬浮时的样式
-    showDelBtn(index) {
-      this.current = index;
-      this.hover = true;
-    },
-    //隐藏鼠标悬浮时的样式
-    hideDelBtn(index) {
-      this.current = index;
-      this.hover = false;
-    },
-    // 鼠标按下编辑课程目标
-    editObj(index) {
-      this.target = this.allinfo[index].name;
-      this.current1 = index;
-      this.isEdit = true;
-    },
-    // 鼠标离开课程目标显示块元素
-    mouseleave() {
-      // this.current1 = -1
     },
     // 打开增加课程目标的弹窗
     openAddDialog() {
@@ -198,12 +147,14 @@ export default {
     },
     // 删除课程目标
     deleteObj(index, row) {
-      this.$confirm("确认删除吗？", "提示", {}).then(() => {
-        this.$api.course.target.delTarget({ id: row.id }).then((res) => {
-          this.succMsg(res.msg);
-          this.findCinstanceTargets();
-        });
-      });
+      this.$confirm("确认删除吗？", "提示", {})
+        .then(() => {
+          this.$api.course.target.delTarget({ id: row.id }).then((res) => {
+            this.succMsg(res.msg);
+            this.findCinstanceTargets();
+          });
+        })
+        .catch(() => {});
     },
     // 添加课程目标
     addTarget() {
