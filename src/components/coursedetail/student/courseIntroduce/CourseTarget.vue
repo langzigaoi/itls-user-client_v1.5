@@ -1,5 +1,5 @@
 <template>
-  <div class="tcommonBox">
+  <div>
     <com-table
       :data="pageResults"
       :columns="columns"
