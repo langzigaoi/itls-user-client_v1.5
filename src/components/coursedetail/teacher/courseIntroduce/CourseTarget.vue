@@ -1,97 +1,113 @@
 <template>
-  <div class="tcommonBox">
-    <header>
-      <h1>课程目标</h1>
-    </header>
-    <section style="width: 90%; margin: 2% auto">
-      <el-card>
-        <div slot="header" class="clearfix">
-          <span> </span>
-          <el-button size="mini" type="primary" @click="openAddDialog"
-            >添加</el-button
+  <div class="outside" style="padding: 50px">
+    <el-row>
+      <el-col :span="12" align="right">
+        <el-tabs>
+        </el-tabs>
+      </el-col>
+      <el-col :span="12">
+        <el-form :inline="true">
+          <el-cascader
+                    style="width: 150px; margin-left: 0px"
+                    size="mini"
+                    placeholder=""
+                ></el-cascader> 
+                <el-button
+                  style="margin-left:5px"
+                  size="mini"
+                  type="primary"
+                  @click="search"
+                  >查询</el-button
+                >
+          <el-button
+            style="margin-left: 5px"
+            size="mini"
+            type="primary"
+            @click="openAddDialog"
+            >新增</el-button
           >
-        </div>
-        <el-table
-          :data="allinfo"
-          style="width: 100%"
-          :row-style="{ height: '70px' }"
-        >
-          <el-table-column label="课程目标 (最多可添加五条)" width="1000">
-            <template slot-scope="scope">
-              <i class="el-icon-star-on"></i>
-              <span style="margin-left: 10px">{{ scope.row.name }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="openUpdateDialog(scope.$index, scope.row)"
-                >编辑</el-button
-              >
-              <el-button
-                size="mini"
-                type="danger"
-                @click="deleteObj(scope.$index, scope.row)"
-                >删除</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-card>
-      <el-dialog
-        title="添加课程目标"
-        :visible.sync="addDialogVisible"
-        width="500px"
-        center
-      >
-        <el-input
-          type="textarea"
-          :rows="4"
-          placeholder="请输入内容"
-          v-model="addtextarea"
-        >
-        </el-input>
-        <span slot="footer" class="dialog-footer">
-          <el-button size="mini" @click="addDialogVisible = false"
-            >取 消</el-button
-          >
-          <el-button size="mini" type="primary" @click="addTarget"
-            >确 定</el-button
-          >
-        </span>
-      </el-dialog>
+        </el-form>
+      </el-col>
+    </el-row>
 
-      <el-dialog
-        title="编辑课程目标"
-        :visible.sync="updateDialogVisible"
-        width="500px"
-        center
+    <com-table
+      :data="pageResults"
+      :columns="columns"
+      :delFlag="true"
+      :editFlag="true"
+      :showOperation="true"
+      @findPage="findPage"
+      @handleRemove="handleRemove"
+      @handleEditChange="handleEditChange"
+    ></com-table>
+
+    <el-dialog
+      title="添加课程目标"
+      :visible.sync="addDialogVisible"
+      width="500px"
+      center
+    >
+      <el-input
+        type="textarea"
+        :rows="4"
+        placeholder="请输入内容"
+        v-model="addtextarea"
       >
-        <el-input
-          type="textarea"
-          :rows="4"
-          placeholder="请输入内容"
-          v-model="updatetextarea"
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="addDialogVisible = false"
+          >取 消</el-button
         >
-        </el-input>
-        <span slot="footer" class="dialog-footer">
-          <el-button size="mini" @click="updateDialogVisible = false"
-            >取 消</el-button
-          >
-          <el-button size="mini" type="primary" @click="updateTarget"
-            >确 定</el-button
-          >
-        </span>
-      </el-dialog>
-    </section>
+        <el-button size="mini" type="primary" @click="addTarget"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
+
+    <el-dialog
+      title="编辑课程目标"
+      :visible.sync="updateDialogVisible"
+      width="500px"
+      center
+    >
+      <el-input
+        type="textarea"
+        :rows="4"
+        placeholder="请输入内容"
+        v-model="updatetextarea"
+      >
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="updateDialogVisible = false"
+          >取 消</el-button
+        >
+        <el-button size="mini" type="primary" @click="updateTarget"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import ComTable from "../../../common/ComTable.vue";
+
 export default {
+  components: {
+    ComTable,
+  },
   data() {
     return {
+      pageResults: {},
+      columns: [
+        {
+          prop: "name",
+          label: "课程目标 (最多可添加五条)",
+          minWidth: 150,
+          align: "center",
+        },
+      ],
+
       allinfo: [], //存放课程目标查询回来的所有信息
       targets: [], //所有课程目标
       addDialogVisible: false, //用于表示添加dialog显示与否
@@ -105,9 +121,24 @@ export default {
     };
   },
   mounted() {
-    this.findCinstanceTargets();
+    // this.findCinstanceTargets();
   },
   methods: {
+    // 分页查询
+    findPage(data) {
+      if (data !== null) {
+        this.pageRequest = data.pageRequest;
+      }
+      this.$api.course.target
+        .findAllTargets({
+          cinstance_id: this.$store.state.course.courseCinstanceId,
+        })
+        .then((res) => {
+          // console.log(res.data);
+          this.pageResults = res.data;
+        })
+        .then(data != null ? data.callback : "");
+    },
     // 获取课程实例的课程目标
     findCinstanceTargets() {
       this.$api.course.target
@@ -116,7 +147,7 @@ export default {
         })
         .then((res) => {
           // console.log(res.data);
-          this.allinfo = res.data;
+          this.pageResults = res.data;
         });
     },
     // 打开增加课程目标的弹窗
@@ -125,10 +156,10 @@ export default {
       this.addDialogVisible = true;
     },
     // 打开编辑课程目标的弹窗
-    openUpdateDialog(index, row) {
-      this.updatetextarea = row.name;
-      this.updateId = row.id;
-      this.updateDialogVisible = true;
+     handleEditChange(row) {
+        this.updateDialogVisible = true;
+        this.updateId = row.id;
+        this.updatetextarea = JSON.parse(JSON.stringify(row.name));
     },
     // 确定修改课程目标
     updateTarget() {
@@ -146,15 +177,10 @@ export default {
       }
     },
     // 删除课程目标
-    deleteObj(index, row) {
-      this.$confirm("确认删除吗？", "提示", {})
-        .then(() => {
-          this.$api.course.target.delTarget({ id: row.id }).then((res) => {
-            this.succMsg(res.msg);
-            this.findCinstanceTargets();
-          });
-        })
-        .catch(() => {});
+    handleRemove(data) {
+      this.$api.course.target
+        .delTarget(data.params)
+        .then(data != null ? data.callback : "");
     },
     // 添加课程目标
     addTarget() {
@@ -174,66 +200,14 @@ export default {
           });
       }
     },
+    search(){
+    }
   },
 };
 </script>
 
 <style scoped>
-.el-button--text {
-  color: #14889a;
-  background: 0 0;
-  padding-left: 0;
-  padding-right: 0;
-}
-.tcommonBox {
-  white-space: normal;
-  word-wrap: break-word;
-  word-break: break-all;
-  position: relative;
-  background: #fff;
-  padding: 15px;
-  border-radius: 5px;
-  margin-bottom: 40px;
-  font-size: 15px;
-  text-align: left;
-  margin-top: 5px;
-}
-.tcommonBox h1 {
-  margin: 10px 0;
-  font-size: 25px;
-  font-weight: 700;
+.outside {
   text-align: center;
-  line-height: 30px;
-}
-/* 更改element-UI按钮样式 */
-.el-button--primary {
-  color: #fff;
-  background-color: #14889a;
-  border-color: #14889a;
-}
-.el-button--primary:hover {
-  background-color: #61b6c4;
-  border-color: #61b6c4;
-}
-.el-button--primary:focus {
-  background-color: #14889a;
-  border-color: #14889a;
-}
-.el-button--default:hover {
-  color: #14889a;
-  border-color: #14889a;
-}
-.el-input__inner:focus {
-  border-color: #14889a;
-}
-.el-select .el-input__inner:focus {
-  border-color: #14889a;
-}
-.el-select .el-input.is-focus .el-input__inner:focus {
-  border-color: #14889a;
-}
-.el-select-dropdown__item.selected {
-  color: #14889a;
-  font-weight: 700;
 }
 </style>

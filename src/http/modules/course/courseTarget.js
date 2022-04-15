@@ -31,10 +31,10 @@ export const updateTarget = (params) => {
   })
 }
 // 删除课程实例的课程目标
-export const delTarget = (params) => {
+export const delTarget = (data) => {
   return axios({
     url: preUrl + 'deleteCInstanceObjective',
     method: 'post',
-    params
+    data
   })
 }
