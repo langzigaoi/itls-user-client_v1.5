@@ -1,29 +1,9 @@
 <template>
   <div class="outside" style="padding: 50px">
     <el-row>
-      <el-col :span="12" align="right">
-        <el-tabs>
-        </el-tabs>
-      </el-col>
-      <el-col :span="12">
-        <el-form :inline="true">
-          <el-cascader
-                    style="width: 150px; margin-left: 0px"
-                    size="mini"
-                    placeholder=""
-                ></el-cascader> 
-                <el-button
-                  style="margin-left:5px"
-                  size="mini"
-                  type="primary"
-                  @click="search"
-                  >查询</el-button
-                >
-          <el-button
-            style="margin-left: 5px"
-            size="mini"
-            type="primary"
-            @click="openAddDialog"
+      <el-col align="left">
+        <el-form>
+          <el-button size="mini" type="primary" @click="openAddDialog"
             >新增</el-button
           >
         </el-form>
@@ -98,7 +78,7 @@ export default {
   },
   data() {
     return {
-      pageResults: {},
+      pageResults: {}, //存放课程目标查询回来的所有信息
       columns: [
         {
           prop: "name",
@@ -108,7 +88,6 @@ export default {
         },
       ],
 
-      allinfo: [], //存放课程目标查询回来的所有信息
       targets: [], //所有课程目标
       addDialogVisible: false, //用于表示添加dialog显示与否
       updateDialogVisible: false, //用于表示编辑dialog显示与否
@@ -116,7 +95,6 @@ export default {
       updatetextarea: "", //用于更新弹框
       current: -1, //表示当前操作位置
       target: "", //用于存放修改的课程项目
-      current1: -1, //表示当前修改位置
       updateId: -1,
     };
   },
@@ -153,13 +131,17 @@ export default {
     // 打开增加课程目标的弹窗
     openAddDialog() {
       this.addtextarea = "";
-      this.addDialogVisible = true;
+      if (this.pageResults.content.length < 5) {
+        this.addDialogVisible = true;
+      }else{
+        this.warnMsg("最多只能添加五条课程目标");
+      }
     },
     // 打开编辑课程目标的弹窗
-     handleEditChange(row) {
-        this.updateDialogVisible = true;
-        this.updateId = row.id;
-        this.updatetextarea = JSON.parse(JSON.stringify(row.name));
+    handleEditChange(row) {
+      this.updateDialogVisible = true;
+      this.updateId = row.id;
+      this.updatetextarea = JSON.parse(JSON.stringify(row.name));
     },
     // 确定修改课程目标
     updateTarget() {
@@ -200,8 +182,6 @@ export default {
           });
       }
     },
-    search(){
-    }
   },
 };
 </script>
