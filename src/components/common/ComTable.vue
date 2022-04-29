@@ -1,39 +1,33 @@
 <template>
   <div>
     <div >
-      <!-- <el-button
-        :size="size"
-        type="primary"
-        @click="handleAdd()"
-        style="float: left"
-        v-if="showBatchDelete & showOperation"
-      >批量导入</el-button> -->
-      
       
     </div>
 
     <el-table
+      ref="table"
       :data="data.content"
       :highlight-current-row="highlightCurrentRow"
+      :show-overflow-tooltip="showOverflowTooltip"
+
       @selection-change="selectionChange"
       @current-change="handleCurrentChange"
+      @select="selectItem"
+      :row-key="getRowKeys"
+
       v-loading="loading"
       :border="border"
-      :show-overflow-tooltip="showOverflowTooltip"
       :max-height="maxHeight"
       :size="size"
       :align="align"
-      :delFlag="delFlag"
-      :viewFlag="viewFlag"
-      :editFlag="editFlag"
+      :stripe="stripe"
 
       style="width: 100%"
-      :stripe="stripe"
     >
       <el-table-column
         type="selection"
         width="30"
-        v-if="showBatchDelete & showOperation"
+        :reserve-selection="true"
       ></el-table-column>
 
       <el-table-column
@@ -62,45 +56,97 @@
 
       <el-table-column
         label="操作"
-        width="250"
+        width= "330"
         fixed="right"
         v-if="showOperation"
         header-align="center"
         align="center"
       >
         <template slot-scope="scope">
+          <!--公用-->
           <el-button 
             size="mini" 
-            type="primary" 
-            v-if=" viewFlag == true "
+            v-if=" showFlag.view == true "
+            :disabled="disableFlag.view == true"
             @click="view(scope.$index, scope.row)"
           >查看</el-button>
+          <!-- <h2>{{disableFlag.view}}</h2> -->
+
+          <!--控制题库-->
           <el-button 
             size="mini" 
             type="primary" 
-            v-if=" editFlag == true "
+            v-if=" showFlag.editProblem == true && scope.row.status == '0' "
+            :disabled="disableFlag.editProblem == true"
             @click="edit(scope.$index, scope.row)"
           >编辑</el-button>
-
           <el-button 
             size="mini" 
             type="danger" 
-            v-if=" delFlag == true "
+            v-if=" showFlag.removeProblem == true && scope.row.status == '0'  "
+            :disabled="disableFlag.removeProblem == true"
+            @click="remove(scope.$index, scope.row)"
+          >删除</el-button>
+
+          <!--控制学生列表-->
+          <el-button 
+            size="mini" 
+            type="danger" 
+            v-if=" showFlag.removeStudent == true "
+            :disabled="disableFlag.removeStudent == true"
             @click="remove(scope.$index, scope.row)"
           >移除</el-button>
+
+          <!--控制考试-->
+          <el-button 
+            size="mini" 
+            v-if=" infoFlag == true && scope.row.isPub == 0   "
+            :disabled="disableFlag.infoFlag == true"
+            @click="info(scope.$index, scope.row)"
+          >详情</el-button>
+          <el-button 
+            size="mini" 
+            v-if=" itemFlag == true && scope.row.isPub == 0   "
+
+            @click="item(scope.$index, scope.row)"
+          >题型</el-button>
+          <el-button 
+            size="mini" 
+            v-if=" problemFlag == true && scope.row.isPub == 0   "
+
+            @click="generate(scope.$index, scope.row)"
+          >组卷</el-button>
+          <el-button 
+            size="mini" 
+            type="primary"
+            v-if=" pubFlag == true && scope.row.isPub == 0   "
+
+            @click="pub(scope.$index, scope.row)"
+          >发布</el-button>
+          <!-- <el-button 
+            size="mini" 
+            type="danger" 
+            
+            disabled=""
+            @click="remove(scope.$index, scope.row)"
+          >删除</el-button> -->
+
+
+
         </template>
       </el-table-column>
 
     </el-table>
 
     <div class="toolbar"  style="padding: 20px, 20px">
+      
       <el-button
         :size="size"
         type="danger"
         @click="handleRemove(null)"
-        :disabled="this.selections.length === 0"
+        :disabled="this.selections.length === 0 || disableFlag.batchRemove == true "
         style="float: left"
-        v-if="delFlag == true"
+        v-if="showFlag.batchRemove == true"
       >批量移除</el-button>
 
       <el-pagination
@@ -114,12 +160,6 @@
       </el-pagination>
     </div>
 
-   
-
-
-
-
-
   </div>
 </template>
 
@@ -128,6 +168,7 @@
     props: {
       columns: Array, // 表格列配置
       data: { }, // 表格分页数据
+
       size: {
         // 尺寸样式
         type: String,
@@ -143,11 +184,7 @@
         type: Number,
         default: 500
       },
-      showOperation: {
-        // 是否显示操作组件
-        type: Boolean,
-        default: true,
-      },
+      
       border: {
         // 是否显示边框
         type: Boolean,
@@ -181,24 +218,79 @@
         type: String,
         default: "",
       },
-      
       // 控制操控页面（全部 或 个人）
       flag: {
         type: String,
         default: "1",
       },
-      delFlag: {
+    
+
+      infoFlag: {
         type: Boolean,
         default: false,
       },
-      viewFlag: {
+      itemFlag:{
         type: Boolean,
         default: false,
       },
-      editFlag: {
+      problemFlag: {
         type: Boolean,
         default: false,
       },
+      pubFlag: {
+        type: Boolean,
+        default: false,
+      },
+
+
+      // 控制表格操作栏
+      showOperation: {
+        // 是否显示操作组件
+        type: Boolean,
+        default: true,
+      },
+      // 控制按钮显示、禁用；由调用本组件的页面按需传值控制显示或禁用
+
+      showFlag:{
+        type: Object,
+        default: {
+            default:()=> ({
+            // 公用
+            view: false,
+            // 批量操作
+            batchRemove: false,
+            // 学生列表
+            removeStudent: false,
+            // 题库
+            editProblem: false,
+            removeProblem: false,
+            // 考试
+        })
+        },
+
+        
+
+      },
+
+      // del:true,
+
+      disableFlag:{
+        type: Object,
+        default:()=> ({
+            // 公用
+            view: false,
+            // 批量操作
+            batchRemove: false,
+            // 学生列表
+            removeStudent: false,
+            // 题库
+            editProblem: false,
+            removeProblem: false,
+            // 考试
+        })
+      },
+
+      
       
     },
 
@@ -211,13 +303,15 @@
         },
         loading: false, // 加载标识
         selections: [], // 列表选中列
+        transientSelections : [],
 
-      
+        // del: true,
       };
     },
     
     mounted() {
       this.findPage();
+      // this.findPersonPage()
     },
 
     methods: {
@@ -230,12 +324,12 @@
         this.loading = true;
         let callback = (res) => {       
           this.loading = false;
-          // console.log(res);
+          // this.pageRequest.pageNum = 1;
         };
         this.$emit("findPage", { pageRequest: this.pageRequest, callback: callback,});
         // console.log(this.data);
+        
       },
-
       findPersonPage () {
         this.loading = true;
         let callback = (res) => {       
@@ -245,19 +339,6 @@
         this.$emit("findPersonPage", { pageRequest: this.pageRequest, callback: callback,});
         // console.log(this.data);
       },
-
-      // 选择切换
-      selectionChange: function (item) {
-        this.selections = item;
-        // console.log(item);
-        this.$emit("selectionChange", { selections: item });
-        // this.getSelected();
-      },
-      // 获取选中多选框的id
-      getSelected() {
-        let noList = this.selections.map((item) => item.stuNo).toString()
-        console.log(noList);
-      },
       // 选择切换
       handleCurrentChange(val) {
         this.$emit("handleCurrentChange", { val: val });
@@ -266,16 +347,72 @@
       refreshPageRequest(pageNum) {
         this.pageRequest.pageNum = pageNum;
         console.log(this.pageRequest.pageNum);
-        this.findPage();
+        if (this.flag == "1") {
+            this.findPage();
+        }
+        if (this.flag == "2") {
+            this.findPersonPage();
+        }
       },
 
-      view(index, row) {
-        this.$emit("handleViewChange", row );
+      selectionChange(item) {
+        // console.log(item);
+        // console.log(item.length);
+        this.selections = item;
+        // console.log(this.selections);
+        this.$emit("selectionChange", { selections: item });
+        this.getSelectedId();
       },
-
-      edit(index, row) {
-        this.$emit("handleEditChange", row );
+      // 获取选中多选框的id
+      getSelected() {
+        let noList = this.selections.map((item) => item.stuNo).toString()
+        // console.log(noList);
       },
+      getSelectedId() {
+        let problemIdList = 
+          this.selections.map((item) => {
+            return {
+              id: item.id,
+              knowledgeName: item.knowledgeName
+            }
+          })
+          // console.log(problemIdList);
+      },
+      getRowKeys(row){
+		    return row.id
+		  },
+      // 选题中使用
+      selectItem(item) {
+        console.log(item);
+        this.transientSelections = item;
+        console.log(this.transientSelections);
+        this.handleSelections();
+      },
+      // 传递数据
+      handleSelections() {
+        this.$emit("handleSelections", this.transientSelections);
+      },
+      // 根据后台数据回显
+      showSelections(list) {
+        console.log(list);
+        let itemList = list;
+        // this.$nextTick(() => {
+          console.log("jinlaile");
+           for( var i in this.data.content ){
+              if( itemList.indexOf(this.data.content[i].id ) != -1 ){
+                  this.$refs.table.toggleRowSelection(this.data.content[i],true);
+              }else{
+                this.$refs.table.toggleRowSelection(this.data.content[i],false);
+              }
+            }          
+      },
+      // 清空复选框
+      clearSelections() {
+        console.log("进来了");
+        // console.log(this.transientSelections);
+        this.$refs.table.clearSelection();
+      },
+      
 
       // 单个删除
       remove(index, row) {
@@ -309,10 +446,10 @@
       },
       //批量删除
       handleRemove(items) {
+        console.log(this.columns);
         this.$confirm("确认移除选中记录吗？", "提示", {
           type: "warning",
           confirmButtonClass:"conf",
-          
         })
           .then(() => {
             let params = [];
@@ -338,10 +475,26 @@
           .catch(() => {});
       },
 
+      view(index, row) {
+        this.$emit("handleViewChange", row );
+      },
+      edit(index, row) {
+        this.$emit("handleEditChange", row );
+      },
 
+      info(index, row) {
+        this.$emit("handleInfoChange", row );
+      },
+      item(index, row) {
+        this.$emit("handleItemChange", row )
+      },
+      generate(index, row) {
+        this.$emit("handleGenerateChange", row );
+      },
+      pub(index, row) {
+        this.$emit("handlePub", row );
+      },
 
-      
-      
     },
   };
 </script>

@@ -45,15 +45,14 @@
     <com-table
       :data = "pageResults"
       :columns = "columns"
-      :delFlag = "delFlag"
-      :viewFlag = "viewFlag"
-      :editFlag = "editFlag"
       @findPage = "findPage"
       @findPersonPage = "findPersonPage"
       @handleViewChange = "handleViewChange"
       @handleEditChange = "handleEditChange"
       @handleRemove = "handleRemove"
       :flag = "flag"
+      :showFlag="showFlag"
+      :disableFlag="disableFlag"
     ></com-table>
 
     <el-dialog
@@ -661,16 +660,6 @@ export default {
             { prop: "knowledgeName", label: "知识点", minWidth: 150, align: "center" },
             { prop: "problemName", label: "名称", minWidth: 250, align: "center" },
             { prop: "problemDescription", label: "题干", minWidth: 250, align: "center" },
-            // { prop: "problemInputFormat", label: "输入格式", minWidth: 250, align: "center" },
-            // { prop: "problemOutputFormat", label: "输出格式", minWidth: 250, align: "center" },
-            // { prop: "problemSampleInput", label: "输入样例", minWidth: 250, align: "center" },
-            // { prop: "problemSampleOutput", label: "输出样例", minWidth: 250, align: "center" },
-            // { prop: "problemTimeLimit", label: "时间限制", minWidth: 250, align: "center" },
-            // { prop: "problemMemoryLimit", label: "内存限制", minWidth: 250, align: "center" },
-            // { prop: "problemHint", label: "提示", minWidth: 250, align: "center" },
-            // { prop: "markup", label: "来源", minWidth: 250, align: "center" },
-            // { prop: "", label: "", minWidth: 150, align: "center" },
-
         ],
         personColumns: [
             // { prop: "courseName", label: "课程", minWidth: 150, align: "center" },
@@ -688,7 +677,6 @@ export default {
             { prop: "lastUpdateTime", label: "最后修改时间", minWidth: 150, 
               align: "center", formatter: this.dateFormat },
             { prop: "status", label: "状态", minWidth: 250, align: "center", formatter: this.getStatu },
-            // { prop: "", label: "", minWidth: 150, align: "center" },
 
         ],
 
@@ -709,15 +697,23 @@ export default {
                 difficulty: [{required: true, message: "请选择", trigger: "blur"}],
                 discrimination: [{required: true, message: "请选择", trigger: "blur"}],
                 markup: [{required: true, message: "请选择", trigger: "blur"}],
-            },
+        },
 
-        delFlag: false,
+        // 设置需显示和禁用的标记
+        showFlag:{
+          view: true,
+          batchRemove:true,
+          editProblem: true,
+          removeProblem: true,
+        },
+        disableFlag:{
+          batchRemove: true,
+        },
 
-        viewFlag: true,
+
         viewVisible: false,
         viewForm: {},
 
-        editFlag: false,
         editVisible: false,
         editForm: {
           knowledgeId: [],
@@ -761,14 +757,12 @@ export default {
 
     handleChangeFlag() {
         if( this.flag == "1") {
-            this.editFlag = false;
-            this.delFlag = false;
-            this.findPage(null);
+          this.showFlag.batchRemove = false;
+          this.findPage(null);
         }
         if( this.flag == "2") {
-            this.editFlag = true;
-            this.delFlag = true;
-            this.findPersonPage(null);
+          this.showFlag.batchRemove = true;
+          this.findPersonPage(null);
         }
     },
     // 分页查询

@@ -52,15 +52,14 @@
     <com-table
       :data = "pageResults"
       :columns = "columns"
-      :delFlag = "delFlag"
-      :viewFlag = "viewFlag"
-      :editFlag = "editFlag"
       @findPage = "findPage"
       @findPersonPage = "findPersonPage"
       @handleViewChange = "handleViewChange"
       @handleEditChange = "handleEditChange"
       @handleRemove = "handleRemove"
       :flag = "flag"
+      :showFlag="showFlag"
+      :disableFlag="disableFlag"
     ></com-table>
 
     <el-dialog
@@ -520,15 +519,21 @@ export default {
                 markup: [{required: true, message: "请输入", trigger: "blur"}],
                 difficulty: [{required: true, message: "请选择", trigger: "blur"}],
                 discrimination: [{required: true, message: "请选择", trigger: "blur"}],
-            },
+        },
 
-        delFlag: false,
+        // 设置需显示和禁用的标记
+        showFlag:{
+          view: true,
+          batchRemove:true,
+          editProblem: true,
+          removeProblem: true,
+        },
+        disableFlag:{
+          batchRemove: true,
+        },
 
-        viewFlag: true,
         viewVisible: false,
         viewForm: {},
-
-        editFlag: false,
         editVisible: false,
         editForm: {
           knowledgeId: [],
@@ -574,13 +579,11 @@ export default {
     },
     handleChangeFlag() {
         if( this.flag == "1") {
-            this.editFlag = false;
-            this.delFlag = false;
+            this.showFlag.batchRemove = false;
             this.findPage(null);
         }
         if( this.flag == "2") {
-            this.editFlag = true;
-            this.delFlag = true;
+            this.showFlag.batchRemove = true;
             this.findPersonPage(null);
         }
     },
