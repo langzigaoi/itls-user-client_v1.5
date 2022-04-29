@@ -23,6 +23,15 @@ export const findPage = (data) => {
   })
 }
 
+export const findByKid = (data) => {
+  return axios({
+    url: preUrl + 'findPageByKid',
+    method: 'post',
+    data
+  })
+}
+
+
 // 根据知识点获取题目
 export const findProblemChoice = (params) => {
   return axios({
@@ -32,6 +41,13 @@ export const findProblemChoice = (params) => {
   })
 }
 
+export const findById = (params) => {
+  return axios({
+    url: preUrl + 'findByid',
+    method: 'get',
+    params
+  })
+}
 // 查询个人选择题列表
 export const findPersonList = (params) => {
   return axios({

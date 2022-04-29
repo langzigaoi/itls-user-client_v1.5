@@ -6,6 +6,16 @@ import axios from '../../axios'
 
 const preUrl = "/course/problemtype/";
 
+// 按课程id查询
+export const findByCid = (params) => {
+  return axios({
+      url: preUrl + 'findByCid',
+      method: 'get',
+      params
+  })
+}
+
+
 // 添加课程实例题型详情
 export const addCourseProblemType = (data) => {
   return axios({

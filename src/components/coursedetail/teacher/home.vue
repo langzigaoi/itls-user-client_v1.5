@@ -112,13 +112,12 @@
                 >
               </el-submenu> -->
 
-              <el-menu-item
-                v-if="hasMenu('/studycourse/coursetest')"
+              <!-- <el-menu-item
                 index="/studycourse/courseExperiment"
                 style="width: 160px"
                 ><i class="el-icon-suitcase"></i>
-                <span>  课程实验</span>
-              </el-menu-item>
+                <span> 课程实验</span>
+              </el-menu-item> -->
 
               <el-submenu index="4">
                 <template slot="title">       
@@ -170,31 +169,19 @@
                     style="width: 160px"
                     @click="toOtherPathWithId('/course/programList', $route.query.id)"
                   >
-                  <i class="el-icon-thumb"></i>编程题</el-menu-item
+                  <i class="el-icon-edit-outline"></i>编程题</el-menu-item
                 >
 
 
 
 
-                <el-menu-item index="/course/problemChoice" 
-                    v-if="hasMenu('/course/problemChoice') && hasProblemType('单选题')"
-                    style="width: 160px"
-                    @click="toOtherPathWithId('/course/problemChoice', $route.query.id)"
-                  >
-                  <i class="el-icon-thumb"></i>单选题(旧)</el-menu-item
-                >
+                
                 <el-menu-item
                   index=""
                   style="width: 160px"
                   v-if="hasProblemType('多选题')"
                   >
                   <i class="el-icon-thumb"></i>多选题</el-menu-item
-                >
-                <el-menu-item index="/course/problemProg" 
-                   style="width: 160px"
-                   v-if="hasProblemType('编程题')"
-                  >
-                  <i class="el-icon-monitor"></i>编程题</el-menu-item
                 >
                 <el-menu-item index="/course/problemFilling" 
                    style="width: 160px"

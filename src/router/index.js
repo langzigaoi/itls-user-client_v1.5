@@ -144,23 +144,6 @@ const routes = [
 
 
 
-
-
-
-      {
-        path: 'problemChoice',
-        name: 'problemChoice',
-        component: () =>
-          import('@/components/coursedetail/teacher/problemBank/choice/ChoiceProblemView'),
-        meta: { title: '选择题' }
-      },
-      {
-        path: 'ChoiceExcel',
-        name: 'ChoiceExcel',
-        component: () =>
-          import('@/components/coursedetail/teacher/problemBank/choice/ChoiceProblemUploadExcel'),
-        meta: { title: '选择题导入' }
-      },
       {
         path: 'problemFilling',
         name: 'problemFilling',
@@ -182,20 +165,7 @@ const routes = [
           import('@/components/coursedetail/teacher/problemBank/judgment/JudgmentProblemUploadExcel'),
         meta: { title: '判断题导入' }
       },
-      {
-        path: 'problemProg',
-        name: 'problemProg',
-        component: () =>
-          import('@/components/coursedetail/teacher/problemBank/prog/ProgProblemView'),
-        meta: { title: '编程题' }
-      },     
-      {
-        path: 'ProgExcel',
-        name: 'ProgExcel',
-        component: () =>
-          import('@/components/coursedetail/teacher/problemBank/prog/ProgProblemUploadExcel'),
-        meta: { title: '编程题导入' }
-      },
+      
       {
         path: 'problemApplication',
         name: 'problemApplication',
@@ -418,20 +388,7 @@ const routes = [
       //   import ('@/components/coursedetail/teacher/problemBank/admin/ApplicationAdmin'),
       //   meta: { title: '应用题审核' }
       // },
-      {
-        path: 'problemProgram',
-        name: 'problemProgram',
-        component: () =>
-          import('@/components/coursedetail/teacher/problemBank/program/ProgramProblemView'),
-        meta: { title: '编程题lgy' }
-      },
-      {
-        path: 'programDetails',
-        name: 'programDetails',
-        component: () =>
-          import('@/components/coursedetail/teacher/problemBank/program/ProgramDetails'),
-        meta: { title: '编程题详情' }
-      },
+      
       {
         path: 'AddCourseHomework',
         name: 'AddCourseHomework',

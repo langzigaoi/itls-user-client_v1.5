@@ -119,3 +119,12 @@ export const findList = (params) => {
     params
   })
 }
+
+// 查询某课程下所有知识点（后端未处理，交由前端处理）
+export const findByChapterId = (params) => {
+  return axios({
+    url: preUrl + 'findList',
+    method: 'get',
+    params
+  })
+}

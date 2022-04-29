@@ -7,7 +7,7 @@
     <com-table 
       :data="pageResults"
       :columns="columns"
-      :delFlag="true"
+      :delStudent= "true"
       :showOperation="true"
       @findPage="findPage"
       @handleRemove="handleRemove"
@@ -85,7 +85,6 @@ export default {
       columns: [
         { prop: "stuNo", label: "学号", minWidth: 150, align: "center" },
         { prop: "name", label: "名字", minWidth: 150, align: "center" },
-        
       ],
 
       selections: [],

@@ -8,6 +8,8 @@
  import * as require from './metadata/require'
  import * as type from './metadata/type'
  import * as title from './metadata/title'
+ import * as examType from './metadata/examType'
+
 
  
  // 默认全部导出
@@ -18,4 +20,5 @@
   require,
   type,
   title,
+  examType,
  }

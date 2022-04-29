@@ -30,13 +30,13 @@ export const findPerPage = (data) => {
     params
   })
 }
-// export const findById = (params) => {
-//   return axios({
-//     url: preUrl + 'findById',
-//     method: 'get',
-//     params
-//   })
-// }
+export const findById = (params) => {
+  return axios({
+    url: preUrl + 'findById',
+    method: 'get',
+    params
+  })
+}
 export const findPersonList = (params) => {
   return axios({
     url: preUrl + 'findPer',
@@ -95,5 +95,13 @@ export const addCheck = (data) => {
   return axios({
     url: preUrl + 'findByIdList?id=' + params,
     method: 'get'
+  })
+}
+
+export const findByKid = (data) => {
+  return axios({
+    url: preUrl + 'findPageByKid',
+    method: 'post',
+    data
   })
 }

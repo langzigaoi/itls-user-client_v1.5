@@ -2,7 +2,7 @@
   <div class="outside" style="padding:10px " >
 
       <el-row>
-          <el-col :span="12" align="right">
+          <el-col :span="16" align="left">
             <el-tabs
               v-model="flag"
               type="card"
@@ -13,25 +13,24 @@
               <el-tab-pane label="我的申请" name="2"></el-tab-pane>
             </el-tabs>
           </el-col>
-          <el-col :span="12">
-            <el-form :inline="true" >   
+          <el-col :span="8">
+            <el-form :inline="true" align="right">   
                 <el-cascader
-                    style="width: 150px; margin-left: 0px"
+                    style="width: 150px;"
                     size="mini"
-                    v-model="knowledgeState"
                     placeholder="请选择知识点"
                     :options="allKnowledge"
                     :props="{ checkStrictly: true }"
-                    @change="handleSelect"
+                    @change="handleSearchKnowledge"
                     :clearable="true"
                 ></el-cascader> 
-                <el-button
+                <!-- <el-button
                   style="margin-left:5px"
                   size="mini"
                   type="primary"
                   @click= "findPageByCondition"
                   >查询</el-button
-                >
+                > -->
                 <el-button
                   style="margin-left:5px"
                   size="mini"
@@ -39,13 +38,6 @@
                   @click="chandgeAddVisible"
                   >新增</el-button
                 >
-        
-                <!-- <el-button
-                  size="mini"
-                  type="primary"
-                  @click="chandgeAddExamVisible"
-                  >新增</el-button
-                > -->
             </el-form>
           </el-col>
         </el-row>
@@ -71,6 +63,7 @@
       :visible.sync="addVisible"
       width="60%"
       style=""
+      @close="closeAddForm"
     >
         <el-form
           ref="addForm"
@@ -80,16 +73,15 @@
           <div>
             <el-row type="flex" justify="center">
               <el-col :span="14">
-                <el-form-item label="知识点" label-width="80px" prop="knowledgeState">
+                <el-form-item label="知识点" label-width="80px" prop="knowledgeId">
                   <el-row type="flex">
                     <el-cascader
                         size="mini"
                         style="width: 100%"
-                        v-model="knowledgeState"
                         placeholder="请选择知识点"
                         :options="allKnowledge"
                         :props="{ checkStrictly: true }"
-                        @change="handleSelect"
+                        v-model="addForm.knowledgeId"
                         clearable
                     ></el-cascader>
                   </el-row>
@@ -226,9 +218,19 @@
                     </el-col>
                 </el-row>
 
+                <el-form-item label="题目来源" label-width="80px" prop="markup">
+                    <el-row type="flex">
+                        <el-input
+                            v-model="addForm.markup"
+                            auto-complete="off"
+                            size="mini"
+                        ></el-input>
+                    </el-row>
+                </el-form-item>
+
                 <el-row>
                     <div>
-                        <el-row type="flex" align="bottom" justify="end">
+                        <el-row type="flex" align="bottom" justify="center">
                             <el-button size="mini" @click="closeAddForm"
                             >返回
                             </el-button>
@@ -252,6 +254,7 @@
       :visible.sync="viewVisible"
       width="60%"
       style=""
+      @close="closeViewForm"
     >
         <el-form
           ref="viewForm"
@@ -263,6 +266,7 @@
                 <el-form-item label="知识点" label-width="80px" prop="knowledgeState">
                   <el-row type="flex">
                     <el-input
+                        onfocus="this.blur();"
                         v-model="viewForm.knowledgeName"
                         auto-complete="off"
                         size="mini"
@@ -272,6 +276,7 @@
                 <el-form-item label="名称" label-width="80px" prop="problemName">
                   <el-row type="flex">
                     <el-input
+                      onfocus="this.blur();"
                       style="textarea"
                       size="mini"
                       v-model="viewForm.problemName"
@@ -282,6 +287,7 @@
                 <el-form-item label="题干" label-width="80px" prop="problemDescription">
                   <el-row type="flex">
                     <el-input
+                      onfocus="this.blur();"
                       style="textarea"
                       size="mini"
                       type="textarea"
@@ -294,6 +300,7 @@
                 <el-form-item label="输入格式" label-width="80px" prop="problemInputFormat">
                   <el-row type="flex">
                     <el-input
+                      onfocus="this.blur();"
                       style="textarea"
                       size="mini"
                       type="textarea"
@@ -306,6 +313,7 @@
                 <el-form-item label="输入样例" label-width="80px" prop="problemSampleInput">
                   <el-row type="flex">
                     <el-input
+                      onfocus="this.blur();"
                       style="textarea"
                       size="mini"
                       type="textarea"
@@ -318,6 +326,7 @@
                 <el-form-item label="输出样例" label-width="80px" prop="problemSampleOutput">
                   <el-row type="flex">
                     <el-input
+                      onfocus="this.blur();"
                       style="textarea"
                       size="mini"
                       type="textarea"
@@ -331,6 +340,7 @@
                 <el-form-item label="提示" label-width="80px" prop="problemHint">
                   <el-row type="flex">
                     <el-input
+                      onfocus="this.blur();"
                       style="textarea"
                       size="mini"
                       type="textarea"
@@ -346,6 +356,7 @@
                         <el-form-item label="时间限制" label-width="80px" prop="problemTimeLimit">
                             <el-row type="flex">
                                 <el-input
+                                onfocus="this.blur();"
                                 style="width:65%; "
                                 size="mini"
                                 v-model="viewForm.problemTimeLimit"
@@ -358,6 +369,7 @@
                         <el-form-item label="内存限制" label-width="80px" prop="problemMemoryLimit">
                             <el-row type="flex">
                                 <el-input
+                                onfocus="this.blur();"
                                 style="width:65%; "
                                 size="mini"
                                 v-model="viewForm.problemMemoryLimit"
@@ -367,6 +379,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+                
 
                 <el-row>
                     <el-col :span="12">
@@ -395,9 +408,20 @@
                     </el-col>
                 </el-row>
 
+                <el-form-item label="题目来源" label-width="80px" prop="markup">
+                    <el-row type="flex">
+                        <el-input
+                            disabled
+                            v-model="viewForm.markup"
+                            auto-complete="off"
+                            size="mini"
+                        ></el-input>
+                    </el-row>
+                </el-form-item>
+
                 <el-row>
                     <div>
-                        <el-row type="flex" align="bottom" justify="end">
+                        <el-row type="flex" align="bottom" justify="center">
                             <el-button size="mini" @click="closeViewForm"
                             >返回
                             </el-button>
@@ -418,6 +442,7 @@
       :visible.sync="editVisible"
       width="60%"
       style=""
+      @close="closeEditForm"
     >
         <el-form
           ref="editForm"
@@ -427,16 +452,16 @@
           <div>
             <el-row type="flex" justify="center">
               <el-col :span="14">
-                <el-form-item label="知识点" label-width="80px" prop="knowledgeState">
+                <el-form-item label="知识点" label-width="80px" prop="knowledgeId">
                   <el-row type="flex">
                     <el-cascader
+                        ref="knowledge"
                         size="mini"
                         style="width: 100%"
-                        v-model="knowledgeState"
+                        v-model="editForm.knowledgeId"
                         placeholder="请选择知识点"
                         :options="allKnowledge"
                         :props="{ checkStrictly: true }"
-                        @change="handleSelect"
                         clearable
                     ></el-cascader>
                   </el-row>
@@ -573,9 +598,20 @@
                     </el-col>
                 </el-row>
 
+                <el-form-item label="题目来源" label-width="80px" prop="markup">
+                    <el-row type="flex">
+                        <el-input
+                            v-model="editForm.markup"
+                            auto-complete="off"
+                            size="mini"
+                            placeholder="题目可来自考研，水平考试，等级考试，教材或其他"
+                        ></el-input>
+                    </el-row>
+                </el-form-item>
+
                 <el-row>
                     <div>
-                        <el-row type="flex" align="bottom" justify="end">
+                        <el-row type="flex" align="bottom" justify="center">
                             <el-button size="mini" @click="closeEditForm"
                             >返回
                             </el-button>
@@ -616,33 +652,52 @@ export default {
         courseCinstanceId: "",
         flag: "1",
         findFlag: "0",
-        
         statu: "",
-        knowledgeId: "",
-        knowledgeState: "",
         allKnowledge: [],
-        columns: [
-            { prop: "courseName", label: "课程", minWidth: 150, align: "center" },
+        knowledgeId: "",
+        columns: [],
+        allColumns: [
+            // { prop: "courseName", label: "课程", minWidth: 150, align: "center" },
             { prop: "knowledgeName", label: "知识点", minWidth: 150, align: "center" },
             { prop: "problemName", label: "名称", minWidth: 250, align: "center" },
             { prop: "problemDescription", label: "题干", minWidth: 250, align: "center" },
-            { prop: "problemInputFormat", label: "输入格式", minWidth: 250, align: "center" },
-            { prop: "problemOutputFormat", label: "输出格式", minWidth: 250, align: "center" },
-            { prop: "problemSampleInput", label: "输入样例", minWidth: 250, align: "center" },
-            { prop: "problemSampleOutput", label: "输出样例", minWidth: 250, align: "center" },
-            { prop: "problemTimeLimit", label: "时间限制", minWidth: 250, align: "center" },
-            { prop: "problemMemoryLimit", label: "内存限制", minWidth: 250, align: "center" },
-            { prop: "problemHint", label: "提示", minWidth: 250, align: "center" },
+            // { prop: "problemInputFormat", label: "输入格式", minWidth: 250, align: "center" },
+            // { prop: "problemOutputFormat", label: "输出格式", minWidth: 250, align: "center" },
+            // { prop: "problemSampleInput", label: "输入样例", minWidth: 250, align: "center" },
+            // { prop: "problemSampleOutput", label: "输出样例", minWidth: 250, align: "center" },
+            // { prop: "problemTimeLimit", label: "时间限制", minWidth: 250, align: "center" },
+            // { prop: "problemMemoryLimit", label: "内存限制", minWidth: 250, align: "center" },
+            // { prop: "problemHint", label: "提示", minWidth: 250, align: "center" },
+            // { prop: "markup", label: "来源", minWidth: 250, align: "center" },
+            // { prop: "", label: "", minWidth: 150, align: "center" },
+
+        ],
+        personColumns: [
+            // { prop: "courseName", label: "课程", minWidth: 150, align: "center" },
+            { prop: "knowledgeName", label: "知识点", minWidth: 150, align: "center" },
+            { prop: "problemName", label: "名称", minWidth: 250, align: "center" },
+            { prop: "problemDescription", label: "题干", minWidth: 250, align: "center" },
+            // { prop: "problemInputFormat", label: "输入格式", minWidth: 250, align: "center" },
+            // { prop: "problemOutputFormat", label: "输出格式", minWidth: 250, align: "center" },
+            // { prop: "problemSampleInput", label: "输入样例", minWidth: 250, align: "center" },
+            // { prop: "problemSampleOutput", label: "输出样例", minWidth: 250, align: "center" },
+            // { prop: "problemTimeLimit", label: "时间限制", minWidth: 250, align: "center" },
+            // { prop: "problemMemoryLimit", label: "内存限制", minWidth: 250, align: "center" },
+            // { prop: "problemHint", label: "提示", minWidth: 250, align: "center" },
+            // { prop: "markup", label: "来源", minWidth: 250, align: "center" },
             { prop: "lastUpdateTime", label: "最后修改时间", minWidth: 150, 
-              align: "center", formatter: this.dateFormat }
+              align: "center", formatter: this.dateFormat },
+            { prop: "status", label: "状态", minWidth: 250, align: "center", formatter: this.getStatu },
             // { prop: "", label: "", minWidth: 150, align: "center" },
 
         ],
 
         addVisible: false,
-        addForm: {},
+        addForm: {
+          knowledgeId: [],
+        },
         addFormRules: {
-                knowledgeState: [{required: true, message: "请选择", trigger: "blur"}],
+                knowledgeId: [{required: true, message: "请选择", trigger: "blur"}],
                 problemName: [{required: true, message: "请输入", trigger: "blur"}],
                 problemDescription: [{required: true, message: "请输入", trigger: "blur"}],
                 problemInputFormat: [{required: true, message: "请输入", trigger: "blur"}],
@@ -651,9 +706,9 @@ export default {
                 problemTimeLimit: [{required: true, message: "请输入", trigger: "blur"}],
                 problemMemoryLimit: [{required: true, message: "请输入", trigger: "blur"}],
                 problemHint: [{required: true, message: "请输入", trigger: "blur"}],
-
                 difficulty: [{required: true, message: "请选择", trigger: "blur"}],
                 discrimination: [{required: true, message: "请选择", trigger: "blur"}],
+                markup: [{required: true, message: "请选择", trigger: "blur"}],
             },
 
         delFlag: false,
@@ -664,7 +719,9 @@ export default {
 
         editFlag: false,
         editVisible: false,
-        editForm: {},
+        editForm: {
+          knowledgeId: [],
+        },
 
     };
   },
@@ -672,7 +729,36 @@ export default {
     dateFormat(row, column) {
         return this.time(row.lastUpdateTime)        
     },
-    
+    getStatu(row) {
+      if (row.status == "0") {
+        return "待审核"        
+      }
+      if (row.status == "1") {
+        return "已审核"        
+      }
+      if (row.status == "-1") {
+        return "已驳回"        
+      }
+    },
+
+     handleSearchKnowledge(item){
+      console.log(item);
+      if (
+        item === undefined ||
+        item === null ||
+        item === "" ||
+        item.length === 0
+      ) {
+        this.knowledgeId = "";
+      } else {
+        this.knowledgeId = item[item.length - 1];
+      }
+      console.log(this.knowledgeId);
+
+      this.flag = "1"
+      this.handleChangeFlag();
+    },
+
     handleChangeFlag() {
         if( this.flag == "1") {
             this.editFlag = false;
@@ -700,8 +786,13 @@ export default {
         .then((res) => {
             console.log(res.data);
             if(res.data !== null) {
+                this.columns = [...this.allColumns]
+                
                 this.pageResults = res.data;
             }
+        }).catch(err => {
+            this.knowledgeId = "";
+            // this.findPage(null);
         })
         .then(data != null ? data.callback : "");
     },
@@ -712,7 +803,7 @@ export default {
       }
       this.pageRequest.params = [
         { name: "courseId", value: this.$store.state.course.courseId },
-        { name: "knowledgeId", value: this.knowledgeId },
+        { name: "knowledgeId", value: "" },
         { name: "status", value: this.statu },
       ];
       this.$api.problem.prog
@@ -722,34 +813,14 @@ export default {
                 this.pageResults = {};
             }
             if(res.data !== null) {
-                // console.log(res.data);
-                this.pageResults = res.data;
+              this.columns = [...this.personColumns]
+              this.pageResults = res.data;
             }
             console.log(res.data);
           // console.log(this.pageResults);
+        }).catch(err => {
         })
         .then(data != null ? data.callback : "");
-    },
-
-    handleSelect(item) {
-        if (
-        item === undefined ||
-        item === null ||
-        item === "" ||
-        item.length === 0
-      ) {
-        this.knowledgeId = "";
-      }
-      // console.log(item);
-      console.log(item[item.length - 1]);
-      this.knowledgeId = item[item.length - 1];
-      console.log(this.knowledgeId);
-    },
-
-    findPageByCondition() {
-        this.flag = "1";
-        this.findPage(null);
-        this.knowledgeId = "";
     },
 
     chandgeAddVisible() {
@@ -758,39 +829,42 @@ export default {
     closeAddForm() {
         this.addVisible = false;
         this.$refs.addForm.resetFields();
-        this.knowledgeId = "";
-        this.knowledgeState = "",
         this.addForm = {};
     },
     submitAdd() {
-        console.log(this.addForm)
-        this.$confirm("确认提交吗？", "提示", {}).then(() => {
-            let params = Object.assign({}, this.addForm);
-            params.courseId =  this.$store.state.course.courseId;
-            params.knowledgeId = this.knowledgeId;
-            // console.log(params);
-            this.$api.problem.prog.add(params).then((res) => {
-              if (res.code == 200) {
-                this.$message({ message: "操作成功", type: "success" });
-                this.closeAddForm();
-                this.flag = "2"
-                this.handleChangeFlag();
-                
-                // this.$refs.getAllAudit()
-              } else {
-                this.$message({
-                  message: "操作失败, " + res.msg,
-                  type: "error",
-                });
-              }
-            });
-        });
+      this.$refs['addForm'].validate((valid) => {
+        if (valid) {
+          console.log(this.addForm)
+          this.$confirm("确认提交吗？", "提示", {}).then(() => {
+              let params = Object.assign({}, this.addForm);
+              params.courseId =  this.$store.state.course.courseId;
+              params.knowledgeId = this.knowledgeId;
+              // console.log(params);
+              this.$api.problem.prog.add(params).then((res) => {
+                if (res.code == 200) {
+                  this.$message({ message: "操作成功", type: "success" });
+                  this.closeAddForm();
+                  this.flag = "2"
+                  this.handleChangeFlag();
+                  // this.$refs.getAllAudit()
+                } else {
+                  this.$message({
+                    message: "操作失败, " + res.msg,
+                    type: "error",
+                  });
+                }
+              })
+              .catch(err => {})
+          });
+        }
+      });
     },
 
     handleViewChange(row) {
         this.viewVisible = true;
         console.log(row);
         this.viewForm = JSON.parse(JSON.stringify(row));
+        
     },
     closeViewForm() {
         this.viewVisible = false;
@@ -805,31 +879,33 @@ export default {
     closeEditForm() {
         this.editVisible = false;
         this.$refs.editForm.resetFields();
-        this.knowledgeId = "";
-        this.knowledgeState = "",
         this.editForm = {}
     },
     submitEdit() {
-        this.$confirm("确认提交吗？", "提示", {}).then(() => {
-            let params = Object.assign({}, this.editForm);
-            params.courseId =  this.$store.state.course.courseId;
-            params.knowledgeId = this.knowledgeId;
-            // console.log(params);
-            this.$api.problem.prog.update(params).then((res) => {
-              if (res.code == 200) {
-                this.$message({ message: "操作成功", type: "success" });
-                this.closeEditForm();
-                this.flag = "2"
-                this.handleChangeFlag();
-                // this.$refs.getAllAudit()
-              } else {
-                this.$message({
-                  message: "操作失败, " + res.msg,
-                  type: "error",
-                });
-              }
-            });
-        });
+      this.$refs['editForm'].validate((valid) => {
+        if (valid) {
+          this.$confirm("确认提交吗？", "提示", {}).then(() => {
+              let params = Object.assign({}, this.editForm);
+              params.courseId =  this.$store.state.course.courseId;
+              params.knowledgeId = this.knowledgeId;
+              // console.log(params);
+              this.$api.problem.prog.update(params).then((res) => {
+                if (res.code == 200) {
+                  this.$message({ message: "操作成功", type: "success" });
+                  this.closeEditForm();
+                  this.flag = "2"
+                  this.handleChangeFlag();
+                  // this.$refs.getAllAudit()
+                } else {
+                  this.$message({
+                    message: "操作失败, " + res.msg,
+                    type: "error",
+                  });
+                }
+              }).catch(err => {})
+          });
+        }
+      });
 
     },
 
@@ -837,8 +913,6 @@ export default {
         console.log(data.params);
         this.$api.problem.prog.del(data.params)
         .then(data != null ? data.callback : "");
-        
-        
     },
 
     

@@ -685,13 +685,13 @@
         destroy-on-close
         
       >
-        <el-form ref="courseForm" v-model="addCourseInform" >
+        <el-form ref="courseForm" v-model="addCourseInform" :rules="addCourseRules">
           <el-row type="flex" align="middle" justify="center">
             <el-col :span="12">
               <!-- <el-form-item label="" label-width="80px">
                 {{viewForm.name}}
             </el-form-item> -->
-              <el-form-item label="课程名称" label-width="80px">
+              <el-form-item label="课程名称" label-width="80px" prop="name">
                 <el-input
                   style="width:205px"
                   size="small"
@@ -699,7 +699,7 @@
                   placeholder="请输入内容"
                 ></el-input>
               </el-form-item>
-              <el-form-item label="课程层次" label-width="80px">
+              <el-form-item label="课程层次" label-width="80px" prop="level">
                 <el-select
                   size="small"
                   v-model="addCourseInform.level"
@@ -715,7 +715,7 @@
                 </el-select>
               </el-form-item>
 
-              <el-form-item label="课程方向" label-width="80px" >
+              <el-form-item label="课程方向" label-width="80px" prop="type1Id">
                 <el-select
                   size="small"
                   v-model="addCourseInform.type1Id"
@@ -730,7 +730,7 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="课程要求" label-width="80px">
+              <el-form-item label="课程要求" label-width="80px" prop="type2Id">
                 <el-select
                   size="small"
                   v-model="addCourseInform.type2Id"
@@ -834,6 +834,12 @@ export default {
 
         hoursOfWeek: [{required: true, validator: this.checkHoursOfWeek, trigger: "blur" }],
         grade: [{required: true, validator: this.checkGrade, trigger: "blur" }],
+      },
+      addCourseRules: {
+        name: [{required: true, message: "请选择", trigger: "blur"}],
+        level: [{required: true, message: "请选择", trigger: "blur"}],
+        type1Id: [{required: true, message: "请选择", trigger: "blur"}],
+        type2Id: [{required: true, message: "请选择", trigger: "blur"}],
       },
       // 编辑课程实例
       editInstanceDialogVisible: false,
@@ -987,29 +993,33 @@ export default {
     },
 
     submitAddInstance() {
-      this.$confirm("确认提交吗？", "提示", {}).then(() => {
-        this.editLoading = true;
-        let params = Object.assign({}, this.addInstanceInform);
-        this.$api.course.cinstance.add(params).then((res) => {
-          this.editLoading = false;
-          if (res.code == 200) {
-            // console.log(res.data);
-            let cid = res.data;
-            this.submitLanguage(cid);
-            this.$message({
-              message: "申请成功,等待审核中···",
-              type: "success",
+      this.$refs['addInstanceInform'].validate((valid) => {
+        if (valid) {
+          this.$confirm("确认提交吗？", "提示", {}).then(() => {
+            this.editLoading = true;
+            let params = Object.assign({}, this.addInstanceInform);
+            this.$api.course.cinstance.add(params).then((res) => {
+              this.editLoading = false;
+              if (res.code == 200) {
+                // console.log(res.data);
+                let cid = res.data;
+                this.submitLanguage(cid);
+                this.$message({
+                  message: "申请成功,等待审核中···",
+                  type: "success",
+                });
+                this.chandgeAddInstanceVisible();
+                this.addCourseInform = [];
+                this.getAllInstance();
+              } else {
+                this.$message({
+                  message: "操作失败, " + res.msg,
+                  type: "error",
+                });
+              }
             });
-            this.chandgeAddInstanceVisible();
-            this.addCourseInform = [];
-            this.getAllInstance();
-          } else {
-            this.$message({
-              message: "操作失败, " + res.msg,
-              type: "error",
-            });
-          }
-        });
+          });
+        }
       });
     },
 
@@ -1019,27 +1029,32 @@ export default {
     },
     closeAddCourseVisible() {
     this.addCourseDialogVisible = false;
+    this.addCourseInform = {};
     },
     submitAddCourse() {
-      this.$confirm("确认提交吗？", "提示", {}).then(() => {
-        this.editLoading = true;
-        let params = Object.assign({}, this.addCourseInform);
-        this.$api.course.course.add(params).then((res) => {
-          this.editLoading = false;
-          if (res.code == 200) {
-            this.$message({
-              message: "申请成功,等待审核中···",
-              type: "success",
+      this.$refs['courseForm'].validate((valid) => {
+        if (valid) {
+          this.$confirm("确认提交吗？", "提示", {}).then(() => {
+            this.editLoading = true;
+            let params = Object.assign({}, this.addCourseInform);
+            this.$api.course.course.add(params).then((res) => {
+              this.editLoading = false;
+              if (res.code == 200) {
+                this.$message({
+                  message: "申请成功,等待审核中···",
+                  type: "success",
+                });
+                this.chandgeAddCourseVisible();
+                this.closeAddInstanceVisible();
+              } else {
+                this.$message({
+                  message: "操作失败, " + res.msg,
+                  type: "error",
+                });
+              }
             });
-            this.chandgeAddCourseVisible();
-            this.closeAddInstanceVisible();
-          } else {
-            this.$message({
-              message: "操作失败, " + res.msg,
-              type: "error",
-            });
-          }
-        });
+          });
+        }
       });
     },
     // 课程层次 本科等
@@ -1173,26 +1188,30 @@ export default {
     },
 
     submitEditInstance() {
-      this.$confirm("确认提交吗？", "提示", {}).then(() => {
-        this.editLoading = true;
-        let params = Object.assign({}, this.editInstanceForm);
-        this.$api.course.cinstance.updateInstance(params).then((res) => {
-          this.editLoading = false;
-          this.submitLanguage(this.editInstanceForm.id);
-          if (res.code == 200) {
-            this.$message({
-              message: "修改成功",
-              type: "success",
+      this.$refs['editInstanceForm'].validate((valid) => {
+        if (valid) {
+          this.$confirm("确认提交吗？", "提示", {}).then(() => {
+            this.editLoading = true;
+            let params = Object.assign({}, this.editInstanceForm);
+            this.$api.course.cinstance.updateInstance(params).then((res) => {
+              this.editLoading = false;
+              this.submitLanguage(this.editInstanceForm.id);
+              if (res.code == 200) {
+                this.$message({
+                  message: "修改成功",
+                  type: "success",
+                });
+                this.getAllInstance();
+                this.closeEditInstanceForm();
+              } else {
+                this.$message({
+                  message: "修改失败, " + res.msg,
+                  type: "error",
+                });
+              }
             });
-            this.getAllInstance();
-            this.closeEditInstanceForm();
-          } else {
-            this.$message({
-              message: "修改失败, " + res.msg,
-              type: "error",
-            });
-          }
-        });
+          });
+        }
       });
     },
 

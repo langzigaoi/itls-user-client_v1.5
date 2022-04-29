@@ -74,6 +74,11 @@ ul {
   background-color: #14889A;
   border-color: #14889A;
 }
+.el-checkbox__input.is-indeterminate .el-checkbox__inner {
+  background-color: #14889A;
+  border-color: #14889A;
+}
+
 
 .el-pager li.active {
   color: #14889A;
