@@ -9,6 +9,7 @@
  import * as type from './metadata/type'
  import * as title from './metadata/title'
  import * as examType from './metadata/examType'
+ import * as objective from './metadata/objective'
 
 
  
@@ -21,4 +22,5 @@
   type,
   title,
   examType,
+  objective,
  }

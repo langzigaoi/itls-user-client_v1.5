@@ -1,193 +1,259 @@
 <template>
-  <div>
-    <div class="actiondiv">
-      <el-button @click="changevisable" round size="small" type="primary">新增</el-button>
-      <!-- <el-button round size="small" @click="changeShowSelect()" type="warning" v-if="!showSelect">删除</el-button> -->
-      <!-- <el-popconfirm title="这是一段内容确定删除吗？" >
-        <el-button round size="small" v-if="showSelect" @click="changeShowSelect()" type="warning" >确认删除</el-button>
-      </el-popconfirm> -->
-      <!-- <el-button round size="small" v-if="showSelect" @click="changeShowSelect()" type="warning">确认删除</el-button> -->
-      <!-- 新增教学团队成员弹框 -->
-      <add-mate ref="addMate"></add-mate>
+  <div class="outside" style="padding: 30px">
+    <el-row>
+      <el-col align="left">
+        <el-form>
+          <el-button
+            style="margin-left: 5px"
+            size="mini"
+            type="primary"
+            @click="openAddDialog"
+            >新增</el-button
+          >
+        </el-form>
+      </el-col>
+    </el-row>
 
-      <!-- 删除教学团队助教弹框 -->
-      <el-dialog title="提示" :visible.sync="deleteDialogVisible" width="30%">
-        <span>确定删除助教 {{this.courseChosing.name}} ？</span>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="deleteDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="sureDelete()">确 定</el-button>
-        </span>
-      </el-dialog>
-      <!-- <el-button round size="small" >圆角按钮</el-button> -->
-    </div>
-    <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%"
-      @selection-change="handleSelectionChange">
-      <!-- <el-table-column type="selection" width="55" v-if="showSelect"> </el-table-column> -->
-      <el-table-column prop="stuNo" label="学号/教工号" width="120" sortable></el-table-column>
-      <el-table-column prop="usrUserInfo.name" label="姓名" width="120" sortable> </el-table-column>
-      <el-table-column prop="usrUserInfo.email" label="邮箱"> </el-table-column>
-      <el-table-column prop="usrUserInfo.telNum" label="电话" width="120"> </el-table-column>
-      <el-table-column prop="isAssistant" label="主讲/助教">
-        <template slot-scope="scope">
-          {{scope.row.isAssistant | isAssistantFilter}}
-        </template>
-      </el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)"
-            v-if="scope.$index != 0 && scope.$index != 1">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div style="margin-top: 20px">
-      <!-- <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>
-        <el-button @click="toggleSelection()">取消选择</el-button> -->
-    </div>
+    <com-table
+      :data="pageResults"
+      :columns="columns"
+      :delFlag="true"
+      :editFlag="true"
+      :showOperation="true"
+      @findPage="findPage"
+      @handleRemove="handleRemove"
+      @handleEditChange="handleEditChange"
+    ></com-table>
+
+     <!-- 添加弹框 -->
+    <el-dialog
+      title="编辑课程实例"
+      width="60%"
+      :visible.sync="addDialogVisible"
+      :close-on-click-modal="false"
+      destroy-on-close
+    >
+      <el-form
+        ref="pageResults"
+        :model="pageResults"
+        style="text-align: center"
+      >
+        <div>
+          <el-row type="flex" justify="center">
+
+            <el-col :span="9">
+              <el-form-item label="职工号" label-width="70px">
+                <el-row type="flex">
+                  <el-input
+                    disabled
+                    style="width: 205px"
+                    size="small"
+                    v-model="pageResults.no"
+                    placeholder="请输入职工号"
+                  ></el-input>
+                </el-row>
+              </el-form-item>
+
+              <el-form-item label="姓名" label-width="70px">
+                <el-row type="flex">
+                  <el-input
+                    style="width: 205px"
+                    size="small"
+                    v-model="pageResults.name"
+                    placeholder="姓名"
+                  ></el-input>
+                </el-row>
+              </el-form-item>
+
+              <el-form-item
+                label="周 学 时"
+                prop="hoursOfWeek"
+                label-width="70px"
+              >
+                <el-row type="flex">
+                  <el-input
+                    disabled
+                    style="width: 205px"
+                    size="small"
+                    v-model="pageResults.hoursOfWeek"
+                    placeholder="请输入周学时"
+                  ></el-input>
+                </el-row>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row type="flex" justify="center">
+            <el-col :span="5"></el-col>
+            <el-col :span="19">
+              <el-form-item label="课程简介" label-width="70px">
+                <el-row type="flex">
+                  <el-input
+                    style="width: 570px"
+                    size="small"
+                    type="textarea"
+                    :rows="4"
+                    v-model="pageResults.intro"
+                    placeholder="请输入内容"
+                  ></el-input>
+                </el-row>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <div>
+            <el-row type="flex" align="bottom" justify="end">
+              <el-button size="mini" @click="addDialogVisible = false"
+                >返回
+              </el-button>
+              <el-button type="primary" size="mini" @click="addTeamMember"
+                >确定</el-button
+              >
+            </el-row>
+          </div>
+        </div>
+      </el-form>
+    </el-dialog>
+
+    <el-dialog
+      title="编辑课程目标"
+      :visible.sync="updateDialogVisible"
+      width="500px"
+      center
+    >
+      <el-input
+        type="textarea"
+        :rows="4"
+        placeholder="请输入内容"
+        v-model="updatetextarea"
+      >
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="updateDialogVisible = false"
+          >取 消</el-button
+        >
+        <el-button size="mini" type="primary" @click="updateTarget"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import ComTable from "../../../common/ComTable.vue";
 
-  import addMate from './AddTeamMate.vue' //新增教学团队成员
-  export default {
-    components: {
-      addMate
-    },
-    data() {
-      return {
-        deleteDialogVisible: false, // 是否显示删除弹框
-        showSelect: false, //是否显示多选
-        multipleSelection: [],
-        courseChosing: {  //团队成员信息
-          stuNo: null,
-          indId: null,
-          isAssistant: null,
-          name: null
-        },
-        courseInstance: {},
-        preData: [
-          /* {
-            stuNo: '',
-            isAssistant: '主讲',
-            usrUserInfo: {
-              name: '视频讲师',
-              email: '123456444@qq.com',
-              telNum: '12345678910',
-            },
-          },
-          {
-            stuNo: '1001',
-            isAssistant: '开课教师',
-            usrUserInfo: {
-              name: '张三',
-              email: '123456444@qq.com',
-              telNum: '12345678910',
-            },
-          }, */
-        ],
-        tableData: [],
+export default {
+  components: {
+    ComTable,
+  },
+  data() {
+    return {
+      pageResults: {}, //存放教学团队查回来的的所有信息
+      columns: [
+        { prop: "no", label: "职工号", minWidth: 150, align: "center" },
+        { prop: "name", label: "姓名", minWidth: 150, align: "center" },
+        { prop: "position", label: "职位", minWidth: 150, align: "center" },
+        { prop: "tel_num", label: "电话", minWidth: 150, align: "center" },
+        { prop: "email", label: "邮箱", minWidth: 150, align: "center" },
+      ],
+
+      targets: [], //所有课程目标
+      addDialogVisible: false, //用于表示添加dialog显示与否
+      updateDialogVisible: false, //用于表示编辑dialog显示与否
+      addtextarea: "", //用于添加弹框
+      updatetextarea: "", //用于更新弹框
+      current: -1, //表示当前操作位置
+      target: "", //用于存放修改的课程项目
+      updateId: -1,
+    };
+  },
+  mounted() {
+    // this.findCinstanceTargets();
+  },
+  methods: {
+    // 分页查询
+    findPage(data) {
+      if (data !== null) {
+        this.pageRequest = data.pageRequest;
       }
+      this.$api.course.target
+        .findAllTargets({
+          cinstance_id: this.$store.state.course.courseCinstanceId,
+        })
+        .then((res) => {
+          // console.log(res.data);
+          this.pageResults = res.data;
+        })
+        .then(data != null ? data.callback : "");
     },
-    filters: {
-      isAssistantFilter(isAssistant) {
-        if (isAssistant == 1)
-          return '助教';
-        else if (isAssistant == '主讲') {
-          return '主讲';
-        }
-        else if (isAssistant == '开课教师') {
-          return '开课教师';
-        }
-      }
+    // 获取课程实例的课程目标
+    findCinstanceTargets() {
+      this.$api.course.target
+        .findAllTargets({
+          cinstance_id: this.$store.state.course.courseCinstanceId,
+        })
+        .then((res) => {
+          // console.log(res.data);
+          this.pageResults = res.data;
+        });
     },
-    methods: {
-
-      // 设置课程实例讲师及开课教师信息
-      setPreInfo() {
-        this.$api.course.cinstance.findCourseInstance({ id: this.$store.state.course.courseCinstanceId }).then((res) => {
-          this.courseInstance = res.data;
-          let lecturer = {
-            stuNo: null,
-            isAssistant: '主讲',
-            usrUserInfo: {
-              name: this.courseInstance.lecturer,
-              email: null,
-              telNum: null
-            }
-          }
-          this.preData[0] = lecturer;
-          this.getTeacherInfo();
-          this.findAstInfoByInd_id();
-
-        }).catch(err => {
-          this.courseInstance = {};
-        })
-      },
-      getTeacherInfo() {
-        this.$api.course.coursechosingstu.getUserInfo({ no: this.courseInstance.teacherNo }).then(res => {
-          let teacher = {
-            stuNo: this.courseInstance.teacherNo,
-            isAssistant: '开课教师',
-            usrUserInfo: {
-              name: res.data.name,
-              email: res.data.email,
-              telNum: res.data.tel_num
-            }
-          }
-          this.preData[1] = teacher;
-        })
-      },
-      findAstInfoByInd_id() {
-        this.$api.course.coursechosingstu.findAstInfoByInd_id({ ind_id: this.$store.state.course.courseCinstanceId }).then(res => {
-          this.tableData = this.preData.concat(res.data);
-        })
-      },
-      //改变删除的多选显示
-      changeShowSelect() {
-        this.showSelect = !this.showSelect;
-      },
-      toggleSelection(rows) {
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row);
+    // 打开增加课程目标的弹窗
+    openAddDialog() {
+      this.addtextarea = "";
+      this.addDialogVisible = true;
+    },
+    // 打开编辑课程目标的弹窗
+    handleEditChange(row) {
+      this.updateDialogVisible = true;
+      this.updateId = row.id;
+      this.updatetextarea = JSON.parse(JSON.stringify(row.name));
+    },
+    // 确定修改课程目标
+    updateTarget() {
+      console.log(this.updatetextarea);
+      if (this.updatetextarea == null || this.updatetextarea == "") {
+        this.warnMsg("课程目标不能为空");
+      } else {
+        this.$api.course.target
+          .updateTarget({ name: this.updatetextarea, id: this.updateId })
+          .then((res) => {
+            this.succMsg(res.msg);
+            this.updateDialogVisible = false;
+            this.findCinstanceTargets();
           });
-        } else {
-          this.$refs.multipleTable.clearSelection();
-        }
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      changevisable() {
-        this.$refs.addMate.changevisable();
-      },
-      // 表格内删除按钮
-      handleDelete(index, row) {
-        this.courseChosing.stuNo = this.tableData[index].stuNo;
-        this.courseChosing.indId = this.$store.state.course.courseCinstanceId;
-        this.courseChosing.isAssistant = 0;
-        this.courseChosing.name = this.tableData[index].usrUserInfo.name;
-        this.deleteDialogVisible = true;
-      },
-      sureDelete() {
-        this.$api.course.coursechosingstu.setCinstanceAssistant(this.courseChosing).then(res => {
-          this.$message.success("删除成功");
-          this.deleteDialogVisible = false;
-          this.findAstInfoByInd_id();
-        }).catch(err => {
-          this.$message.err("删除失败");
-        })
       }
     },
-    mounted() {
-      this.setPreInfo();
+    // 删除课程目标
+    handleRemove(data) {
+      this.$api.course.target
+        .delTarget(data.params)
+        .then(data != null ? data.callback : "");
     },
-  }
+    // 添加课程目标
+    addTeamMember() {
+      console.log(this.addtextarea);
+      if (this.addtextarea == null || this.addtextarea == "") {
+        this.warnMsg("课程目标不能为空");
+      } else {
+        this.$api.course.target
+          .addTarget({
+            cinstance_id: this.$store.state.course.courseCinstanceId,
+            name: this.addtextarea,
+          })
+          .then((res) => {
+            this.succMsg(res.msg);
+            this.addDialogVisible = false;
+            this.findCinstanceTargets();
+          });
+      }
+    },
+  },
+};
 </script>
+
 <style scoped>
-  .actiondiv {
-    align-content: left;
-    text-align: left;
-    margin-top: 20px;
-  }
+.outside {
+  text-align: center;
+}
 </style>

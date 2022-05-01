@@ -490,7 +490,7 @@ export default {
               }
             });
         }
-      );
+      ).catch(() => {});
     },
     // 获取课程编程语言
     findCinstanceLanguage(id) {

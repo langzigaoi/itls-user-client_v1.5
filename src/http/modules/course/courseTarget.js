@@ -38,3 +38,11 @@ export const delTarget = (data) => {
     data
   })
 }
+// 发布课程实例的课程目标
+export const releaseTarget = (data) => {
+  return axios({
+    url: preUrl + 'release',
+    method: 'post',
+    data
+  })
+}
