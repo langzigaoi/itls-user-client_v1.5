@@ -111,6 +111,7 @@
             :disabled="disableFlag.removeObjective == true"
             @click="remove(scope.$index, scope.row)"
           >删除</el-button>
+          
 
           <!--控制考试-->
           <el-row>
@@ -201,6 +202,7 @@
         style="float: left"
         v-if="showFlag.batchRemove == true"
       >批量移除</el-button>
+      <h1>{{this.flag}}</h1>
 
       <el-pagination
         layout="total, prev, pager, next, jumper "
@@ -271,11 +273,13 @@
         type: String,
         default: "",
       },
+
       // 控制操控页面（全部 或 个人）
       flag: {
         type: String,
         default: "1",
       },
+
       // 控制表格操作栏
       showOperation: {
         // 是否显示操作组件
@@ -358,7 +362,7 @@
       if (this.flag == "1") {
         this.findPage();
       }
-      if (this.flag = "2") {
+      if (this.flag == "2") {
         this.findPersonPage()
       }
       
