@@ -15,7 +15,6 @@
       @select="selectItem"
       :row-key="getRowKeys"
 
-      v-loading="loading"
       :border="border"
       :max-height="maxHeight"
       :size="size"
@@ -56,7 +55,7 @@
 
       <el-table-column
         label="操作"
-        width= "330"
+        width= "210"
         fixed="right"
         v-if="showOperation"
         header-align="center"
@@ -98,38 +97,76 @@
           >移除</el-button>
 
           <!--控制考试-->
-          <el-button 
-            size="mini" 
-            v-if=" infoFlag == true && scope.row.isPub == 0   "
-            :disabled="disableFlag.infoFlag == true"
-            @click="info(scope.$index, scope.row)"
-          >详情</el-button>
-          <el-button 
-            size="mini" 
-            v-if=" itemFlag == true && scope.row.isPub == 0   "
+          <el-row>
+            <!-- <el-col :span="8"></el-col> -->
 
-            @click="item(scope.$index, scope.row)"
-          >题型</el-button>
-          <el-button 
-            size="mini" 
-            v-if=" problemFlag == true && scope.row.isPub == 0   "
+            <!-- <el-col :span="12" align="right"> -->
+               <el-row>
+                  <el-button 
+                    size="mini" 
+                    v-if=" showFlag.infoForm == true && scope.row.isPub == 0   "
+                    :disabled="disableFlag.infoForm == true"
+                    @click="openInfoForm(scope.$index, scope.row)"
+                  >信息设置</el-button>
+                </el-row>
+                <el-row>
+                  <el-button 
+                    size="mini" 
+                    v-if=" showFlag.itemList == true && scope.row.isPub == 0   "
+                    :disabled="disableFlag.itemList == true"
+                    @click="openItemList(scope.$index, scope.row)"
+                  >题型设置</el-button>
+                </el-row>
+                <el-row>
+                  <el-button 
+                    size="mini" 
+                    v-if=" showFlag.problemList == true && scope.row.isPub == 0   "
+                    :disabled="disableFlag.problemList == true"
+                    @click="openProblemList(scope.$index, scope.row)"
+                  >题目设置</el-button>
+                </el-row>
 
-            @click="generate(scope.$index, scope.row)"
-          >组卷</el-button>
-          <el-button 
-            size="mini" 
-            type="primary"
-            v-if=" pubFlag == true && scope.row.isPub == 0   "
+                <el-row>
+                  <el-button 
+                    size="mini" 
+                    v-if=" showFlag.problemList == true && scope.row.isPub == 0   "
+                    :disabled="disableFlag.problemList == true"
+                    @click="openObjectiveList(scope.$index, scope.row)"
+                  >双向细目</el-button>
+                </el-row>
+            <!-- </el-col> -->
 
-            @click="pub(scope.$index, scope.row)"
-          >发布</el-button>
-          <!-- <el-button 
-            size="mini" 
-            type="danger" 
+            <!-- <el-col :span="12" > -->
+              <el-row>
+                <el-button 
+                  style="width:40%"
+                  size="mini" 
+                  type="primary"
+                  v-if=" showFlag.pub == true && scope.row.isPub == 0   "
+                  :disabled="disableFlag.pub == true"
+                  @click="pub(scope.$index, scope.row)"
+                > 发 布 </el-button>
+              </el-row>
+
+
+
+
+              <el-row>
+                <el-button 
+                  style="width:40%"
+                  size="mini" 
+                  type="danger" 
+                  v-if=" showFlag.removeExam == true && scope.row.isPub == 0   "
+                  :disabled="disableFlag.removeExam == true"
+                  @click="remove(scope.$index, scope.row)"
+                >删除</el-button>
+              </el-row>
+            <!-- </el-col> -->
+
             
-            disabled=""
-            @click="remove(scope.$index, scope.row)"
-          >删除</el-button> -->
+          
+          
+          </el-row>
 
 
 
@@ -182,7 +219,7 @@
       maxHeight: {
         // 表格最大高度
         type: Number,
-        default: 500
+        default: 600
       },
       
       border: {
@@ -223,26 +260,6 @@
         type: String,
         default: "1",
       },
-    
-
-      infoFlag: {
-        type: Boolean,
-        default: false,
-      },
-      itemFlag:{
-        type: Boolean,
-        default: false,
-      },
-      problemFlag: {
-        type: Boolean,
-        default: false,
-      },
-      pubFlag: {
-        type: Boolean,
-        default: false,
-      },
-
-
       // 控制表格操作栏
       showOperation: {
         // 是否显示操作组件
@@ -250,7 +267,6 @@
         default: true,
       },
       // 控制按钮显示、禁用；由调用本组件的页面按需传值控制显示或禁用
-
       showFlag:{
         type: Object,
         default: {
@@ -265,14 +281,15 @@
             editProblem: false,
             removeProblem: false,
             // 考试
+            infoForm: false,
+            itemList: false,
+            problemList: false,
+            objectiveList: false,
+            pub: false,
+            removeExam: false,
         })
         },
-
-        
-
       },
-
-      // del:true,
 
       disableFlag:{
         type: Object,
@@ -287,6 +304,12 @@
             editProblem: false,
             removeProblem: false,
             // 考试
+            infoForm: false,
+            itemList: false,
+            problemList: false,
+            objectiveList: false,
+            pub: false,
+            removeExam: false,
         })
       },
 
@@ -310,8 +333,13 @@
     },
     
     mounted() {
-      this.findPage();
-      // this.findPersonPage()
+      if (this.flag == "1") {
+        this.findPage();
+      }
+      if (this.flag = "2") {
+        this.findPersonPage()
+      }
+      
     },
 
     methods: {
@@ -482,14 +510,19 @@
         this.$emit("handleEditChange", row );
       },
 
-      info(index, row) {
-        this.$emit("handleInfoChange", row );
+
+      // 考试
+      openInfoForm(index, row) {
+        this.$emit("openInfoForm", row );
       },
-      item(index, row) {
-        this.$emit("handleItemChange", row )
+      openItemList(index, row) {
+        this.$emit("openItemList", row )
       },
-      generate(index, row) {
-        this.$emit("handleGenerateChange", row );
+      openProblemList(index, row) {
+        this.$emit("openProblemList", row );
+      },
+      openObjectiveList(index, row) {
+        this.$emit("openObjectiveList", row );
       },
       pub(index, row) {
         this.$emit("handlePub", row );
