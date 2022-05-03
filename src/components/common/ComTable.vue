@@ -96,6 +96,22 @@
             @click="remove(scope.$index, scope.row)"
           >移除</el-button>
 
+          <!--控制课程目标-->
+          <el-button 
+            size="mini" 
+            type="primary" 
+            v-if=" showFlag.editObjective == true "
+            :disabled="disableFlag.editObjective == true"
+            @click="edit(scope.$index, scope.row)"
+          >编辑</el-button>
+          <el-button 
+            size="mini" 
+            type="danger" 
+            v-if=" showFlag.removeObjective == true "
+            :disabled="disableFlag.removeObjective == true"
+            @click="remove(scope.$index, scope.row)"
+          >删除</el-button>
+
           <!--控制考试-->
           <el-row>
             <!-- <el-col :span="8"></el-col> -->
@@ -277,6 +293,9 @@
             batchRemove: false,
             // 学生列表
             removeStudent: false,
+            //课程目标
+            editObjective: false,
+            removeObjective: false,
             // 题库
             editProblem: false,
             removeProblem: false,
@@ -300,6 +319,9 @@
             batchRemove: false,
             // 学生列表
             removeStudent: false,
+            //课程目标
+            editObjective: false,
+            removeObjective: false,
             // 题库
             editProblem: false,
             removeProblem: false,
@@ -539,7 +561,12 @@
   size: mini;
   
 }
-
-
-
+.el-button--primary:disabled {
+  background-color: #a0cbd1;
+  border-color: #96d0da;
+}
+.el-button--primary.is-disabled:hover {
+    background-color: #a0cbd1;
+    border-color: #a0cbd1;
+}
 </style>

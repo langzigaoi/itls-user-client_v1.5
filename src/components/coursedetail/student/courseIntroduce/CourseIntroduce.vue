@@ -1,108 +1,106 @@
 <template>
-  <div>
-    <div class="tcommonBox">
-      <el-row>
-        <el-col :span="5">
+  <div class="outside" style="padding: 30px">
+    <el-row>
+      <el-col :span="5">
+        <div>
+          <el-avatar
+            shape="square"
+            fit="contain"
+            :size="120"
+            :src="courseInstance.image"
+          ></el-avatar>
+        </div>
+      </el-col>
+
+      <el-col :span="7">
+        <el-row type="flex" class="el-row-margin">
           <div>
-            <el-avatar
-              shape="square"
-              fit="contain"
-              :size="120"
-              :src="courseInstance.image"
-            ></el-avatar>
+            <span>课程名称</span>
+            <el-divider direction="vertical"></el-divider>
+            <span>{{ courseInstance.courseName }}</span>
           </div>
-        </el-col>
+        </el-row>
 
-        <el-col :span="7">
-          <el-row type="flex" class="el-row-margin">
-            <div>
-              <span>课程名称</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>{{ courseInstance.courseName }}</span>
-            </div>
-          </el-row>
+        <el-row type="flex" class="el-row-margin">
+          <div>
+            <span>主讲人</span>
+            <el-divider direction="vertical"></el-divider>
+            <span>{{ courseInstance.lecturer }}</span>
+          </div>
+        </el-row>
 
-          <el-row type="flex" class="el-row-margin">
-            <div>
-              <span>主讲人</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>{{ courseInstance.lecturer }}</span>
-            </div>
-          </el-row>
+        <el-row class="el-row-margin">
+          <div>
+            <span>起止日期</span>
+            <el-divider direction="vertical"></el-divider>
+            <span>{{ dateFormate(new Date(courseInstance.startYear)) }}</span
+            >~<span>{{ dateFormate(new Date(courseInstance.endYear)) }}</span>
+          </div>
+        </el-row>
 
-          <el-row class="el-row-margin">
-            <div>
-              <span>起止日期</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>{{ dateFormate(new Date(courseInstance.startYear)) }}</span
-              >~<span>{{ dateFormate(new Date(courseInstance.endYear)) }}</span>
-            </div>
-          </el-row>
+        <el-row class="el-row-margin">
+          <div>
+            <span>周学时</span>
+            <el-divider direction="vertical"></el-divider>
+            <span>{{ courseInstance.hoursOfWeek }} 学时</span>
+          </div>
+        </el-row>
 
-          <el-row class="el-row-margin">
-            <div>
-              <span>周学时</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>{{ courseInstance.hoursOfWeek }} 学时</span>
-            </div>
-          </el-row>
+        <el-row class="el-row-margin">
+          <div>
+            <span>需要编程</span>
+            <el-divider direction="vertical"></el-divider>
+            <span v-if="courseInstance.isProgram == 1">是</span>
+            <span v-else>否</span>
+          </div>
+        </el-row>
+      </el-col>
 
-          <el-row class="el-row-margin">
-            <div>
-              <span>需要编程</span>
-              <el-divider direction="vertical"></el-divider>
-              <span v-if="courseInstance.isProgram == 1">是</span>
-              <span v-else>否</span>
-            </div>
-          </el-row>
-        </el-col>
+      <el-col :span="12">
+        <el-row class="el-row-margin">
+          <div>
+            <span>教学类型</span>
+            <el-divider direction="vertical"></el-divider>
+            <span>{{ courseInstance.teachingTypeName }}</span>
+          </div>
+        </el-row>
 
-        <el-col :span="12">
-          <el-row class="el-row-margin">
-            <div>
-              <span>教学类型</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>{{ courseInstance.teachingTypeName }}</span>
-            </div>
-          </el-row>
+        <el-row class="el-row-margin">
+          <div>
+            <span>学期</span>
+            <el-divider direction="vertical"></el-divider>
+            <span>第 {{ courseInstance.semester }} 学期</span>
+          </div>
+        </el-row>
 
-          <el-row class="el-row-margin">
-            <div>
-              <span>学期</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>第 {{ courseInstance.semester }} 学期</span>
-            </div>
-          </el-row>
+        <el-row class="el-row-margin">
+          <div>
+            <span>学分</span>
+            <el-divider direction="vertical"></el-divider>
+            <span>{{ courseInstance.grade }}</span>
+          </div>
+        </el-row>
 
-          <el-row class="el-row-margin">
-            <div>
-              <span>学分</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>{{ courseInstance.grade }}</span>
-            </div>
-          </el-row>
+        <el-row class="el-row-margin">
+          <div>
+            <span>编程语言</span>
+            <el-divider direction="vertical"></el-divider>
+            <span v-for="(value, index) in languageList" :key="index"
+              >&nbsp;{{ value.name }}语言
+              <span v-if="index != languageList.length - 1">、</span>&nbsp;
+            </span>
+          </div>
+        </el-row>
 
-          <el-row class="el-row-margin">
-            <div>
-              <span>编程语言</span>
-              <el-divider direction="vertical"></el-divider>
-              <span v-for="(value, index) in languageList" :key="index"
-                >&nbsp;{{ value.name }}语言
-                <span v-if="index != languageList.length - 1">、</span>&nbsp;
-              </span>
-            </div>
-          </el-row>
-
-          <el-row class="el-row-margin">
-            <div>
-              <span>课程简介</span>
-              <el-divider direction="vertical"></el-divider>
-              <span>{{ courseInstance.intro }}</span>
-            </div>
-          </el-row>
-        </el-col>
-      </el-row>
-    </div>
+        <el-row class="el-row-margin">
+          <div>
+            <span>课程简介</span>
+            <el-divider direction="vertical"></el-divider>
+            <span>{{ courseInstance.intro }}</span>
+          </div>
+        </el-row>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
@@ -187,64 +185,5 @@ export default {
 }
 .el-row-margin {
   margin-bottom: 60px;
-}
-.el-textarea__inner:focus {
-  border-color: #14889a;
-}
-.el-input__inner:focus {
-  border-color: #14889a;
-}
-.el-select .el-input__inner:focus {
-  border-color: #14889a;
-}
-.el-select .el-input.is-focus .el-input__inner:focus {
-  border-color: #14889a;
-}
-.tcommonBox h1 {
-  margin: 15px 850px 19px 19px;
-  font-size: 25px;
-  font-weight: 700;
-  text-align: left;
-  line-height: 30px;
-  padding-bottom: 25px;
-}
-
-header {
-  border-top: 1px;
-}
-/* 更改element-UI按钮样式 */
-.el-button--primary {
-  color: #fff;
-  background-color: #14889a;
-  border-color: #14889a;
-}
-.el-button--primary:hover {
-  background-color: #61b6c4;
-  border-color: #61b6c4;
-}
-.el-button--primary:disabled {
-  background-color: #a0cbd1;
-  border-color: #96d0da;
-}
-.el-button--primary:focus {
-  background-color: #14889a;
-  border-color: #14889a;
-}
-.el-button--default:hover {
-  color: #14889a;
-  border-color: #14889a;
-}
-.el-input__inner:focus {
-  border-color: #14889a;
-}
-.el-select .el-input__inner:focus {
-  border-color: #14889a;
-}
-.el-select .el-input.is-focus .el-input__inner:focus {
-  border-color: #14889a;
-}
-.el-select-dropdown__item.selected {
-  color: #14889a;
-  font-weight: 700;
 }
 </style>
