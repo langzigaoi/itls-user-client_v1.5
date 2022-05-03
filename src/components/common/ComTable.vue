@@ -113,6 +113,22 @@
           >删除</el-button>
           
 
+          <!--控制教学团队-->
+          <el-button 
+            size="mini" 
+            type="primary" 
+            v-if=" showFlag.editTeachingTeam == true "
+            :disabled="disableFlag.editTeachingTeam == true"
+            @click="edit(scope.$index, scope.row)"
+          >编辑</el-button>
+          <el-button 
+            size="mini" 
+            type="danger" 
+            v-if=" showFlag.removeTeachingTeam == true "
+            :disabled="disableFlag.removeTeachingTeam == true"
+            @click="remove(scope.$index, scope.row)"
+          >删除</el-button>
+
           <!--控制考试-->
           <el-row>
             <!-- <el-col :span="8"></el-col> -->
@@ -300,6 +316,9 @@
             //课程目标
             editObjective: false,
             removeObjective: false,
+            //教学团队
+            editTeachingTeam: false,
+            removeTeachingTeam: false,
             // 题库
             editProblem: false,
             removeProblem: false,
@@ -326,6 +345,9 @@
             //课程目标
             editObjective: false,
             removeObjective: false,
+            //教学团队
+            editTeachingTeam: false,
+            removeTeachingTeam: false,
             // 题库
             editProblem: false,
             removeProblem: false,
