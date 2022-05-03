@@ -1,5 +1,6 @@
 <template>
   <div>
+ 
 
     <div >
         <el-row type="flex" align="bottom" justify="start">
@@ -59,7 +60,6 @@
         :index="indexMethod"
       ></el-table-column>
 
-      <!--题型设置-->
       <el-table-column 
         prop="problemType" 
         label="类型"
@@ -71,6 +71,7 @@
             v-model="scope.row.problemTypeId"
             @click.native="beforeChangeProblemType(scope.$index, scope.row)"
             @change="changeProblemType(scope.row)"
+            
             >
             <el-option
               v-for="item in allProblemType"
@@ -89,6 +90,7 @@
         v-if="columnFlag.num == true">
         <template scope="scope">
           <el-input 
+            
             size="mini" v-model="scope.row.num"> </el-input>
           </template>
       </el-table-column>
@@ -97,12 +99,13 @@
         v-if="columnFlag.score == true">
         <template scope="scope">
           <el-input 
+            
             size="mini" v-model="scope.row.score">
           </el-input>
         </template>
       </el-table-column>
 
-      <!--题目设置-->
+
       <el-table-column 
         prop="problemTypeName" 
         label="类型"
@@ -116,68 +119,21 @@
         v-if="columnFlag.viewScore == true">
       </el-table-column>
 
-      <el-table-column prop="knowledgeName" label="知识点" 
+
+      <el-table-column prop="num" label="知识点" 
         v-if="columnFlag.knowledgeName == true">
         <template scope="scope">
           <el-input 
            size="mini" v-model="scope.row.knowledgeName"> </el-input>
           </template>
       </el-table-column>
-      <el-table-column prop="score" label="分值" 
+      <el-table-column prop="num" label="分值" 
         v-if="columnFlag.singleScore == true">
         <template scope="scope">
           <el-input 
            size="mini" v-model="scope.row.score"> </el-input>
           </template>
       </el-table-column>
-
-      <!--双向细目-->
-      <el-table-column 
-        prop="problemTypeName" 
-        label="类型"
-        v-if="columnFlag.objProblemTypeName"
-        >
-      </el-table-column>
-      <el-table-column 
-        prop="knowledgeName" 
-        label="知识点" 
-        v-if="columnFlag.objKnowledgeName">
-      </el-table-column>
-      <el-table-column 
-        prop="score"
-        label="分值"
-        v-if="columnFlag.objScore">
-      </el-table-column>
-      <el-table-column 
-        prop="problemType" 
-        label="目标"
-        v-if="columnFlag.objObjective == true"
-        >
-        <template scope="scope">
-          <el-select 
-            v-model="scope.row.objectiveId">
-            <el-option
-              v-for="item in allProblemType"
-              :key="item.id"
-              :label="item.value"
-              :value="item.id"
-            >
-            </el-option>
-          </el-select>
-        </template>
-          
-      </el-table-column>
-
-
-
-
-
-
-
-
-
-
-
 
 
       <el-table-column
@@ -193,7 +149,6 @@
           <el-button
               @click="open(scope.$index,scope.row)"
               size="mini"
-              type="primary"
               v-if="columnFlag.openButton == true "
             >
             题目列表
@@ -206,7 +161,6 @@
             >
             详情
           </el-button>
-
 
           <!--公用-->
           <el-button @click.native.prevent="deleteRow(scope.$index, data.tableData)"
@@ -350,38 +304,12 @@
         type: Array,
         default: [],
       },
-      allObjective: {
-        type: Array,
-        default: [],
-      },
       
 
-      columnFlag:{
+      columnFlag: {
         type: Object,
-        default:()=> ({
-          addButton: false,
-          selectButton: false,
-          openButton: false,
-          problemButton: false,
-          delButton: false,
-
-          problemType: false,
-          num: false,
-          score: false,
-
-          viewProblemType: false,
-          viewNum: false,
-          viewScore: false,
-          knowledgeName: false,
-          singleScore: false,
-
-          objProblemTypeName: false,
-          objKnowledgeName: false,
-          objScore: false,
-          objObjective: false,
-
-
-        })
+        default: {
+        }
       }
 
 
