@@ -17,38 +17,32 @@
     <com-table
       :data="pageResults"
       :columns="columns"
-      :delFlag="true"
-      :editFlag="true"
+      :showFlag="showFlag"
       :showOperation="true"
       @findPage="findPage"
       @handleRemove="handleRemove"
       @handleEditChange="handleEditChange"
     ></com-table>
 
-     <!-- 添加弹框 -->
+    <!-- 添加弹框 -->
     <el-dialog
-      title="编辑课程实例"
-      width="60%"
+      title="添加助教"
+      width="500px"
       :visible.sync="addDialogVisible"
       :close-on-click-modal="false"
       destroy-on-close
+      center
     >
-      <el-form
-        ref="pageResults"
-        :model="pageResults"
-        style="text-align: center"
-      >
+      <el-form ref="addForm" :model="addForm" style="text-align: center">
         <div>
           <el-row type="flex" justify="center">
-
-            <el-col :span="9">
+            <el-col :span="16">
               <el-form-item label="职工号" label-width="70px">
                 <el-row type="flex">
                   <el-input
-                    disabled
-                    style="width: 205px"
+                    style="width: 220px"
                     size="small"
-                    v-model="pageResults.no"
+                    v-model="addForm.no"
                     placeholder="请输入职工号"
                   ></el-input>
                 </el-row>
@@ -57,44 +51,48 @@
               <el-form-item label="姓名" label-width="70px">
                 <el-row type="flex">
                   <el-input
-                    style="width: 205px"
+                    style="width: 220px"
                     size="small"
-                    v-model="pageResults.name"
-                    placeholder="姓名"
+                    v-model="addForm.name"
+                    placeholder="请输入姓名"
                   ></el-input>
                 </el-row>
               </el-form-item>
 
-              <el-form-item
-                label="周 学 时"
-                prop="hoursOfWeek"
-                label-width="70px"
-              >
+              <el-form-item label="职位" label-width="70px">
+                <el-row type="flex">
+                  <el-select
+                    size="small"
+                    v-model="addForm.position"
+                    placeholder="请选择职位"
+                  >
+                    <el-option
+                      v-for="item in allAssistantType"
+                      :key="item.value"
+                      :label="item.value"
+                      :value="item.id"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-row>
+              </el-form-item>
+              <el-form-item label="电话" label-width="70px">
                 <el-row type="flex">
                   <el-input
-                    disabled
-                    style="width: 205px"
+                    style="width: 220px"
                     size="small"
-                    v-model="pageResults.hoursOfWeek"
-                    placeholder="请输入周学时"
+                    v-model="addForm.telNum"
+                    placeholder="请输入电话"
                   ></el-input>
                 </el-row>
               </el-form-item>
-            </el-col>
-          </el-row>
-
-          <el-row type="flex" justify="center">
-            <el-col :span="5"></el-col>
-            <el-col :span="19">
-              <el-form-item label="课程简介" label-width="70px">
+              <el-form-item label="邮箱" label-width="70px">
                 <el-row type="flex">
                   <el-input
-                    style="width: 570px"
+                    style="width: 220px"
                     size="small"
-                    type="textarea"
-                    :rows="4"
-                    v-model="pageResults.intro"
-                    placeholder="请输入内容"
+                    v-model="addForm.email"
+                    placeholder="请输入邮箱"
                   ></el-input>
                 </el-row>
               </el-form-item>
@@ -115,27 +113,91 @@
       </el-form>
     </el-dialog>
 
+    <!-- 编辑弹框 -->
     <el-dialog
-      title="编辑课程目标"
+      title="编辑助教信息"
       :visible.sync="updateDialogVisible"
       width="500px"
       center
     >
-      <el-input
-        type="textarea"
-        :rows="4"
-        placeholder="请输入内容"
-        v-model="updatetextarea"
-      >
-      </el-input>
-      <span slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="updateDialogVisible = false"
-          >取 消</el-button
-        >
-        <el-button size="mini" type="primary" @click="updateTarget"
-          >确 定</el-button
-        >
-      </span>
+      <el-form ref="editForm" :model="editForm" style="text-align: center">
+        <div>
+          <el-row type="flex" justify="center">
+            <el-col :span="16">
+              <el-form-item label="职工号" label-width="70px">
+                <el-row type="flex">
+                  <el-input
+                    style="width: 220px"
+                    size="small"
+                    v-model="editForm.no"
+                    placeholder="请输入职工号"
+                  ></el-input>
+                </el-row>
+              </el-form-item>
+
+              <el-form-item label="姓名" label-width="70px">
+                <el-row type="flex">
+                  <el-input
+                    style="width: 220px"
+                    size="small"
+                    v-model="editForm.name"
+                    placeholder="请输入姓名"
+                  ></el-input>
+                </el-row>
+              </el-form-item>
+
+              <el-form-item label="职位" label-width="70px">
+                <el-row type="flex">
+                  <el-select
+                    size="small"
+                    v-model="editForm.position"
+                    placeholder="请选择职位"
+                  >
+                    <el-option
+                      v-for="item in allAssistantType"
+                      :key="item.value"
+                      :label="item.value"
+                      :value="item.id"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-row>
+              </el-form-item>
+              <el-form-item label="电话" label-width="70px">
+                <el-row type="flex">
+                  <el-input
+                    style="width: 220px"
+                    size="small"
+                    v-model="editForm.telNum"
+                    placeholder="请输入电话"
+                  ></el-input>
+                </el-row>
+              </el-form-item>
+              <el-form-item label="邮箱" label-width="70px">
+                <el-row type="flex">
+                  <el-input
+                    style="width: 220px"
+                    size="small"
+                    v-model="editForm.email"
+                    placeholder="请输入邮箱"
+                  ></el-input>
+                </el-row>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <div>
+            <el-row type="flex" align="bottom" justify="end">
+              <el-button size="mini" @click="updateDialogVisible = false"
+                >返回
+              </el-button>
+              <el-button type="primary" size="mini" @click="updateTeamMember"
+                >确定</el-button
+              >
+            </el-row>
+          </div>
+        </div>
+      </el-form>
     </el-dialog>
   </div>
 </template>
@@ -150,15 +212,27 @@ export default {
   data() {
     return {
       pageResults: {}, //存放教学团队查回来的的所有信息
+      editForm: {}, //存放编辑表格所有信息
+      addForm: {}, //存放添加表格所有信息
       columns: [
         { prop: "no", label: "职工号", minWidth: 150, align: "center" },
         { prop: "name", label: "姓名", minWidth: 150, align: "center" },
         { prop: "position", label: "职位", minWidth: 150, align: "center" },
-        { prop: "tel_num", label: "电话", minWidth: 150, align: "center" },
+        { prop: "telNum", label: "电话", minWidth: 150, align: "center" },
         { prop: "email", label: "邮箱", minWidth: 150, align: "center" },
       ],
 
-      targets: [], //所有课程目标
+      // 设置需显示和禁用的标记
+      showFlag: {
+        batchRemove: true,
+        editTeachingTeam: true,
+        removeTeachingTeam: true,
+      },
+      disableFlag: {
+        editTeachingTeam: "",
+        removeTeachingTeam: "",
+        batchRemove: "",
+      },
       addDialogVisible: false, //用于表示添加dialog显示与否
       updateDialogVisible: false, //用于表示编辑dialog显示与否
       addtextarea: "", //用于添加弹框
@@ -166,20 +240,19 @@ export default {
       current: -1, //表示当前操作位置
       target: "", //用于存放修改的课程项目
       updateId: -1,
+      allAssistantType: ["助教"],
     };
   },
-  mounted() {
-    // this.findCinstanceTargets();
-  },
+  mounted() {},
   methods: {
-    // 分页查询
+    // 分页查询全部助教信息
     findPage(data) {
       if (data !== null) {
         this.pageRequest = data.pageRequest;
       }
-      this.$api.course.target
-        .findAllTargets({
-          cinstance_id: this.$store.state.course.courseCinstanceId,
+      this.$api.course.teachingTeam
+        .findAllAssistant({
+          cinstanceId: this.$store.state.course.courseCinstanceId,
         })
         .then((res) => {
           // console.log(res.data);
@@ -187,11 +260,11 @@ export default {
         })
         .then(data != null ? data.callback : "");
     },
-    // 获取课程实例的课程目标
-    findCinstanceTargets() {
-      this.$api.course.target
-        .findAllTargets({
-          cinstance_id: this.$store.state.course.courseCinstanceId,
+    // 获取全部助教信息
+    findAllAssistant() {
+      this.$api.course.teachingTeam
+        .findAllAssistant({
+          cinstanceId: this.$store.state.course.courseCinstanceId,
         })
         .then((res) => {
           // console.log(res.data);
@@ -200,53 +273,44 @@ export default {
     },
     // 打开增加课程目标的弹窗
     openAddDialog() {
-      this.addtextarea = "";
       this.addDialogVisible = true;
     },
     // 打开编辑课程目标的弹窗
     handleEditChange(row) {
       this.updateDialogVisible = true;
-      this.updateId = row.id;
-      this.updatetextarea = JSON.parse(JSON.stringify(row.name));
+      this.editForm = JSON.parse(JSON.stringify(row));
     },
     // 确定修改课程目标
-    updateTarget() {
-      console.log(this.updatetextarea);
-      if (this.updatetextarea == null || this.updatetextarea == "") {
-        this.warnMsg("课程目标不能为空");
-      } else {
-        this.$api.course.target
-          .updateTarget({ name: this.updatetextarea, id: this.updateId })
-          .then((res) => {
-            this.succMsg(res.msg);
-            this.updateDialogVisible = false;
-            this.findCinstanceTargets();
-          });
-      }
+    updateTeamMember() {
+      let data = Object.assign({}, this.editForm);
+      this.$api.course.teachingTeam
+        .updateAssistant(data)
+        .then((res) => {
+          this.succMsg(res.msg);
+          this.updateDialogVisible = false;
+          this.findAllAssistant();
+        });
     },
     // 删除课程目标
     handleRemove(data) {
-      this.$api.course.target
-        .delTarget(data.params)
+      let ids = data.params.map((item) => {return item.id})
+      console.log("hhh",ids.toString())
+      this.$api.course.teachingTeam
+        .delTarget({IDs: ids.toString()})
         .then(data != null ? data.callback : "");
     },
     // 添加课程目标
     addTeamMember() {
-      console.log(this.addtextarea);
-      if (this.addtextarea == null || this.addtextarea == "") {
-        this.warnMsg("课程目标不能为空");
-      } else {
-        this.$api.course.target
-          .addTarget({
-            cinstance_id: this.$store.state.course.courseCinstanceId,
-            name: this.addtextarea,
-          })
-          .then((res) => {
-            this.succMsg(res.msg);
-            this.addDialogVisible = false;
-            this.findCinstanceTargets();
-          });
-      }
+      this.addForm.position="助教";
+      this.addForm.cinstanceId=this.$store.state.course.courseCinstanceId;
+      let data = Object.assign({}, this.addForm);
+      this.$api.course.teachingTeam
+        .addAssistant(data)
+        .then((res) => {
+          this.succMsg(res.msg);
+          this.addDialogVisible = false;
+          this.findAllAssistant();
+        });
     },
   },
 };
