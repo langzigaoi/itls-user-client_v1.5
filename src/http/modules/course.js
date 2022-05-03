@@ -12,7 +12,7 @@ import * as choosing from './course/choosing'
  import * as sectionhomework from './course/sectionhomework'
  import * as sectiontest from './course/sectiontest'
  import * as courseProblemType from './course/courseProblemType'
- import * as target from './course/courseTarget'
+ import * as courseTarget from './course/courseTarget'
  import * as language from './course/language'
  import * as shortAnserQues from './course/shortAnserQues'
  
@@ -28,7 +28,7 @@ import * as choosing from './course/choosing'
   sectionhomework,
   sectiontest,
   courseProblemType,
-  target,
+  courseTarget,
   language,
   shortAnserQues
  }
