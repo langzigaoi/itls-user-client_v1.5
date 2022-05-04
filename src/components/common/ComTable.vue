@@ -14,13 +14,11 @@
       @current-change="handleCurrentChange"
       @select="selectItem"
       :row-key="getRowKeys"
-
       :border="border"
       :max-height="maxHeight"
       :size="size"
       :align="align"
       :stripe="stripe"
-
       style="width: 100%"
     >
       <el-table-column
@@ -218,7 +216,6 @@
         style="float: left"
         v-if="showFlag.batchRemove == true"
       >批量移除</el-button>
-      <h1>{{this.flag}}</h1>
 
       <el-pagination
         layout="total, prev, pager, next, jumper "

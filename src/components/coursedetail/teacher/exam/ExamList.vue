@@ -287,7 +287,7 @@
       </el-form>
     </el-dialog>
 
-    <!--题型列表-->
+    <!--2.题型列表-->
     <el-dialog
       top="5vh"
       align="center"
@@ -326,7 +326,7 @@
     </el-dialog>
 
 
-    <!--题目设置-->
+    <!--3.题目设置-->
     <el-dialog
       top="5vh"
       align="center"
@@ -504,16 +504,261 @@
     </el-dialog>
 
 
+    <!--单个题目展示弹框-->
+    <el-dialog
+      top="5vh"
+      align="center"
+      :visible.sync="viewProblemVisible"
+      width="70%"
+      style=""
+      @close="closeViewProblemForm"
+    >
+        <el-form
+          ref="viewProblemForm"
+          :model="viewProblemForm"
+        >
+          <div >
+            <el-row type="flex" justify="center"> 
+              <el-col :span="14">
+
+                <el-form-item label="知识点" label-width="80px"  
+                  v-if="viewProblemForm.knowledgeName">
+                  <el-row type="flex">
+                    <el-input
+                        onfocus="this.blur();"
+                        v-model="viewProblemForm.knowledgeName"
+                        auto-complete="off"
+                        size="mini"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+
+
+                <!--选择题特有字段-->
+                <el-form-item v-if="viewProblemForm.title" 
+                    label="题干" label-width="80px" prop="title">
+                  <el-row type="flex">
+                    <el-input
+                      onfocus="this.blur();"
+                      style="textarea"
+                      :rows="4"
+                      size="mini"
+                      type="textarea"
+                      v-model="viewProblemForm.title"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+                <el-form-item label="选项" label-width="80px" prop="options" 
+                            v-if="viewProblemForm.options">
+                    <el-row type="flex">
+                        <el-input
+                            onfocus="this.blur();"
+                            type="textarea"
+                            :rows="4"
+                            v-model="viewProblemForm.options"
+                            auto-complete="off"
+                            size="mini"
+                        ></el-input>
+                    </el-row>
+                </el-form-item>
+                <el-form-item label="答案" label-width="80px" prop="answer" 
+                            v-if="viewProblemForm.answer">
+                    <el-row type="flex">
+                        <el-input
+                            onfocus="this.blur();"
+                            type="textarea"
+                            :rows="4"
+                            v-model="viewProblemForm.answer"
+                            auto-complete="off"
+                            size="mini"
+                        ></el-input>
+                    </el-row>
+                </el-form-item>
+                <el-form-item label="解析" label-width="80px" prop="analysis" 
+                            v-if="viewProblemForm.analysis">
+                    <el-row type="flex">
+                        <el-input
+                            onfocus="this.blur();"
+                            type="textarea"
+                            :rows="4"
+                            v-model="viewProblemForm.analysis"
+                            auto-complete="off"
+                            size="mini"
+                        ></el-input>
+                    </el-row>
+                </el-form-item>
+
+                <!--编程题特有字段-->
+                <el-form-item label="名称" label-width="80px" prop="problemName" 
+                      v-if="viewProblemForm.problemName">
+                  <el-row type="flex">
+                    <el-input
+                      onfocus="this.blur();"
+                      style="textarea"
+                      size="mini"
+                      v-model="viewProblemForm.problemName"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+                <el-form-item label="题干" label-width="80px" prop="problemDescription"  
+                      v-if="viewProblemForm.problemDescription">
+                  <el-row type="flex">
+                    <el-input
+                      onfocus="this.blur();"
+                      style="textarea"
+                      size="mini"
+                      type="textarea"
+                      :rows="4"
+                      v-model="viewProblemForm.problemDescription"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+                <el-form-item label="输入格式" label-width="80px" prop="problemInputFormat" 
+                      v-if="viewProblemForm.problemInputFormat">
+                  <el-row type="flex">
+                    <el-input
+                      onfocus="this.blur();"
+                      style="textarea"
+                      size="mini"
+                      type="textarea"
+                      :rows="4"
+                      v-model="viewProblemForm.problemInputFormat"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+                <el-form-item label="输入样例" label-width="80px" prop="problemSampleInput" 
+                      v-if="viewProblemForm.problemSampleInput">
+                  <el-row type="flex">
+                    <el-input
+                      onfocus="this.blur();"
+                      style="textarea"
+                      size="mini"
+                      type="textarea"
+                      :rows="4"
+                      v-model="viewProblemForm.problemSampleInput"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+                <el-form-item label="输出样例" label-width="80px" prop="problemSampleOutput" 
+                      v-if="viewProblemForm.problemSampleOutput">
+                  <el-row type="flex">
+                    <el-input
+                      onfocus="this.blur();"
+                      style="textarea"
+                      size="mini"
+                      type="textarea"
+                      :rows="4"
+                      v-model="viewProblemForm.problemSampleOutput"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+                
+                <el-form-item label="提示" label-width="80px" prop="problemHint" 
+                      v-if="viewProblemForm.problemHint">
+                  <el-row type="flex">
+                    <el-input
+                      onfocus="this.blur();"
+                      style="textarea"
+                      size="mini"
+                      type="textarea"
+                      :rows="4"
+                      v-model="viewProblemForm.problemHint"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="时间限制" label-width="80px" prop="problemTimeLimit" 
+                                v-if="viewProblemForm.problemTimeLimit">
+                            <el-row type="flex">
+                                <el-input
+                                onfocus="this.blur();"
+                                style="width:65%; "
+                                size="mini"
+                                v-model="viewProblemForm.problemTimeLimit"
+                                placeholder="请输入内容"
+                                ></el-input>
+                            </el-row>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="内存限制" label-width="80px" prop="problemMemoryLimit" 
+                                v-if="viewProblemForm.problemMemoryLimit">
+                            <el-row type="flex">
+                                <el-input
+                                onfocus="this.blur();"
+                                style="width:65%; "
+                                size="mini"
+                                v-model="viewProblemForm.problemMemoryLimit"
+                                placeholder="请输入内容"
+                                ></el-input>
+                            </el-row>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
 
 
 
+                <el-form-item label="题目来源" label-width="80px" prop="markup" 
+                            v-if="viewProblemForm.markup">
+                    <el-row type="flex">
+                        <el-input
+                            onfocus="this.blur();"
+                            v-model="viewProblemForm.markup"
+                            auto-complete="off"
+                            size="mini"
+                        ></el-input>
+                    </el-row>
+                </el-form-item>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="难易度" label-width="80px" prop="difficulty" align="left" 
+                                    v-if="viewProblemForm.difficulty">
+                            <el-row type="flex">
+                                <el-input
+                                    v-model="viewProblemForm.difficulty"
+                                    auto-complete="off"
+                                    size="mini"
+                                ></el-input>
+                            </el-row>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12" >
+                        <el-form-item label="区分度" label-width="80px" prop="discrimination" align="left" 
+                                    v-if="viewProblemForm.discrimination">
+                            <el-row type="flex">
+                                <el-input
+                                    v-model="viewProblemForm.discrimination"
+                                    auto-complete="off"
+                                    size="mini"
+                                ></el-input>
+                            </el-row>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <div>
+                        <el-row type="flex" align="bottom" justify="center">
+                            <el-button size="mini" type="primary" @click="closeViewProblemForm"
+                            >返回
+                            </el-button>
+                        </el-row>
+                    </div>
+              </el-row>
 
-
-
-
-
-
-
+              </el-col>       
+            </el-row>
+         </div>
+        </el-form>
+    </el-dialog>
 
 
   </div>
@@ -699,11 +944,11 @@ export default {
     };
   },
   mounted() {
-    this.allKnowledge = JSON.parse(
-      JSON.stringify(this.$store.state.course.knowledge)
-    );
+    this.allKnowledge = JSON.parse(JSON.stringify(this.$store.state.course.knowledge));
     this.findAllExamType();
     this.findAllProblemType();
+    this.findAllObjectiveType();
+
   },
   methods: {
     // 元数据及处理
@@ -1077,6 +1322,7 @@ export default {
         this.problemListForm.num = row.num;
         this.problemListForm.score = row.score;
         this.problemListForm.itemId = row.id;
+        this.problemListForm.examId = row.examId;
           
         if (row.id != "" && row.id != null && row.id != undefined) {
           this.pageRequest.params = [{ name: "itemId", value: row.id },];
@@ -1129,6 +1375,7 @@ export default {
             problemTypeId: this.problemListForm.id,
             score: this.problemListForm.tableData[i].score,
             knowledgeName: this.problemListForm.tableData[i].knowledgeName,
+            examId: this.problemListForm.examId,
           })
         }
         console.log(params);
@@ -1290,61 +1537,108 @@ export default {
 
     // 双向细目页面
     findAllObjectiveType() {
-      // 未处理所有选项
       let suggests = [];
-      this.$api.course.courseProblemType
-        .findByCid({ courseId: this.$store.state.course.courseId })
-        .then((res) => {
-          // console.log(res);
-          for (let index = 0; index < res.data.length; index++) {
+      this.$api.course.courseTarget
+      .findAllTargets({cinstanceId: this.$store.state.course.courseCinstanceId})
+      .then((res) => {
+          console.log(res);
+          for (let index = 0; index < res.data.content.length; index++) {
             suggests.push({
-              value: res.data[index].problemTypeName,
-              id: res.data[index].problemTypeId,
+              value: res.data.content[index].name,
+              id: res.data.content[index].id,
+              lable: res.data.content[index].objectiveTypeName
             });
           }
-          this.allObjective = suggests;
+          this.allObjective = JSON.parse(JSON.stringify(suggests));
+          console.log(this.allObjective);
         });
     },
-    changeObjectiveListVisible() {
-      this.objectiveListVisible = true;
+    changeObjectiveListVisible(row) {
+      console.log(row);
+      let examId = row.id;
+
+      this.pageRequest.params = [{ name: "examId", value: examId },];
+      this.$api.exam.examContent.findByExamId(this.pageRequest).then((res) => {
+        console.log(res.data);
+        if(res.data !== null) {
+          this.objectiveListForm = res.data;
+          this.objectiveListForm.tableData = this.objectiveListForm.content;
+          console.log(this.objectiveListForm.tableData);
+        } 
+        this.objectiveListVisible = true;
+      }).catch(err => {})
 
     },
     closeObjectiveList() {
+      this.objectiveListForm = {
+        tableData:[]
+      };
       this.objectiveListVisible = false;
     },
     submitObjectiveList() {
+      console.log(this.objectiveListForm.tableData);
 
+      let params = JSON.parse(JSON.stringify(this.objectiveListForm.tableData))
+
+      for (let i = 0; i < params.length; i++) {
+        if (params[i].objectiveId == null ||
+            params[i].objectiveId == "" ||
+            params[i].objectiveId == undefined) 
+         {
+            this.$message({
+              message: "请填写完整" ,
+              type: "error",
+            }) 
+            return null;
+         }
+      }
+      console.log(params);
+      this.$confirm("确认提交吗？", "提示", {}).then(() => {
+          this.$api.exam.examContent.updateObj(params).then((res) => {
+            if (res.code == 200) {
+              this.$message({
+                message: res.msg,
+                type: "success",
+              });
+              // this.problemListVisible = false;
+            }
+          })
+          .catch((err) => {
+          })
+        });
     },
 
-
-
-
-
-    
-
+    // 发布
     handlePub() {},
 
     openProblemInfo(row) {
       console.log(row);
 
-      if (row.problemTypeId == 1) {
+      let problemTypeId = row.problemTypeId;
+      let problemId = row.problemId;
+
+      if (problemTypeId == 1) {
         // 选择题
-        this.$api.problem.choice.findById({id:row.problemId}).then((res) => {
+        this.$api.problem.choice.findById({id:problemId}).then((res) => {
           console.log(res.data);
-          this.viewProblemForm = JSON.parse(JSON.stringify(res.data))
-        })
-        
+          if (res.data != null) {
+            this.viewProblemForm = JSON.parse(JSON.stringify(res.data))
+            this.viewProblemVisible = true;
+          }    
+        }) 
       }
-      if (row.problemTypeId == 7) {
+      if (problemTypeId == 7) {
         // 编程题
-        this.$api.problem.prog.findById({id:row.problemId}).then((res) =>{
+        this.$api.problem.prog.findById({id:problemId}).then((res) =>{
           console.log(res.data);
-          this.viewProblemForm = JSON.parse(JSON.stringify(res.data))
+          if (res.data != null) {
+            this.viewProblemForm = JSON.parse(JSON.stringify(res.data))
+            this.viewProblemVisible = true;
+          }
         })
-        
       }
 
-      this.viewProblemVisible = true;
+      
     },
     closeViewProblemForm() {
       this.viewProblemVisible = false;

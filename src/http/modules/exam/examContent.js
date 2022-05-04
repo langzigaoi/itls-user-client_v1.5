@@ -19,3 +19,21 @@ export const update = (data) => {
     data
   })
 }
+
+export const findByExamId = (data) => {
+  return axios({
+    url: preUrl + 'findByExamId',
+    method: 'post',
+    data
+  })
+}
+
+// 编辑
+export const updateObj = (data) => {
+  return axios({
+    url: preUrl + 'updateObj',
+    method: 'post',
+    data
+  })
+}
+
