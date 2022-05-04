@@ -218,7 +218,6 @@
         style="float: left"
         v-if="showFlag.batchRemove == true"
       >批量移除</el-button>
-      <h1>{{this.flag}}</h1>
 
       <el-pagination
         layout="total, prev, pager, next, jumper "

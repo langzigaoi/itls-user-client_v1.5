@@ -100,7 +100,7 @@
           <el-row type="flex">
             <el-select
               size="small"
-              v-model="editType"
+              v-model="editTypeId"
               placeholder="请选择课程目标类型"
             >
               <el-option
@@ -157,7 +157,7 @@ export default {
           align: "center",
         },
         {
-          prop: "typeName",
+          prop: "objectiveTypeName",
           label: "目标类型",
           minWidth: 150,
           align: "center",
@@ -186,7 +186,7 @@ export default {
       allObjectiveType: [], //课程目标类型
       objectiveType: "",
       addObjectiveForm: {},
-      editType: "",
+      editTypeId:"",
     };
   },
   mounted() {
@@ -198,9 +198,9 @@ export default {
       if (data !== null) {
         this.pageRequest = data.pageRequest;
       }
-      this.$api.course.target
+      this.$api.course.courseTarget
         .findAllTargets({
-          cinstance_id: this.$store.state.course.courseCinstanceId,
+          cinstanceId: this.$store.state.course.courseCinstanceId,
         })
         .then((res) => {
           // console.log(res.data);
@@ -235,9 +235,9 @@ export default {
     },
     // 获取课程实例的课程目标
     findCinstanceTargets() {
-      this.$api.course.target
+      this.$api.course.courseTarget
         .findAllTargets({
-          cinstance_id: this.$store.state.course.courseCinstanceId,
+          cinstanceId: this.$store.state.course.courseCinstanceId,
         })
         .then((res) => {
           // console.log(res.data);
@@ -268,19 +268,18 @@ export default {
       this.updateDialogVisible = true;
       this.updateId = row.id;
       this.updatetextarea = JSON.parse(JSON.stringify(row.name));
-      this.editType = JSON.parse(JSON.stringify(row.typeName));
+      this.editTypeId = JSON.parse(JSON.stringify(row.objectiveTypeId));
     },
     // 确定修改课程目标
     updateTarget() {
-      console.log(this.updatetextarea);
       if (this.updatetextarea == null || this.updatetextarea == "") {
         this.warnMsg("课程目标不能为空");
       } else {
-        this.$api.course.target
+        this.$api.course.courseTarget
           .updateTarget({
             name: this.updatetextarea,
             id: this.updateId,
-            type: this.editType,
+            type: this.editTypeId,
           })
           .then((res) => {
             this.succMsg(res.msg);
@@ -291,7 +290,7 @@ export default {
     },
     // 删除课程目标
     handleRemove(data) {
-      this.$api.course.target
+      this.$api.course.courseTarget
         .delTarget(data.params)
         .then(data != null ? data.callback : "");
     },
@@ -304,7 +303,7 @@ export default {
       )
         .then(() => {
           console.log(this.pageResults.content);
-          this.$api.course.target
+          this.$api.course.courseTarget
             .releaseTarget(this.pageResults.content)
             .then((res) => {
               if (res.msg == "发布成功") {
@@ -326,7 +325,7 @@ export default {
       if (this.addtextarea == null || this.addtextarea == "") {
         this.warnMsg("课程目标不能为空");
       } else {
-        this.$api.course.target
+        this.$api.course.courseTarget
           .addTarget({
             cinstance_id: this.$store.state.course.courseCinstanceId,
             name: this.addtextarea,
