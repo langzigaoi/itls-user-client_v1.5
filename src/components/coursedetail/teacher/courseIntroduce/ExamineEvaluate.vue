@@ -1,7 +1,7 @@
 <template>
   <div class="outside" style="padding: 30px">
-    <el-row>
-      <el-col :span="12" align='left'>
+    <!-- <el-row>
+      <el-col :span="12" align="left">
         <el-form :inline="true">
           <el-button
             style="margin-left: 5px"
@@ -12,9 +12,90 @@
           >
         </el-form>
       </el-col>
-    </el-row>
+    </el-row> -->
 
-    <com-table
+    <div style="">
+      <el-form
+        :model="itemListForm"
+        ref="itemListForm"
+        size="small"
+        text-algin="center"
+      >
+        <el-form-item>
+          <div style="width: 80%">
+            <modifiable-table
+              :data="itemListForm"
+              :allEvaluateType="allEvaluateType"
+              :allObjective="allObjective"
+              :columnFlag="itemColumnFlag"
+              @findPage="findPage"
+              @open="handleitemListVisible"
+            >
+            </modifiable-table>
+          </div>
+        </el-form-item>
+        <el-row>
+          <div>
+            <el-row type="flex" align="bottom" justify="center">
+              <!-- <el-button size="mini" @click="closeItemListForm"
+                >返回
+              </el-button> -->
+              <el-button type="primary" size="mini" @click="submitItemListForm"
+                >保存
+              </el-button>
+            </el-row>
+          </div>
+        </el-row>
+      </el-form>
+    </div>
+
+    <el-dialog
+      top="5vh"
+      align="center"
+      title="详情"
+      :visible.sync="itemListVisible"
+      width="70%"
+      style=""
+      @close="closeItemListForm"
+    >
+      <div style="">
+        <el-form
+          :model="detailedListForm"
+          ref="itemListForm"
+          size="small"
+          text-algin="center"
+        >
+          <el-form-item>
+            <!-- <div style="width: 100%"> -->
+              <modifiable-table
+                :data="detailedListForm"
+                :allEvaluateType="detailedEvaluateType"
+                :allObjective="allObjective"
+                :columnFlag="itemColumnFlag"
+                @findPage="findPage"
+              >
+              </modifiable-table>
+            <!-- </div> -->
+          </el-form-item>
+          <el-row>
+            <div>
+              <el-row type="flex" align="bottom" justify="center">
+                <el-button size="mini" @click="closeItemListForm"
+                  >返回
+                </el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="submitItemListForm"
+                  >保存
+                </el-button>
+              </el-row>
+            </div>
+          </el-row>
+        </el-form>
+      </div>
+    </el-dialog>
+    <!-- <com-table
       :data="pageResults"
       :columns="columns"
       :delFlag="delFlag"
@@ -26,7 +107,7 @@
       @handleEditChange="handleEditChange"
       @handleRemove="handleRemove"
       :flag="flag"
-    ></com-table>
+    ></com-table> -->
 
     <el-dialog
       top="5vh"
@@ -38,7 +119,7 @@
     >
       <el-form ref="addForm" :model="addForm" :rules="addFormRules">
         <div>
-           <el-row type="flex" justify="center">
+          <el-row type="flex" justify="center">
             <el-col :span="14">
               <el-form-item label="考核项目" label-width="80px" prop="answer">
                 <el-row type="flex">
@@ -296,19 +377,47 @@
 </template>
 <script>
 import ComTable from "../../../common/ComTable.vue";
-
+import ModifiableTable from "./ModifiableTable .vue";
 export default {
   components: {
     ComTable,
+    ModifiableTable,
   },
-  mounted() {
-    this.allKnowledge = JSON.parse(
-      JSON.stringify(this.$store.state.course.knowledge)
-    );
-    console.log(this.allKnowledge);
-  },
+
   data() {
     return {
+      itemListForm: {
+        tableData: [],
+      },
+      detailedListForm: {
+        tableData: [],
+      },
+      itemColumnFlag: {
+        problemType: true,
+        num: true,
+        score: true,
+        addButton: true,
+        delButton: true,
+        problemButton: true,
+      },
+      //考核类型设置
+      allEvaluateType: [
+        { id: "1", value: "期末考试" },
+        // { id: "2", value: "测验" },
+        // { id: "3", value: "作业" },
+        // { id: "4", value: "实验" },
+        { id: "5", value: "过程评价" },
+      ],
+      detailedEvaluateType:[
+        { id: "2", value: "测验" },
+        { id: "3", value: "作业" },
+        { id: "4", value: "实验" },
+        { id: "4", value: "考勤" },
+        { id: "4", value: "单元考试" },
+      ],
+      //评价目标
+      allObjective: [],
+      itemListVisible: false,
       record: {},
       pageRequest: { pageNum: 1, pageSize: 10 },
       pageResults: {},
@@ -321,7 +430,12 @@ export default {
       knowledgeState: "",
       allKnowledge: [],
       columns: [
-        { prop: "courseName", label: "考核项目", minWidth: 150, align: "center" },
+        {
+          prop: "courseName",
+          label: "考核项目",
+          minWidth: 150,
+          align: "center",
+        },
         {
           prop: "knowledgeName",
           label: "成绩占比",
@@ -330,7 +444,12 @@ export default {
         },
       ],
       detailColumns: [
-        { prop: "courseName", label: "考核项目", minWidth: 150, align: "center" },
+        {
+          prop: "courseName",
+          label: "考核项目",
+          minWidth: 150,
+          align: "center",
+        },
         {
           prop: "knowledgeName",
           label: "成绩占比",
@@ -368,7 +487,103 @@ export default {
       editForm: {},
     };
   },
+  mounted() {
+    this.findCinstanceTargets();
+  },
   methods: {
+    // 获取课程实例的课程目标
+    findCinstanceTargets() {
+      this.$api.course.courseTarget
+        .findAllTargets({
+          cinstanceId: this.$store.state.course.courseCinstanceId,
+        })
+        .then((res) => {
+          // console.log(res.data);
+          this.allObjective = res.data.content;
+        });
+    },
+    handleAllProblemType(list) {
+      // console.log(list);
+      let suggests = [];
+      this.$api.course.courseProblemType
+        .findByCid({ courseId: this.$store.state.course.courseId })
+        .then((res) => {
+          // console.log(res);
+          for (let index = 0; index < res.data.length; index++) {
+            suggests.push({
+              value: res.data[index].problemTypeName,
+              id: res.data[index].problemTypeId,
+              disabled: false,
+            });
+          }
+          // console.log(suggests);
+          if (list !== undefined && list != null && list.length > 0) {
+            for (let i = 0; i < list.length; i++) {
+              for (let j = 0; j < suggests.length; j++) {
+                if (list[i].problemTypeId == suggests[j].id) {
+                  suggests[j].disabled = true;
+                }
+              }
+            }
+          }
+          this.allProblemType = JSON.parse(JSON.stringify(suggests));
+        });
+    },
+    closeItemListForm() {
+      this.itemListForm = {
+        tableData: [],
+      };
+      this.itemListVisible = false;
+      this.itemColumnFlag.problemButton = true;
+    },
+    submitItemListForm() {
+      //校验
+      console.log(this.itemListForm);
+      console.log(this.itemListForm.tableData);
+      let suggests = JSON.parse(JSON.stringify(this.itemListForm.tableData));
+      for (let m = 0; m < suggests.length; m++) {
+        if (
+          suggests[m].problemTypeId == null ||
+          suggests[m].problemTypeId == "" ||
+          suggests[m].problemTypeId == undefined ||
+          suggests[m].num == null ||
+          suggests[m].num == "" ||
+          suggests[m].num == undefined ||
+          !/^[1-9]\d*$/.test(suggests[m].num) ||
+          suggests[m].score == null ||
+          suggests[m].score == "" ||
+          suggests[m].score == undefined ||
+          !/^[1-9]\d*$/.test(suggests[m].score)
+        ) {
+          this.$message({
+            message: "请检查表格信息",
+            type: "error",
+          });
+          return null;
+        }
+      }
+      // 插入examId，处理参数
+      for (let i = 0; i < this.itemListForm.tableData.length; i++) {
+        this.itemListForm.tableData[i].examId = this.examId;
+      }
+      let params = JSON.parse(JSON.stringify(this.itemListForm.tableData));
+      this.$confirm("确认提交吗？", "提示", {}).then(() => {
+        this.$api.exam.examItem
+          .update(params)
+          .then((res) => {
+            if (res.code == 200) {
+              this.$message({
+                message: res.msg,
+                type: "success",
+              });
+              this.findItemList();
+            }
+          })
+          .catch((err) => {
+            this.closeItemListForm();
+          });
+      });
+    },
     dateFormat(row, column) {
       return this.time(row.lastUpdateTime);
     },
@@ -395,15 +610,15 @@ export default {
         { name: "knowledgeId", value: this.knowledgeId },
       ];
       // console.log(this.pageRequest);
-      this.$api.problem.choice
-        .findPage(this.pageRequest)
-        .then((res) => {
-          console.log(res.data);
-          if (res.data !== null) {
-            this.pageResults = res.data;
-          }
-        })
-        .then(data != null ? data.callback : "");
+      // this.$api.problem.choice
+      //   .findPage(this.pageRequest)
+      //   .then((res) => {
+      //     console.log(res.data);
+      //     if (res.data !== null) {
+      //       this.pageResults = res.data;
+      //     }
+      //   })
+      //   .then(data != null ? data.callback : "");
     },
     // 个人分页数据
     findPersonPage(data) {
@@ -496,6 +711,12 @@ export default {
       this.viewForm = {};
     },
 
+    handleitemListVisible(row) {
+      this.itemListVisible = true;
+      this.itemColumnFlag.problemButton = false;
+      // console.log(row.knowledgeName);
+      // this.editForm = JSON.parse(JSON.stringify(row));
+    },
     handleEditChange(row) {
       this.editVisible = true;
       // console.log(row.knowledgeName);

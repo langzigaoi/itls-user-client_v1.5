@@ -19,6 +19,7 @@
       :columns="columns"
       :showFlag="showFlag"
       :showOperation="true"
+      :flag="'1'"
       @findPage="findPage"
       @handleRemove="handleRemove"
       @handleEditChange="handleEditChange"
