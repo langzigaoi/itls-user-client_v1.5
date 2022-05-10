@@ -119,38 +119,14 @@
                 <span> 课程实验</span>
               </el-menu-item> -->
 
+              <el-menu-item
+                index="/course/examList"
+                style="width: 160px"
+              >
+                <i class="el-icon-finished"></i><span>课程考试</span>
+              </el-menu-item>
+
               <el-submenu index="4">
-                <template slot="title">       
-                  <span style="font-size: 1em"
-                    ><i class="el-icon-finished" aria-hidden="true"></i> 课程考试</span
-                  >
-                </template>
-
-                <el-menu-item index="/course/examList" 
-                    style="width: 160px"
-                  >
-                  <i class="el-icon-finished"></i>考试</el-menu-item
-                >
-              
-                <el-menu-item index="/course/unitExam" 
-                    style="width: 160px"
-                  >
-                  <i class="el-icon-finished"></i>单元考试</el-menu-item
-                >
-                <el-menu-item
-                  index="/course/midsemester"
-                  style="width: 160px"
-                  >
-                  <i class="el-icon-finished"></i>期中考试</el-menu-item
-                >
-                <el-menu-item index="/course/finalExam" 
-                   style="width: 160px"
-                  >
-                  <i class="el-icon-finished"></i>期末考试</el-menu-item
-                >
-              </el-submenu>
-
-              <el-submenu index="5">
                 <template slot="title">       
                   <span style="font-size: 1em"
                     ><i class="el-icon-bank-card" aria-hidden="true"></i> 题库</span
@@ -174,8 +150,6 @@
 
 
 
-
-                
                 <el-menu-item
                   index=""
                   style="width: 160px"

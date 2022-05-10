@@ -25,7 +25,7 @@ export default function $axios(options) {
           // 用户未登录时处理
           if(response.data.code == 401){
             router.push({
-              path: `/`
+              path: `/login`
             })
           }
           return Promise.reject(response.data)

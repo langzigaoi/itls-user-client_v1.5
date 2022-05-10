@@ -10,7 +10,13 @@ export const findList = (data) => {
     data
   })
 }
-
+export const findProblemList = (params) => {
+  return axios({
+    url: preUrl + 'findProblem',
+    method: 'get',
+    params
+  })
+}
 // 编辑
 export const update = (data) => {
   return axios({
@@ -34,6 +40,16 @@ export const updateObj = (data) => {
     url: preUrl + 'updateObj',
     method: 'post',
     data
+  })
+}
+
+// 预览
+export const previewPdf = (params) => {
+  return axios({
+    url: preUrl + 'problemPdf',
+    method: 'get',
+    params,
+    responseType: 'blob',
   })
 }
 

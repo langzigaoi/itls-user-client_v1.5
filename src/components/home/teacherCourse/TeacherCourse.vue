@@ -340,7 +340,7 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="编程语言" label-width="80px" prop="langlist">
+                <el-form-item label="编程语言" label-width="80px"   >
                   <el-row type="flex">
                     <div>
                       <el-select
@@ -447,7 +447,7 @@
               </el-col>
 
               <el-col :span="9">
-                <el-form-item label="课程名称" label-width="80px" prop="name">
+                <el-form-item label="课程名称" label-width="80px" prop="courseId">
                   <el-row type="flex">
                     <el-select
                       style="width: 205px"
@@ -822,14 +822,14 @@ export default {
       pickerOptions: {
       },
       addInstanceRules: {
-        name: [{required: true, message: "请选择", trigger: "blur"}],
+        courseId: [{required: true, message: "请选择", trigger: "blur"}],
         lecturer: [{required: true, message: "请选择", trigger: "blur"}],
         startYear: [{required: true, message: "请选择", trigger: "blur"}],
         endYear: [{required: true, message: "请选择", trigger: "blur"}],
         isProgram: [{required: true, message: "请选择", trigger: "blur"}],
         teachingTypeId: [{required: true, message: "请选择", trigger: "blur"}],
         semester: [{required: true, message: "请选择", trigger: "blur"}],
-        langlist: [{required: true, message: "请选择", trigger: "blur"}],
+        // langlist: [{required: true, message: "请选择", trigger: "blur"}],
         intro: [{required: true, message: "请输入", trigger: "blur"}],
 
         hoursOfWeek: [{required: true, validator: this.checkHoursOfWeek, trigger: "blur" }],

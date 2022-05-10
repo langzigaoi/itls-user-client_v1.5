@@ -98,6 +98,8 @@ const routes = [
     ]
   },
 
+
+  
   
   // 教师 课程实例内的内容
   {
@@ -248,55 +250,7 @@ const routes = [
           import('@/components/coursedetail/teacher/courseContent/CourseContent'),
         meta: { title: '课程内容' }
       },
-      {
-        path: 'unitExam',
-        name: 'unitexam',
-        component: () =>
-          import('@/components/coursedetail/teacher/exam/UnitExam'),
-        meta: { title: '单元考试' }
-      },
-      {
-        path: 'addUnitExam',
-        name: 'addUnitExam',
-        component: () =>
-          import('@/components/coursedetail/teacher/exam/AddUnitExam'),
-        meta: { title: '添加单元考试' }
-      },
-      {
-        path: 'updateUnitExam',
-        name: 'UpdateUnitExam',
-        component: () =>
-          import('@/components/coursedetail/teacher/exam/UpdateUnitExam'),
-        meta: { title: '修改单元考试' }
-      },
-      {
-        path: 'addMidsemesterExam',
-        name: 'addMidsemesterExam',
-        component: () =>
-          import('@/components/coursedetail/teacher/exam/AddMidseMesterExam'),
-        meta: { title: '添加期中考试' }
-      },
-      {
-        path: 'addFinalExam',
-        name: 'addFinalExam',
-        component: () =>
-          import('@/components/coursedetail/teacher/exam/AddFinalExam'),
-        meta: { title: '添加期末考试' }
-      },
-      {
-        path: 'midsemester',
-        name: 'midsemester',
-        component: () =>
-          import('@/components/coursedetail/teacher/exam/MidseMester'),
-        meta: { title: '期中考试' }
-      },
-      {
-        path: 'finalExam',
-        name: 'finalExam',
-        component: () =>
-          import('@/components/coursedetail/teacher/exam/FinalExam'),
-        meta: { title: '期末考试' }
-      },
+      
       {
         path: 'searchExperiment',
         name: 'SearchExperiment',
@@ -538,34 +492,7 @@ const routes = [
           import('@/components/coursedetail/student/courseTest/BeginTest'),
         meta: { title: '开始测验' }
       },
-      {
-        path: 'unitexam',
-        name: 'unitexam',
-        component: () =>
-          import('@/components/coursedetail/student/exam/UnitExam'),
-        meta: { title: '单元考试' }
-      },
-      {
-        path: 'beginUnitExam',
-        name: 'beginUnitExam',
-        component: () =>
-          import('@/components/coursedetail/student/exam/DoUnitExam'),
-        meta: { title: '考试界面' }
-      },
-      {
-        path: 'midsemester',
-        name: 'midsemester',
-        component: () =>
-          import('@/components/coursedetail/student/exam/MidseMester'),
-        meta: { title: '期中考试' }
-      },
-      {
-        path: 'finalexam',
-        name: 'finalexam',
-        component: () =>
-          import('@/components/coursedetail/student/exam/FinalExam'),
-        meta: { title: '期末考试' }
-      },
+      
 
       {
         path: 'courseitem',

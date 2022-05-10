@@ -132,3 +132,7 @@ ul {
   line-height: 25px;
 }
 
+.el-tooltip__popper{
+  max-width: 500px
+}
+

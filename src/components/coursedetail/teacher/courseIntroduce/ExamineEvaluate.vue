@@ -22,7 +22,7 @@
         text-algin="center"
       >
         <el-form-item>
-          <div style="width: 80%">
+          <div style="width: 100%">
             <modifiable-table
               :data="itemListForm"
               :allEvaluateType="allEvaluateType"

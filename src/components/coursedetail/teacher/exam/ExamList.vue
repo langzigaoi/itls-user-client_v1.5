@@ -1,7 +1,20 @@
+
 <template>
   <div class="outside" style="padding: 10px">
     <el-row>
-      <el-col :span="15" align="left">
+      <el-col :span="14">
+        <el-tabs
+              v-model="typeFlag"
+              type="card"
+              @tab-click="handleChangeTypeFlag"
+              class="mlef-20"
+            >
+              <el-tab-pane label="期末考试" name="1"></el-tab-pane>
+              <el-tab-pane label="其他考试" name="2"></el-tab-pane>
+            </el-tabs>
+      </el-col>
+
+      <el-col :span="10" align="center">
         <el-cascader
           style="width: 150px; margin-left: 10px"
           size="mini"
@@ -35,15 +48,12 @@
       @openItemList="changeItemListVisible"
       @openProblemList="handleGenerateChange"
       @openObjectiveList="changeObjectiveListVisible"
+      @handlePreview="handlePreview"
+      @handlePub="handlePub"
+
     >
     </com-table>
     
- <!-- @openInfoForm=""
-      
-      
-      @openObjectiveList=""
-      @handlePub="" -->
-
 
     <el-dialog
       align="center"
@@ -326,7 +336,7 @@
     </el-dialog>
 
 
-    <!--3.题目设置-->
+    <!--3.题目设置-第一层-->
     <el-dialog
       top="5vh"
       align="center"
@@ -341,9 +351,9 @@
               <div style="width:80%">
                 <modifiable-table
                   :data="viewItemForm"
-                  :allProblemType= "allProblemType"
                   :columnFlag= "typeColumnFlag"
                   @open="changeProblemListVisible"
+                  @handlePreviewChange="handlePreviewChange"
                   >
                 </modifiable-table>
             </div>
@@ -363,7 +373,47 @@
       </div>
     </el-dialog>
 
-    <!--题目列表页面-->
+    <!--预览题型下的题目-->
+    <el-dialog
+      top="5vh"
+      align="center"
+      width="70%"
+      :visible.sync="previewProblemListVisible"
+      @close="closePreviewProblemListForm"
+    >        
+    <el-form :model="previewProblemListForm" ref="previewProblemListForm" size="small" text-algin="center">
+        <el-form-item>
+          <el-row type="flex" justify="center">
+            <h2>{{previewProblemListForm.problemTypeName}}列表</h2>
+          </el-row>
+        </el-form-item>
+        
+        <el-form-item >
+            <div style="width:80%">
+              <modifiable-table
+                :data="previewProblemListForm"
+                :columnFlag= "problemColumnFlag"
+                :showOperation="false"
+                >
+              </modifiable-table>
+          </div>
+        </el-form-item>
+
+        <el-row>
+          <div>
+            <el-row type="flex" align="bottom" justify="center">
+              <el-button size="mini" @click="closePreviewProblemListForm">返回 </el-button>
+                  <!-- <el-button type="primary" size="mini" @click="closeGenerateForm"
+                    >保存
+                  </el-button> -->
+            </el-row>
+          </div>
+        </el-row>
+      </el-form>
+
+    </el-dialog>
+
+    <!--题目列表页面-第二层-->
     <el-dialog
       top="5vh"
       align="center"
@@ -384,10 +434,12 @@
                 :allProblemType= "allProblemType"
                 :columnFlag= "listColumnFlag"
                 @open="openProblemInfo"
-                @choose="changeAllProblemVisible">
+                @choose="changeAllProblemVisible"
+              >
               </modifiable-table>
           </div>
         </el-form-item>
+
 
         <el-row>
             <div>
@@ -406,7 +458,7 @@
       </el-form>
     </el-dialog>
 
-    <!--选题页面-->
+    <!--选题页面-第三层-->
     <el-dialog
       align="center"
       :visible.sync="allProblemVisible"
@@ -706,7 +758,6 @@
                 </el-row>
 
 
-
                 <el-form-item label="题目来源" label-width="80px" prop="markup" 
                             v-if="viewProblemForm.markup">
                     <el-row type="flex">
@@ -780,6 +831,7 @@ export default {
       courseCinstanceId: "",
       chapterId: "",
       isPub: "",
+      typeFlag: "2",
 
       examId: "",
 
@@ -789,6 +841,7 @@ export default {
           infoForm: true,
           itemList: true,
           problemList: true,
+          preview: true,
           pub: true,
           removeExam: true,
         },
@@ -857,6 +910,7 @@ export default {
         viewNum: true,
         viewScore: true,
         openButton: true,
+        previewItemList: true,
       },
       listColumnFlag:{
         knowledgeName: true,
@@ -866,6 +920,16 @@ export default {
         problemButton: true,
         total:true,
         delButton:true,
+      },
+      //预览题型下的题目
+      previewProblemListVisible: false,
+      previewProblemListForm: {
+        problemTypeName:"",
+        tableData:[],
+      },
+      problemColumnFlag:{
+        previewKnowledgeName: true,
+        previewTitle: true,
       },
       // 所有题目列表
       columns: [
@@ -989,6 +1053,17 @@ export default {
       return index + 1;
     },
 
+    handleChangeTypeFlag(){
+      if( this.typeFlag == "1") {
+        // 期末考试
+            this.findPersonPage(null);
+      }
+      if( this.typeFlag == "2") {
+        // 非期末考试
+            this.findPersonPage(null);
+      }
+
+    },
     // 分页查询
     findPersonPage(data) {
       if (data !== null) {
@@ -998,6 +1073,7 @@ export default {
         { name: "insId", value: this.$store.state.course.courseCinstanceId },
         { name: "chapterId", value: this.chapterId },
         { name: "isPub", value: this.isPub },
+        { name: "typeFlag", value: this.typeFlag}
       ];
       console.log(this.pageRequest.params);
       this.$api.exam.examSetup
@@ -1024,6 +1100,16 @@ export default {
             console.log(this.pageResults.content);
             // console.log(this.pageResults.content[0].chapterOfList[0].chapterName);
           }
+          if (res.data == null) {
+            this.$message({
+              message: res.msg,
+              type: "error",
+            });
+            this.pageResults = [];
+            console.log(this.pageResults.content);
+            // console.log(this.pageResults.content[0].chapterOfList[0].chapterName);
+          }
+
         })
         .then(data != null ? data.callback : "");
     },
@@ -1313,6 +1399,56 @@ export default {
       };
       this.generateForm = {};
     },
+    // 预览题型下所有题目 itemId -> problemList
+    handlePreviewChange(row) {
+      console.log(row);
+      this.previewProblemListForm.problemTypeName = row.problemTypeName;
+      let itemId = row.id;
+      this.$api.exam.examContent.findProblemList({itemId:itemId}).then((res) =>{
+        console.log(res.data);
+
+        let m = 0;
+
+        if (res.code == 200) {
+          for (let i = 0; i < res.data.length; i++) {
+            m++;
+            if (res.data[i].problemTypeName == "单选题") {
+              let content = {};
+              content.id = res.data[i].id;
+              content.index = m;
+              content.knowledgeName = res.data[i].knowledgeName;
+              content.title = res.data[i].choice.title;
+              this.previewProblemListForm.tableData.push(content);
+            }
+            if (res.data[i].problemTypeName == "编程题") {
+              let content = {};
+              content.id = res.data[i].id;
+              content.index = m;
+              content.knowledgeName = res.data[i].knowledgeName;
+              content.title = res.data[i].program.problemDescription;
+              this.previewProblemListForm.tableData.push(content);
+
+            }
+          }
+          console.log(this.previewProblemListForm.tableData);
+        }
+      })
+
+
+
+
+      this.previewProblemListVisible = true;
+
+
+    },
+    closePreviewProblemListForm() {
+      this.previewProblemListVisible = false;
+      this.previewProblemListForm = {
+        tableData:[],
+      };
+
+    },
+
 
     changeProblemListVisible(row) {
         console.log(row);
@@ -1354,8 +1490,8 @@ export default {
          let s= this.problemListForm.tableData[index].score;
          score = score + s;
       }
-      console.log("当前各题分数总和"+typeof score);
-      console.log("预设分值"+typeof this.problemListForm.score);
+      console.log("当前各题分数总和"+ score);
+      console.log("预设分值"+ this.problemListForm.score);
 
       if (this.problemListForm.score != score) {
         this.$message({
@@ -1608,8 +1744,28 @@ export default {
         });
     },
 
+    // 预览全部
+    handlePreview(row) {
+      console.log(row);
+      let url = this.global.baseUrl + '/exam/setup/pdf?examId='
+      // console.log(url);
+      window.open( url+ row.id)
+    },
+
     // 发布
-    handlePub() {},
+    handlePub(row) {
+      console.log(row);
+      let examId = row.id;
+      this.$confirm("确认提交吗？", "提示", {}).then(() => {
+        this.$api.exam.examSetup.pub({examId:examId}).then((res) =>{
+          if (res.code == 200) {
+            this.$message({message: res.msg,type: "success",});
+            this.findPersonPage(null);
+          }
+        })
+        .catch((err) =>{})
+      })
+    },
 
     openProblemInfo(row) {
       console.log(row);

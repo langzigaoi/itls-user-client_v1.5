@@ -659,7 +659,7 @@ export default {
             // { prop: "courseName", label: "课程", minWidth: 150, align: "center" },
             { prop: "knowledgeName", label: "知识点", minWidth: 150, align: "center" },
             { prop: "problemName", label: "名称", minWidth: 250, align: "center" },
-            { prop: "problemDescription", label: "题干", minWidth: 250, align: "center" },
+            { prop: "problemDescription", label: "题干", minWidth: 250, align: "left", overflow:"true" },
         ],
         personColumns: [
             // { prop: "courseName", label: "课程", minWidth: 150, align: "center" },

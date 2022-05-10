@@ -113,6 +113,21 @@
       <el-table-column
         prop="knowledgeName"
         label="知识点"
+        v-if="columnFlag.previewKnowledgeName == true"
+      >
+      </el-table-column>
+      <el-table-column
+        width="400"
+        prop="title"
+        label="题干"
+        v-if="columnFlag.previewTitle == true"
+      >
+      </el-table-column>
+
+
+      <el-table-column
+        prop="knowledgeName"
+        label="知识点"
         v-if="columnFlag.knowledgeName == true"
       >
         <template scope="scope">
@@ -177,6 +192,14 @@
         align="center"
       >
         <template slot-scope="scope">
+
+          <el-button
+            @click="preview(scope.$index, scope.row)"
+            size="mini"
+            v-if="columnFlag.previewItemList == true"
+          >
+            预览
+          </el-button>
           <el-button
             @click="open(scope.$index, scope.row)"
             size="mini"
@@ -185,6 +208,7 @@
           >
             题目列表
           </el-button>
+
           <el-button
             @click="open(scope.$index, scope.row)"
             size="mini"
@@ -214,7 +238,7 @@
             @current-change="refreshPageRequest"
             :current-page="pageRequest.pageNum"
             :page-size="pageRequest.pageSize"
-            :total="data.totalSize"
+            :total="data.tableData.length"
             style="float: right"
           >
           </el-pagination>
@@ -312,9 +336,13 @@ export default {
         num: false,
         score: false,
 
+        previewItemList: false,
+
         viewProblemType: false,
         viewNum: false,
         viewScore: false,
+        previewKnowledgeName: false,
+        previewTitle: false,
         knowledgeName: false,
         singleScore: false,
 
@@ -444,6 +472,10 @@ export default {
     },
     edit(index, row) {
       this.$emit("handleEditChange", row);
+    },
+
+    preview(index, row) {
+      this.$emit("handlePreviewChange", row);
     },
 
     // 分页查询
