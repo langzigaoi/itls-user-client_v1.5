@@ -57,11 +57,11 @@
           </div>
 
           <div class="card-body">
-            <div style="width: 50%">
+            <div style="width: 100%">
               <el-image
                 :src="item.image"
                 fit="fill"
-                style="width: 250px; height: 180px"
+                style="height: 180px"
               >
                 <div slot="placeholder" class="image-slot">
                   加载中<span class="dot">...</span>
@@ -147,7 +147,7 @@
                     class="avatar-uploader"
                     :action="uploadimgurl"
                     :show-file-list="false"
-                    :on-success="handleImageSuccess"
+                    :on-success="handleEditImageSuccess"
                     name="image"
                     with-credentials
                     :before-upload="beforeImageUpload"
@@ -421,7 +421,7 @@
                     class="avatar-uploader"
                     :action="uploadimgurl"
                     :show-file-list="false"
-                    :on-success="handleImageSuccess"
+                    :on-success="handleAddImageSuccess"
                     name="image"
                     with-credentials
                     :before-upload="beforeImageUpload"
@@ -951,10 +951,16 @@ export default {
       }
       return isJPG && isLt2M;
     },
-    handleImageSuccess(res, file) {
+    handleAddImageSuccess(res, file) {
       // this.addInstanceInform.avatar = URL.createObjectURL(file.raw);
       console.log("上传成功的回调", res);
       this.addInstanceInform.image = res.data;
+      // console.log(this.addInstanceInform.image);
+    },
+    handleEditImageSuccess(res, file) {
+      // this.addInstanceInform.avatar = URL.createObjectURL(file.raw);
+      console.log("上传成功的回调", res);
+      this.editInstanceForm.image = res.data;
       // console.log(this.addInstanceInform.image);
     },
     findAllTeachingType() {

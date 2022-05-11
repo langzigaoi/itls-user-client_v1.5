@@ -164,36 +164,20 @@
         prop="problemType"
         label="目标"
         v-if="columnFlag.objObjective == true"
-        width="300"
+        width="200"
       >
         <template scope="scope">
-          <el-select 
-          style="width:100%" 
-          popper-class="popper" 
-          
-          v-model="scope.row.objectiveId">
+          <el-select v-model="scope.row.objectiveId">
             <el-option
-              
               v-for="item in allObjective"
               :key="item.id"
               :label="item.value"
               :value="item.id"
             >
-            <el-row>
-              <el-col :span="20">
-                <div style="width:100%; overflow:hidden; text-overflow: ellipsis; display:inline-block">
-                    {{ item.value }}
-                </div>
-              </el-col>
-              <el-col :span="4" align="right">
-                  <el-tag>{{ item.lable }}目标</el-tag>
-              </el-col>
-            </el-row>
-            
-            
-              <!-- <span style="float: right; color: #8492a6; font-size: 13px">
-              <el-tag >{{ item.lable }}目标</el-tag>
-              </span>  -->
+              <span style="float: left">{{ item.value }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">
+                {{ item.lable }}目标
+              </span>
             </el-option>
           </el-select>
         </template>
@@ -589,9 +573,4 @@ export default {
   background: #14889a !important;
   size: mini;
 }
-
-.popper{
-  max-width: 40%;
-}
-
 </style>

@@ -14,7 +14,7 @@
             </el-tabs>
       </el-col>
 
-      <el-col :span="10" align="center">
+      <!-- <el-col :span="10" align="center">
         <el-cascader
           style="width: 150px; margin-left: 10px"
           size="mini"
@@ -32,7 +32,7 @@
           @click="chandgeAddVisible"
           >新增</el-button
         >
-      </el-col>
+      </el-col> -->
     </el-row>
 
     <!--考试列表-->
@@ -798,7 +798,7 @@
                 <el-row>
                     <div>
                         <el-row type="flex" align="bottom" justify="center">
-                            <el-button size="mini" @click="closeViewProblemForm"
+                            <el-button size="mini" type="primary" @click="closeViewProblemForm"
                             >返回
                             </el-button>
                         </el-row>

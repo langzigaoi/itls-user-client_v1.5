@@ -2,8 +2,8 @@
 <div class="content">
       <el-row>
         <el-col :span="5">
-          <div>
-            <el-avatar :size="120" :src="info.avatar"></el-avatar>
+          <div style="text-align:center">
+            <el-image fit="fit" style="width:110px" :src="info.avatar"> </el-image>
           </div>
 
         </el-col>
