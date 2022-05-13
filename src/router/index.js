@@ -4,10 +4,6 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 
-const HasOpenCourse = () => import('../components/home/studentCourse/HasOpenCourse.vue')
-const IsLearningCourse = () => import('../components/home/studentCourse/IsLearningCourse.vue')
-const ToStartLearn = () => import('../components/home/studentCourse/ToStartLearn.vue')
-const CompleteCourse = () => import('../components/home/studentCourse/CompleteCourse.vue')
 
 const routes = [
   // {
@@ -68,36 +64,12 @@ const routes = [
         path: 'studentCourse',
         name: 'StudentCourse',
         component: () => import('@/components/home/studentCourse/StudentCourse'),
-        children: [
-          //学生课程
-          {
-            path: '',
-          },
-          {
-            path: 'hasOpenCourse',
-            name: 'HasOpenCourse',
-            component: HasOpenCourse,
-          },
-          {
-            path: 'isLearningCourse',
-            name: 'IsLearningCourse',
-            component: IsLearningCourse
-          },
-          {
-            path: 'toStartLearn',
-            name: 'ToStartLearn',
-            component: ToStartLearn
-          },
-          {
-            path: 'completeCourse',
-            name: 'CompleteCourse',
-            component: CompleteCourse
-          }
-        ]
       },
     ]
   },
 
+
+  
   
   // 教师 课程实例内的内容
   {
@@ -115,6 +87,49 @@ const routes = [
           import('@/components/coursedetail/teacher/dashboard/StudentList'),
         meta: { title: '学生列表' }
       },
+      {
+        path: 'courseintroduce',
+        name: 'courseintroduce',
+        component: () =>
+          import('@/components/coursedetail/teacher/courseIntroduce/CourseIntroduce'),
+        meta: { title: '课程介绍' }
+      },
+      {
+        path: 'coursetarget',
+        name: 'coursetargete',
+        component: () =>
+          import('@/components/coursedetail/teacher/courseIntroduce/CourseTarget'),
+        meta: { title: '课程目标' }
+      },
+      {
+        path: 'examineevaluate',
+        name: 'examineevaluate',
+        component: () =>
+          import('@/components/coursedetail/teacher/courseIntroduce/ExamineEvaluate'),
+        meta: { title: '考核评价' }
+      },
+      {
+        path: 'atlasAnalyze',
+        name: 'atlasAnalyze',
+        component: () =>
+          import('@/components/coursedetail/teacher/atlasAnalyze/SelectKnowledge'),
+        meta: { title: '图谱分析' }
+      },
+      {
+        path: 'teachingTeam',
+        name: 'teachingTeam',
+        component: () =>
+          import('@/components/coursedetail/teacher/teachingTeam/TeachingTeam'),
+        meta: { title: '教学团队' }
+      },
+      {
+        path: 'courseContent',
+        name: 'courseContent',
+        component: () =>
+          import('@/components/coursedetail/teacher/courseContent/CourseContent'),
+        meta: { title: '课程内容' }
+      },
+
 
 
       {
@@ -186,6 +201,7 @@ const routes = [
         component: () =>
           import('@/components/coursedetail/teacher/problemBank/program/ProgramDetails')
       },
+
       {
         path: 'teacherCourse',
         name: 'TeacherCourse',
@@ -199,34 +215,7 @@ const routes = [
         ]
       },
       
-      {
-        path: 'courseintroduce',
-        name: 'courseintroduce',
-        component: () =>
-          import('@/components/coursedetail/teacher/courseIntroduce/CourseIntroduce'),
-        meta: { title: '课程介绍' }
-      },
-      {
-        path: 'coursetarget',
-        name: 'coursetargete',
-        component: () =>
-          import('@/components/coursedetail/teacher/courseIntroduce/CourseTarget'),
-        meta: { title: '课程目标' }
-      },
-      {
-        path: 'examineevaluate',
-        name: 'examineevaluate',
-        component: () =>
-          import('@/components/coursedetail/teacher/courseIntroduce/ExamineEvaluate'),
-        meta: { title: '考核评价' }
-      },
-      {
-        path: 'atlasAnalyze',
-        name: 'atlasAnalyze',
-        component: () =>
-          import('@/components/coursedetail/teacher/atlasAnalyze/SelectKnowledge'),
-        meta: { title: '图谱分析' }
-      },
+      
       {
         path: 'teachingAnalyze',
         name: 'teachingAnalyze',
@@ -234,69 +223,8 @@ const routes = [
           import('@/components/coursedetail/teacher/teachingAnalyze/TeachingAnalyze'),
         meta: { title: '教学分析' }
       },
-      {
-        path: 'teachingTeam',
-        name: 'teachingTeam',
-        component: () =>
-          import('@/components/coursedetail/teacher/teachingTeam/TeachingTeam'),
-        meta: { title: '教学团队' }
-      },
-      {
-        path: 'courseContent',
-        name: 'courseContent',
-        component: () =>
-          import('@/components/coursedetail/teacher/courseContent/CourseContent'),
-        meta: { title: '课程内容' }
-      },
-      {
-        path: 'unitExam',
-        name: 'unitexam',
-        component: () =>
-          import('@/components/coursedetail/teacher/exam/UnitExam'),
-        meta: { title: '单元考试' }
-      },
-      {
-        path: 'addUnitExam',
-        name: 'addUnitExam',
-        component: () =>
-          import('@/components/coursedetail/teacher/exam/AddUnitExam'),
-        meta: { title: '添加单元考试' }
-      },
-      {
-        path: 'updateUnitExam',
-        name: 'UpdateUnitExam',
-        component: () =>
-          import('@/components/coursedetail/teacher/exam/UpdateUnitExam'),
-        meta: { title: '修改单元考试' }
-      },
-      {
-        path: 'addMidsemesterExam',
-        name: 'addMidsemesterExam',
-        component: () =>
-          import('@/components/coursedetail/teacher/exam/AddMidseMesterExam'),
-        meta: { title: '添加期中考试' }
-      },
-      {
-        path: 'addFinalExam',
-        name: 'addFinalExam',
-        component: () =>
-          import('@/components/coursedetail/teacher/exam/AddFinalExam'),
-        meta: { title: '添加期末考试' }
-      },
-      {
-        path: 'midsemester',
-        name: 'midsemester',
-        component: () =>
-          import('@/components/coursedetail/teacher/exam/MidseMester'),
-        meta: { title: '期中考试' }
-      },
-      {
-        path: 'finalExam',
-        name: 'finalExam',
-        component: () =>
-          import('@/components/coursedetail/teacher/exam/FinalExam'),
-        meta: { title: '期末考试' }
-      },
+      
+      
       {
         path: 'searchExperiment',
         name: 'SearchExperiment',
@@ -339,55 +267,6 @@ const routes = [
           import('@/components/coursedetail/teacher/experiment/StudentAnswer'),
         meta: { title: '学生实验详情' }
       },
-      // {
-      //   path: 'problem',
-      //   name: 'problem',
-      //   component: () =>
-      //   import('@/components/coursedetail/teacher/problemBank/home'),
-      //   meta: {title: '题库'}
-      // },
-      // {
-      //   path: 'problemChoice',
-      //   name: 'problemChoice',
-      //   component: () =>
-      //     import('@/components/coursedetail/teacher/problemBank/choice/ChoiceProblemView'),
-      //   meta: { title: '选择题' }
-      // },
-      // {
-      //   path: 'ChoiceAdmin',
-      //   name: 'ChoiceAdmin',
-      //   component: () =>
-      //   import ('@/components/coursedetail/teacher/problemBank/admin/ChoiceAdmin'),
-      //   meta: { title: '选择题审核' }
-      // },
-      // {
-      //   path: 'problemProg',
-      //   name: 'problemProg',
-      //   component: () =>
-      //     import('@/components/coursedetail/teacher/problemBank/prog/ProgProblemView'),
-      //   meta: { title: '编程题' }
-      // },
-      // {
-      //   path:'releaseTest',
-      //   name: 'releaseTest',
-      //   component: () =>
-      //   import ('@/components/coursedetail/teacher/problemBank/admin/ProgAdmin'),
-      //   meta: { title: '编程题审核' }
-      // },
-      // {
-      //   path: 'problemApplication',
-      //   name: 'problemApplication',
-      //   component: () =>
-      //     import('@/components/coursedetail/teacher/problemBank/application/ApplicationProblemView'),
-      //   meta: { title: '应用题' }
-      // },
-      // {
-      //   path: 'ApplicationAdmin',
-      //   name: 'ApplicationAdmin',
-      //   component: () =>
-      //   import ('@/components/coursedetail/teacher/problemBank/admin/ApplicationAdmin'),
-      //   meta: { title: '应用题审核' }
-      // },
       
       {
         path: 'AddCourseHomework',
@@ -475,13 +354,6 @@ const routes = [
         meta: { title: '考核评价' }
       },
       {
-        path: 'students',
-        name: 'students',
-        component: () =>
-          import('@/components/coursedetail/student/choseStudent/CinstanceStudentView'),
-        meta: { title: '选课学生' }
-      },
-      {
         path: 'teachingteam',
         name: 'teachingteam',
         component: () =>
@@ -495,6 +367,33 @@ const routes = [
           import('@/components/coursedetail/student/courseContent/CourseContent'),
         meta: { title: '课程内容' }
       },
+
+      {
+        path: 'examlist',
+        name: 'examList',
+        component: () =>
+          import('@/components/coursedetail/student/exam/ExamList'),
+        meta: { title: '课程考试' }
+      },
+
+
+
+
+
+
+
+
+
+
+      // {
+      //   path: 'students',
+      //   name: 'students',
+      //   component: () =>
+      //     import('@/components/coursedetail/student/choseStudent/CinstanceStudentView'),
+      //   meta: { title: '选课学生' }
+      // },
+      
+      
       {
         path: 'courseExperiment',
         name: 'CourseExperiment',
@@ -538,34 +437,7 @@ const routes = [
           import('@/components/coursedetail/student/courseTest/BeginTest'),
         meta: { title: '开始测验' }
       },
-      {
-        path: 'unitexam',
-        name: 'unitexam',
-        component: () =>
-          import('@/components/coursedetail/student/exam/UnitExam'),
-        meta: { title: '单元考试' }
-      },
-      {
-        path: 'beginUnitExam',
-        name: 'beginUnitExam',
-        component: () =>
-          import('@/components/coursedetail/student/exam/DoUnitExam'),
-        meta: { title: '考试界面' }
-      },
-      {
-        path: 'midsemester',
-        name: 'midsemester',
-        component: () =>
-          import('@/components/coursedetail/student/exam/MidseMester'),
-        meta: { title: '期中考试' }
-      },
-      {
-        path: 'finalexam',
-        name: 'finalexam',
-        component: () =>
-          import('@/components/coursedetail/student/exam/FinalExam'),
-        meta: { title: '期末考试' }
-      },
+      
 
       {
         path: 'courseitem',

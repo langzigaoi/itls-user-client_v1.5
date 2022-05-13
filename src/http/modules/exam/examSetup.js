@@ -18,7 +18,6 @@ export const findPersonPage = (data) => {
     data
   })
 }
-
 // 删除
 export const del = (data) => {
   return axios({
@@ -27,8 +26,7 @@ export const del = (data) => {
     data
   })
 }
-
-// 删除
+// 更新
 export const update = (data) => {
   return axios({
     url: preUrl + 'update',
@@ -36,6 +34,27 @@ export const update = (data) => {
     data
   })
 }
+// 发布
+export const pub = (params) => {
+  return axios({
+    url: preUrl + 'pub',
+    method: 'patch',
+    params
+  })
+}
+
+// 发布
+export const pdf = (params) => {
+  return axios({
+    url: preUrl + 'pdf',
+    method: 'get',
+    params
+  })
+}
+
+
+
+
 
 
 //获取对应的章节

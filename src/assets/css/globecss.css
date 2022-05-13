@@ -132,3 +132,20 @@ ul {
   line-height: 25px;
 }
 
+.el-tooltip__popper{
+  max-width: 500px
+}
+
+.el-select-dropdown__item.selected {
+  color: #14889A;
+  width: auto;
+}
+
+.el-tag {
+  color: #747272;
+}
+
+.el-avatar>img {
+  height: 125%;
+  display: inline;
+}

@@ -27,6 +27,7 @@
       :columns="columns"
       :showFlag="showFlag"
       :showOperation="true"
+      :flag="'1'"
       :disableFlag="disableFlag"
       @findPage="findPage"
       @handleRemove="handleRemove"
@@ -39,6 +40,7 @@
       width="700px"
       center
     >
+    
       <el-form
         ref="addObjectiveForm"
         :model="addObjectiveForm"

@@ -44,11 +44,11 @@
           </div>
 
           <div class="card-body">
-            <div style="width: 50%">
+            <div style="width: 100%">
               <el-image
                 :src="item.image"
                 fit="fill"
-                style="width: 250px; height: 180px"
+                style=" height: 180px"
               >
                 <div slot="placeholder" class="image-slot">
                   加载中<span class="dot">...</span>

@@ -133,30 +133,16 @@
                 <span>  课程实验</span>
               </el-menu-item>
 
-              <el-submenu index="3">
-                <template slot="title">       
-                  <span style="font-size: 1em"
-                    ><i class="el-icon-finished" aria-hidden="true"></i> 课程考试</span
-                  >
-                </template>
-              
-                <el-menu-item index="/studycourse/unitexam" 
-                    style="width: 160px"
-                  >
-                  <i class="el-icon-finished"></i>单元考试</el-menu-item
-                >
-                <el-menu-item
-                  index="/studycourse/midsemester"
-                  style="width: 160px"
-                  >
-                  <i class="el-icon-finished"></i>期中考试</el-menu-item
-                >
-                <el-menu-item index="/studycourse/finalexam" 
-                   style="width: 160px"
-                  >
-                  <i class="el-icon-finished"></i>期末考试</el-menu-item
-                >
-              </el-submenu>
+
+
+              <el-menu-item
+                index="/studycourse/examList"
+                style="width: 160px"
+              >
+                <i class="el-icon-finished"></i><span>课程考试</span>
+              </el-menu-item>
+
+
 
               <el-menu-item index="/studycourse/courseitem" style="width: 160px"
                 >
@@ -168,7 +154,7 @@
                 <i class="el-icon-share"></i>知识图谱</el-menu-item
               >
 
-              <el-submenu index="5">
+              <el-submenu index="3">
                 <template slot="title">
                   <i class="el-icon-s-comment" aria-hidden="true"></i> 讨论区
                 </template>

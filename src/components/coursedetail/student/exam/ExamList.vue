@@ -1,7 +1,20 @@
+
 <template>
   <div class="outside" style="padding: 10px">
     <el-row>
-      <el-col :span="15" align="left">
+      <el-col :span="14">
+        <el-tabs
+              v-model="typeFlag"
+              type="card"
+              @tab-click="handleChangeTypeFlag"
+              class="mlef-20"
+            >
+              <el-tab-pane label="期末考试" name="1"></el-tab-pane>
+              <el-tab-pane label="其他考试" name="2"></el-tab-pane>
+            </el-tabs>
+      </el-col>
+
+      <!-- <el-col :span="10" align="center">
         <el-cascader
           style="width: 150px; margin-left: 10px"
           size="mini"
@@ -19,7 +32,7 @@
           @click="chandgeAddVisible"
           >新增</el-button
         >
-      </el-col>
+      </el-col> -->
     </el-row>
 
     <!--考试列表-->
@@ -28,16 +41,19 @@
       :columns="columns"
       :flag="'2'"
       @findPersonPage="findPersonPage"
-      @handleInfoChange="handleInfoChange"
-
-      @handleGenerateChange="handleGenerateChange"
-      @handlePub="handlePub"
-      @handleRemove="handleRemove"
-      @handleItemChange="changeItemVisible"
       :showFlag="examList.showFlag"
       :disableFlag="examList.disableFlag"
+      @handleRemove="handleRemove"
+      @openInfoForm="changeInfoFormVisible"
+      @openItemList="changeItemListVisible"
+      @openProblemList="handleGenerateChange"
+      @openObjectiveList="changeObjectiveListVisible"
+      @handlePreview="handlePreview"
+      @handlePub="handlePub"
+
     >
     </com-table>
+    
 
     <el-dialog
       align="center"
@@ -48,15 +64,6 @@
     >
       <el-form ref="addForm" :model="addForm" :rules="addFormRules">
         <div>
-          <!-- <el-tabs
-            tab-position="top"
-            v-model="step"
-            style="height: 90px; width: 100%"
-          >
-            <el-tab-pane label="STEP1.基本信息" name="1"></el-tab-pane>
-            <el-tab-pane label="STEP2.手动组卷" name="2"></el-tab-pane>
-          </el-tabs> -->
-
           <el-row type="flex" justify="center">
             <el-col :span="7"></el-col>
             <el-col :span="18">
@@ -151,12 +158,6 @@
                 <el-button type="primary" size="mini" @click="submitAdd"
                   >保存并离开</el-button
                 >
-                <!-- <el-button
-                  type="primary"
-                  size="mini"
-                  @click="handleGenerateChange"
-                  >去组卷
-                </el-button> -->
               </el-row>
             </div>
           </el-row>
@@ -167,9 +168,9 @@
     <el-dialog
       top="5vh"
       align="center"
-      title="STEP1.基本信息"
-      :visible.sync="infoVisible"
-      width="60%"
+      title="1.考试信息设置"
+      :visible.sync="infoFormVisible"
+      width="50%"
       style=""
       @close="closeInfoForm"
     >
@@ -188,11 +189,10 @@
                   ></el-input>
                 </el-row>
               </el-form-item>
-
               <el-form-item label="类型" label-width="80px" prop="examTypeId">
                 <el-row type="flex">
                   <el-select
-                    size="small"
+                    size="mini"
                     v-model="infoForm.examTypeId"
                     placeholder="请选择"
                   >
@@ -206,7 +206,6 @@
                   </el-select>
                 </el-row>
               </el-form-item>
-
               <el-form-item label="范围" label-width="80px" prop="knowledgeId">
                 <el-row type="flex">
                   <el-cascader
@@ -227,7 +226,6 @@
                   ></el-cascader>
                 </el-row>
               </el-form-item>
-
               <el-form-item label="总题数" label-width="80px" prop="examName">
                 <el-row type="flex">
                   <el-input
@@ -239,7 +237,6 @@
                   ></el-input>
                 </el-row>
               </el-form-item>
-
               <el-form-item label="总分" label-width="80px" prop="examName">
                 <el-row type="flex">
                   <el-input
@@ -251,7 +248,6 @@
                   ></el-input>
                 </el-row>
               </el-form-item>
-
 
               <el-form-item
                 label="开始时间"
@@ -289,10 +285,10 @@
           </el-row>
           <el-row>
             <div>
-              <el-row type="flex" align="bottom" justify="end">
+              <el-row type="flex" align="bottom" justify="center">
                 <el-button size="mini" @click="closeInfoForm">返回 </el-button>
-                <el-button type="primary" size="mini" @click="submitInfo"
-                  >提交
+                <el-button type="primary" size="mini" @click="submitInfoForm"
+                  >保存
                 </el-button>
               </el-row>
             </div>
@@ -301,41 +297,34 @@
       </el-form>
     </el-dialog>
 
-    <!--题型列表-->
+    <!--2.题型列表-->
     <el-dialog
       top="5vh"
       align="center"
-      title="STEP2.题型管理"
-      :visible.sync="itemVisible"
+      title="2.题型设置"
+      :visible.sync="itemListVisible"
       width="70%"
       style=""
-      @close="closeItemForm"
+      @close="closeItemListForm"
     >
       <div style="">
-        <el-form :model="itemForm" ref="itemForm" size="small" text-algin="center">
+        <el-form :model="itemListForm" ref="itemListForm" size="small" text-algin="center">
           <el-form-item >
               <div style="width:80%">
-                <!-- <el-input 
-                  type="textarea"
-                  rows="4"
-                  v-model="this.generateForm.list"></el-input> -->
-
                 <modifiable-table
-                  :data="itemForm"
+                  :data="itemListForm"
                   :allProblemType= "allProblemType"
                   :columnFlag= "itemColumnFlag"
                   @findPage="findItemList"
                   >
                 </modifiable-table>
-
             </div>
           </el-form-item>
-
           <el-row>
               <div>
                 <el-row type="flex" align="bottom" justify="center">
-                  <el-button size="mini" @click="closeItemForm">返回 </el-button>
-                  <el-button type="primary" size="mini" @click="submitItemForm"
+                  <el-button size="mini" @click="closeItemListForm">返回 </el-button>
+                  <el-button type="primary" size="mini" @click="submitItemListForm"
                     >保存
                   </el-button>
                 </el-row>
@@ -347,29 +336,26 @@
     </el-dialog>
 
 
-    <!--题型列表（只浏览）-->
+    <!--3.题目设置-第一层-->
     <el-dialog
       top="5vh"
       align="center"
-      title="STEP3.题目管理"
+      title="3.题目设置"
       :visible.sync="generateVisible"
       width="70%"
       style=""
-      @close="closeGenerateForm"
-    >
+      @close="closeGenerateForm">
       <div style="">
         <el-form :model="viewItemForm" ref="viewItemForm" size="small" text-algin="center">
           <el-form-item >
               <div style="width:80%">
-
                 <modifiable-table
                   :data="viewItemForm"
-                  :allProblemType= "allProblemType"
                   :columnFlag= "typeColumnFlag"
                   @open="changeProblemListVisible"
+                  @handlePreviewChange="handlePreviewChange"
                   >
                 </modifiable-table>
-
             </div>
           </el-form-item>
 
@@ -377,19 +363,57 @@
               <div>
                 <el-row type="flex" align="bottom" justify="center">
                   <el-button size="mini" @click="closeGenerateForm">返回 </el-button>
-                  <el-button type="primary" size="mini" @click="closeGenerateForm"
+                  <!-- <el-button type="primary" size="mini" @click="closeGenerateForm"
                     >保存
-                  </el-button>
+                  </el-button> -->
                 </el-row>
               </div>
           </el-row>
-
-
         </el-form>
       </div>
     </el-dialog>
 
-    <!--题目列表 -->
+    <!--预览题型下的题目-->
+    <el-dialog
+      top="5vh"
+      align="center"
+      width="70%"
+      :visible.sync="previewProblemListVisible"
+      @close="closePreviewProblemListForm"
+    >        
+    <el-form :model="previewProblemListForm" ref="previewProblemListForm" size="small" text-algin="center">
+        <el-form-item>
+          <el-row type="flex" justify="center">
+            <h2>{{previewProblemListForm.problemTypeName}}列表</h2>
+          </el-row>
+        </el-form-item>
+        
+        <el-form-item >
+            <div style="width:80%">
+              <modifiable-table
+                :data="previewProblemListForm"
+                :columnFlag= "problemColumnFlag"
+                :showOperation="false"
+                >
+              </modifiable-table>
+          </div>
+        </el-form-item>
+
+        <el-row>
+          <div>
+            <el-row type="flex" align="bottom" justify="center">
+              <el-button size="mini" @click="closePreviewProblemListForm">返回 </el-button>
+                  <!-- <el-button type="primary" size="mini" @click="closeGenerateForm"
+                    >保存
+                  </el-button> -->
+            </el-row>
+          </div>
+        </el-row>
+      </el-form>
+
+    </el-dialog>
+
+    <!--题目列表页面-第二层-->
     <el-dialog
       top="5vh"
       align="center"
@@ -403,27 +427,26 @@
             <h2>{{problemListForm.name}}列表</h2>
           </el-row>
         </el-form-item>
-        
         <el-form-item >
             <div style="width:80%">
-
               <modifiable-table
                 :data="problemListForm"
                 :allProblemType= "allProblemType"
                 :columnFlag= "listColumnFlag"
                 @open="openProblemInfo"
-                @choose="changeAllProblemVisible">
+                @choose="changeAllProblemVisible"
+              >
               </modifiable-table>
-
           </div>
         </el-form-item>
+
 
         <el-row>
             <div>
               <el-row type="flex" align="middle" justify="center" >
                 <el-button size="mini" @click="closeProblemListForm">返回 </el-button>
                 <el-button type="primary" size="mini" @click="submitProblemList"
-                  >提交
+                  >保存
                 </el-button>
                 <h5 >
                   (需选 {{problemListForm.num}} 题,已选 {{problemListForm.tableData.length}} 题)
@@ -435,24 +458,20 @@
       </el-form>
     </el-dialog>
 
-    <!--选题列表-->
+    <!--选题页面-第三层-->
     <el-dialog
       align="center"
       :visible.sync="allProblemVisible"
       width="80%"
-      
     >
       <el-form ref="allProblemForm" :model="allProblemForm" >
         <div>
           <el-row>
             <el-col :span="15" align="left">
-
-
               <el-select 
                   v-model="selectedKnowledge"
                   @change="handleSelectedKnowledge"
                   size="mini"
-                  
                   clearable>
                 <el-option
                     v-for="item in knowledgeOption"
@@ -471,6 +490,8 @@
               :data="allProblemForm.tableData"
               :columns="problemColumns"
               :showOperation = false
+              :flag="'1'"
+              :showFlag="allProblem.showFlag"
               @findPage="findProblemPage"
               @handleSelections="handleAllProblemSelect"
               :selected= "selected"
@@ -488,7 +509,6 @@
                 <h5 >
                   (需选 {{problemListForm.num}} 题,已选 {{problemListForm.tableData.length}} 题)
                 </h5>
-
               </el-row>
             </div>
         </el-row>
@@ -496,7 +516,47 @@
       </el-form>
     </el-dialog>
 
+    <!--双向细目表-->
+    <el-dialog
+      top="5vh"
+      align="center"
+      title="4.双向细目"
+      :visible.sync="objectiveListVisible"
+      width="70%"
+      @close="closeObjectiveList"
+    >
+      <el-form :model="objectiveListForm" ref="objectiveListForm" size="small" text-algin="center">
+        
+        <el-form-item >
+            <div style="width:80%">
+              <modifiable-table
+                :data="objectiveListForm"
+                :allProblemType= "allProblemType"
+                :columnFlag= "objColumnFlag"
+                :allObjective="allObjective"
+                @open="openProblemInfo"
+                @choose="changeAllProblemVisible">
+              </modifiable-table>
+          </div>
+        </el-form-item>
 
+        <el-row>
+            <div>
+              <el-row type="flex" align="middle" justify="center" >
+                <el-button size="mini" @click="closeObjectiveList">返回 </el-button>
+                <el-button type="primary" size="mini" @click="submitObjectiveList"
+                  >保存
+                </el-button>
+                
+              </el-row>
+            </div>
+        </el-row>
+
+      </el-form>
+    </el-dialog>
+
+
+    <!--单个题目展示弹框-->
     <el-dialog
       top="5vh"
       align="center"
@@ -698,7 +758,6 @@
                 </el-row>
 
 
-
                 <el-form-item label="题目来源" label-width="80px" prop="markup" 
                             v-if="viewProblemForm.markup">
                     <el-row type="flex">
@@ -753,10 +812,6 @@
     </el-dialog>
 
 
-
-
-
-
   </div>
 </template>
 <script>
@@ -772,11 +827,13 @@ export default {
     return {
       pageRequest: { pageNum: 1, pageSize: 10 },
       pageResults: {},
+      // findPersonPage参数
       courseCinstanceId: "",
-      allExamType: [],
-      allKnowledge: [],
-      step: "1",
-      delFlag: true,
+      chapterId: "",
+      isPub: "",
+      typeFlag: "2",
+
+      examId: "",
 
       //考试列表
       examList: {
@@ -784,6 +841,7 @@ export default {
           infoForm: true,
           itemList: true,
           problemList: true,
+          preview: true,
           pub: true,
           removeExam: true,
         },
@@ -795,24 +853,91 @@ export default {
           removeExam: false,
         },
       },
+      // 添加考试信息
+      allExamType: [],
+      allKnowledge: [],
+      addVisible: false,
+      addForm: {
+        knowledgeId: [],
+      },
+      addFormRules: {
+        examName: [{ required: true, message: "请输入", trigger: "blur" }],
+        examTypeId: [{ required: true, message: "请选择", trigger: "blur" }],
+        knowledgeId: [{ required: true, message: "请选择", trigger: "blur" }],
+        startTime: [{ required: true, message: "请选择", trigger: "blur" }],
+        endTime: [{ required: true, message: "请选择", trigger: "blur" }],
+      },
+      // 信息设置
+      infoFormVisible: false,
+      infoForm: {
+        knowledgeId: [],
+      },
+      // 题型设置
+      allProblemType: [],
+      itemColumnFlag:{
+        problemType: true,
+        num: true,
+        score: true,
+        addButton: true,
+        delButton: true,
+      },
+      itemListVisible: false,
+      itemListForm: {
+        tableData: [],
+      },
 
-      isPub: "",
-      chapterId: "",
-
-      findFlag: "0",
-
-      statu: "",
-      knowledgeId: "",
-      chapterId: "",
-      knowledgeState: "",
-
+      // 题目设置
+      knowledgeOption: [],
+      selectedKnowledge: "",
+      allKnowledgeString: "",
+      knowledgeString: "",
+      generateVisible: false,
+      generateForm: {
+        type: "",
+      },
+      viewItemForm:{
+        tableData:[],
+      },
+      // 选中的题目列表
+      problemListVisible: false,
+      problemListForm: {
+        name: "",
+        tableData: [
+        ],
+      },
+      typeColumnFlag:{
+        viewProblemType: true,
+        viewNum: true,
+        viewScore: true,
+        openButton: true,
+        previewItemList: true,
+      },
+      listColumnFlag:{
+        knowledgeName: true,
+        title: true,
+        singleScore: true,
+        selectButton: true,
+        problemButton: true,
+        total:true,
+        delButton:true,
+      },
+      //预览题型下的题目
+      previewProblemListVisible: false,
+      previewProblemListForm: {
+        problemTypeName:"",
+        tableData:[],
+      },
+      problemColumnFlag:{
+        previewKnowledgeName: true,
+        previewTitle: true,
+      },
+      // 所有题目列表
       columns: [
         { prop: "examName", label: "标题", minWidth: 150, align: "center" },
         { prop: "examTypeName", label: "类型", minWidth: 150, align: "center" },
         // { prop: "num", label: "总题数", minWidth: 100, align: "center", formatter: this.getIsGenerate },
         // { prop: "fraction", label: "总分", minWidth: 100, align: "center", formatter: this.getIsGenerate },
         { prop: "list", label: "范围", minWidth: 250, align: "center" },
-
         {
           prop: "startTime",
           label: "开始时间",
@@ -834,96 +959,18 @@ export default {
           align: "center",
           formatter: this.getIsPub,
         },
-
-        // { prop: "", label: "", minWidth: 150, align: "center" },
       ],
-
-      addVisible: false,
-      addForm: {
-        knowledgeId: [],
-      },
-      addFormRules: {
-        examName: [{ required: true, message: "请输入", trigger: "blur" }],
-        examTypeId: [{ required: true, message: "请选择", trigger: "blur" }],
-        knowledgeId: [{ required: true, message: "请选择", trigger: "blur" }],
-        startTime: [{ required: true, message: "请选择", trigger: "blur" }],
-        endTime: [{ required: true, message: "请选择", trigger: "blur" }],
-      },
       chapterList: [],
-      // 时间选择器
       pickerOptions: {},
-      delFlag: true,
-      infoFlag: true,
-      itemFlag: true,
-      problemFlag: true,
-      pubFlag: true,
 
-      infoFlag: true,
-      infoVisible: false,
-      infoForm: {
-        knowledgeId: [],
-      },
-      examId: "",
-      // 题型表单
-      itemColumnFlag:{
-        problemType: true,
-        num: true,
-        score: true,
-        addButton: true,
-        delButton: true,
-      },
-      itemVisible: false,
-      itemForm: {
-        tableData: [],
-      },
-
-      // 组卷表单
-      generateVisible: false,
-      generateForm: {
-        type: "",
-      },
-      // 题型列表
-      allProblemType: [],
-      viewItemForm:{
-        tableData:[],
-      },
-      
-
-      // 选中的题目列表
-      problemListVisible: false,
-      problemListForm: {
-        name: "",
-        tableData: [
-        ],
-      },
-      typeColumnFlag:{
-        viewProblemType: true,
-        viewNum: true,
-        viewScore: true,
-        openButton: true,
-      },
-      listColumnFlag:{
-        knowledgeName: true,
-        title: true,
-        singleScore: true,
-        selectButton: true,
-        problemButton: true,
-        total:true,
-        delButton:true,
-      },
-
-
-      // 所有题目
-      
       allProblemVisible: false,
       allProblemForm: {
         tableData: [
         ],
       },
-      knowledgeOption: [],
-      selectedKnowledge: "",
-      allKnowledgeString: "",
-      knowledgeString: "",
+      allProblem: {
+        showFlag:{},
+      },
       selected: [],
       problemColumns: [],
       choiceColumns: [
@@ -936,21 +983,47 @@ export default {
          { prop: "problemId", label: "problemId", minWidth: 250, align: "center" },
       ],
 
+      // 查看单个题目表单
       viewProblemVisible: false,
       viewProblemForm: {
       },
+
+      // 双向细目表
+      objectiveListVisible: false,
+      objectiveListForm: {
+        tableData:[],
+      },
+      objColumnFlag:{
+        problemButton: true,
+
+        objProblemTypeName: true,
+        objKnowledgeName: true,
+        objScore: true,
+        objObjective: true,
+
+      },
+      allObjective:[],
 
 
     };
   },
   mounted() {
-    this.allKnowledge = JSON.parse(
-      JSON.stringify(this.$store.state.course.knowledge)
-    );
+    this.allKnowledge = JSON.parse(JSON.stringify(this.$store.state.course.knowledge));
     this.findAllExamType();
     this.findAllProblemType();
+    this.findAllObjectiveType();
+
+  },
+  created() {
+    this.$nextTick(() => {
+      // 禁用右键
+      document.oncontextmenu = new Function("event.returnValue=false");
+      // 禁用选择
+      document.onselectstart = new Function("event.returnValue=false");
+    });
   },
   methods: {
+    // 元数据及处理
     getIsPub(row) {
       if (row.isPub == "0") {
         return "待发布";
@@ -958,9 +1031,6 @@ export default {
       if (row.isPub == "1") {
         return "已发布";
       }
-      // if (row.isPub == "-1") {
-      //   return "已驳回"
-      // }
     },
     getIsGenerate(row) {
       if (row.num == "" || row.num == null ||
@@ -969,9 +1039,7 @@ export default {
           row.fraction == undefined) {
         return "空(请组卷)";
       }
-      
     },
-
     // 元数据查询
     findAllExamType() {
       let suggests = [];
@@ -989,26 +1057,21 @@ export default {
     dateFormat(row, column) {
       return this.time(row.lastUpdateTime);
     },
-    handleSearchChapter(item) {
-      console.log(item);
-      if (
-        item === undefined ||
-        item === null ||
-        item === "" ||
-        item.length === 0
-      ) {
-        this.chapterId = "";
-      } else {
-        this.chapterId = item[item.length - 1];
-      }
-      console.log(this.chapterId);
-      this.findPersonPage(null);
-    },
-    // 自增排序
     indexMethod: function (index) {
       return index + 1;
     },
 
+    handleChangeTypeFlag(){
+      if( this.typeFlag == "1") {
+        // 期末考试
+            this.findPersonPage(null);
+      }
+      if( this.typeFlag == "2") {
+        // 非期末考试
+            this.findPersonPage(null);
+      }
+
+    },
     // 分页查询
     findPersonPage(data) {
       if (data !== null) {
@@ -1018,6 +1081,7 @@ export default {
         { name: "insId", value: this.$store.state.course.courseCinstanceId },
         { name: "chapterId", value: this.chapterId },
         { name: "isPub", value: this.isPub },
+        { name: "typeFlag", value: this.typeFlag}
       ];
       console.log(this.pageRequest.params);
       this.$api.exam.examSetup
@@ -1035,32 +1099,51 @@ export default {
               ) {
                 clist.push(
                   pageResults.content[i].chapterOfList[j].chapterName,
-                  "；"
+                  ";"
                 );
-
                 pageResults.content[i].list = JSON.parse(JSON.stringify(clist));
               }
             }
             this.pageResults = pageResults;
             console.log(this.pageResults.content);
-
             // console.log(this.pageResults.content[0].chapterOfList[0].chapterName);
           }
+          if (res.data == null) {
+            this.$message({
+              message: res.msg,
+              type: "error",
+            });
+            this.pageResults = [];
+            console.log(this.pageResults.content);
+            // console.log(this.pageResults.content[0].chapterOfList[0].chapterName);
+          }
+
         })
         .then(data != null ? data.callback : "");
     },
+    // 条件查询PersonPage
+    handleSearchChapter(item) {
+      console.log(item);
+      if (item === undefined ||item === null ||item === "" ||item.length === 0) 
+      {
+        this.chapterId = "";
+      } else {
+        this.chapterId = item[item.length - 1];
+      }
+      console.log(this.chapterId);
+      this.findPersonPage(null);
+    },
 
+    // 添加考试信息
     chandgeAddVisible() {
-      this.addVisible = !this.addVisible;
+      this.addVisible = true;
     },
     closeAddForm() {
       this.addVisible = false;
       this.$refs.addForm.resetFields();
       this.addForm = {};
-      // this.findPage();
     },
     submitAdd() {
-      // console.log(this.addForm.knowledgeId);
       for (let index = 0; index < this.addForm.knowledgeId.length; index++) {
         console.log(this.addForm.knowledgeId[index]);
         this.chapterList.push({ chapterId: this.addForm.knowledgeId[index] });
@@ -1084,7 +1167,6 @@ export default {
                   this.findPersonPage(null);
                   this.closeAddForm();
                   // this.flag = "2"
-
                   // this.$refs.getAllAudit()
                 } else {
                   this.$message({
@@ -1100,9 +1182,16 @@ export default {
         }
       });
     },
+    // 删除
+    handleRemove(data) {
+      console.log(data.params);
+      this.$api.exam.examSetup
+        .del(data.params)
+        .then(data != null ? data.callback : "");
+    },
 
-    handleInfoChange(row) {
-      this.infoVisible = true;
+    // 信息设置
+    changeInfoFormVisible(row) {
       this.infoForm = JSON.parse(JSON.stringify(row));
       console.log(row.chapterOfList);
       // 所选考试范围回显
@@ -1112,13 +1201,14 @@ export default {
       }
       console.log(chapterList);
       this.infoForm.knowledgeId = chapterList;
+      this.infoFormVisible = true;
     },
     closeInfoForm() {
+      this.infoFormVisible = false;
       this.$refs.infoForm.resetFields();
-      this.infoVisible = false;
       this.infoForm = {};
     },
-    submitInfo() {
+    submitInfoForm() {
       for (let index = 0; index < this.infoForm.knowledgeId.length; index++) {
         console.log(this.infoForm.knowledgeId[index]);
         this.chapterList.push({ chapterId: this.infoForm.knowledgeId[index] });
@@ -1141,9 +1231,6 @@ export default {
                   });
                   this.findPersonPage(null);
                   this.closeInfoForm();
-                  // this.flag = "2"
-
-                  // this.$refs.getAllAudit()
                 } else {
                   this.$message({
                     message: "操作失败, " + res.msg,
@@ -1159,6 +1246,7 @@ export default {
       });
     },
 
+    // 题型设置
     findAllProblemType() {
       // 未处理所有选项
       let suggests = [];
@@ -1200,15 +1288,25 @@ export default {
                 }
               }
             }
-            // console.log(suggests);
           }
           this.allProblemType = JSON.parse(JSON.stringify(suggests))     
       });
-
     },
-
-    // itemForm
-    changeItemVisible(row) {
+    findItemList(){
+       this.pageRequest.params = [{ name: "examId", value: this.examId },];
+       this.$api.exam.examItem.findList(this.pageRequest)
+        .then((res) => {
+          // console.log(res);
+          if (res.data != null) {
+            console.log(res.data);
+            this.itemListForm.tableData = res.data.content;
+            console.log();
+            // 题型选择栏禁用项处理
+            this.handleAllProblemType(this.itemListForm.tableData);
+          }
+       })
+    },
+    changeItemListVisible(row) {
       console.log(row);
       //item项回显
       this.examId = row.id;
@@ -1218,33 +1316,47 @@ export default {
           // console.log(res);
           if (res.data != null) {
             console.log(res.data);
-            this.itemForm.tableData = res.data.content;
-            this.itemForm.totalSize = res.data.totalSize;
+            this.itemListForm.tableData = res.data.content;
+            this.itemListForm.totalSize = res.data.totalSize;
             // 题型选择栏禁用项处理
-            this.handleAllProblemType(this.itemForm.tableData);
-            
+            this.handleAllProblemType(this.itemListForm.tableData);
           }
-       }).catch((err) => {
-
-       })
-       this.itemVisible = true;
-      // // 该条记录数据row深拷贝给表单数据
-      // this.itemForm = JSON.parse(JSON.stringify(row))
-    },
-    submitItemForm() {
-       //校验
-      console.log(this.itemForm);
-      console.log(this.itemForm.tableData);
-
-
-      // 插入examId，处理参数
-      for (let i = 0; i < this.itemForm.tableData.length; i++) {
-        this.itemForm.tableData[i].examId = this.examId;
+       }).catch((err) => {})
+       this.itemListVisible = true;
+      },
+    closeItemListForm() {
+      this.itemListForm = {
+        tableData: [],
       }
-      let params = JSON.parse(JSON.stringify(this.itemForm.tableData));
-      // console.log(params);
-      this.$confirm("确认提交吗？", "提示", {}).then(() => {
-          
+      this.itemListVisible = false;
+    },
+    submitItemListForm() {
+       //校验
+      console.log(this.itemListForm);
+      console.log(this.itemListForm.tableData);
+      let suggests = JSON.parse(JSON.stringify(this.itemListForm.tableData));
+      for (let m = 0; m < suggests.length; m++) {
+        
+        if (suggests[m].problemTypeId == null || suggests[m].problemTypeId == "" ||
+            suggests[m].problemTypeId == undefined ||
+            suggests[m].num == null || suggests[m].num == "" ||
+            suggests[m].num == undefined || !/^[1-9]\d*$/.test(suggests[m].num) ||
+            suggests[m].score == null || suggests[m].score == "" ||
+            suggests[m].score == undefined || !/^[1-9]\d*$/.test(suggests[m].score) 
+        ) {
+            this.$message({
+              message: "请检查表格信息" ,
+              type: "error",
+            });
+            return null;
+          }
+       }
+        // 插入examId，处理参数
+        for (let i = 0; i < this.itemListForm.tableData.length; i++) {
+          this.itemListForm.tableData[i].examId = this.examId;
+        }
+        let params = JSON.parse(JSON.stringify(this.itemListForm.tableData));
+        this.$confirm("确认提交吗？", "提示", {}).then(() => {
           this.$api.exam.examItem.update(params).then((res) => {
             if (res.code == 200) {
               this.$message({
@@ -1255,35 +1367,16 @@ export default {
             }
           })
           .catch((err) => {
-            this.closeItemForm();
-          })
-      });
-    },
-    closeItemForm() {
-      this.itemForm = {
-        tableData: [],
-      }
-      this.itemVisible = false;
-    },
-    findItemList(){
-       this.pageRequest.params = [{ name: "examId", value: this.examId },];
-       this.$api.exam.examItem.findList(this.pageRequest)
-        .then((res) => {
-          // console.log(res);
-          if (res.data != null) {
-            console.log(res.data);
-            this.itemForm.tableData = res.data.content;
-            console.log();
-            // 题型选择栏禁用项处理
-            this.handleAllProblemType(this.itemForm.tableData);
-          }
-       })
+            this.closeItemListForm();
+            })
+        });
+      
     },
 
+    // 题目设置
     handleGenerateChange(row) {
       console.log(row);
-      
-     //item项回显
+      //item项回显
       this.examId = row.id;
       this.pageRequest.params = [{ name: "examId", value: this.examId },];
        this.$api.exam.examItem.findList(this.pageRequest)
@@ -1293,12 +1386,6 @@ export default {
             console.log(res.data);
             this.viewItemForm.tableData = res.data.content;
             this.viewItemForm.totalSize = res.data.totalSize;
-            // 题型选择栏禁用项处理
-            // this.handleAllProblemType(this.viewItemForm.tableData);
-
-            // this.examId = row.id;
-            // this.findItemList(this.examId);
-            // 该条记录数据row深拷贝给表单数据
             this.generateForm = JSON.parse(JSON.stringify(row))
             console.log(this.generateForm);
             //处理章节查询参数
@@ -1307,62 +1394,94 @@ export default {
             for (let index = 0; index < this.knowledgeOption.length; index++) {
               knowledgeString = knowledgeString + this.knowledgeOption[index].chapterId + ','
             }
-            // console.log(knowledgeString);
             this.allKnowledgeString = knowledgeString;
             console.log(this.allKnowledgeString);
-            this.generateVisible = true;
-                }
-            }).catch((err) => {
-
-       })
-      
-    },
-    
-    changeProblemListVisible(row) {
-      //  //更新题型列表
-      //   this.submitProblemList();
-
-        console.log(row);
-        if (JSON.stringify(row) ==='{}' || Object.keys(row).length === 0 ||
-            row.problemTypeId == "" || row.problemTypeId == undefined ||
-            row.problemTypeId == null || 
-            row.num == "" || row.num == undefined ||
-            row.num == null ||
-            row.score == "" || row.score == undefined ||
-            row.score == null) {
-          this.$message({
-              message: "请完整填写表格信息" ,
-              type: "error",
-            });
-        } else {
-          this.problemListForm.name = row.problemTypeName;
-          this.problemListForm.id = row.problemTypeId;
-          this.problemListForm.num = row.num;
-          this.problemListForm.score = row.score;
-          this.problemListForm.itemId = row.id;
-          // 判断是否编辑回显
-          // if (row.itemList != null && row.itemList != "" && row.itemList != undefined) {
-          //   // console.log("有题目");
-          //   this.problemListForm.tableData = row.itemList;
-          // }
-          if (row.id != "" && row.id != null && row.id != undefined) {
-            this.pageRequest.params = [{ name: "itemId", value: row.id },];
-            this.$api.exam.examContent.findList(this.pageRequest)
-              .then((res) => {
-                console.log(res);
-                if (res.data != null) {
-                  console.log(res.data);
-                  this.problemListForm.tableData = res.data.content;
-                }
-            })
           }
+          this.generateVisible = true;
+       }).catch((err) => {})
+    },
+    closeGenerateForm() {
+      this.generateVisible = false;
+      this.viewItemForm={
+        tableData: [],
+      };
+      this.generateForm = {};
+    },
+    // 预览题型下所有题目 itemId -> problemList
+    handlePreviewChange(row) {
+      console.log(row);
+      this.previewProblemListForm.problemTypeName = row.problemTypeName;
+      let itemId = row.id;
+      this.$api.exam.examContent.findProblemList({itemId:itemId}).then((res) =>{
+        console.log(res.data);
 
-          //显示对话框
-          this.problemListVisible = true;
-          console.log(this.problemListForm);
+        let m = 0;
+
+        if (res.code == 200) {
+          for (let i = 0; i < res.data.length; i++) {
+            m++;
+            if (res.data[i].problemTypeName == "单选题") {
+              let content = {};
+              content.id = res.data[i].id;
+              content.index = m;
+              content.knowledgeName = res.data[i].knowledgeName;
+              content.title = res.data[i].choice.title;
+              this.previewProblemListForm.tableData.push(content);
+            }
+            if (res.data[i].problemTypeName == "编程题") {
+              let content = {};
+              content.id = res.data[i].id;
+              content.index = m;
+              content.knowledgeName = res.data[i].knowledgeName;
+              content.title = res.data[i].program.problemDescription;
+              this.previewProblemListForm.tableData.push(content);
+
+            }
+          }
+          console.log(this.previewProblemListForm.tableData);
+        }
+      })
+
+
+
+
+      this.previewProblemListVisible = true;
+
+
+    },
+    closePreviewProblemListForm() {
+      this.previewProblemListVisible = false;
+      this.previewProblemListForm = {
+        tableData:[],
+      };
+
+    },
+
+
+    changeProblemListVisible(row) {
+        console.log(row);
+   
+        this.problemListForm.name = row.problemTypeName;
+        this.problemListForm.id = row.problemTypeId;
+        this.problemListForm.num = row.num;
+        this.problemListForm.score = row.score;
+        this.problemListForm.itemId = row.id;
+        this.problemListForm.examId = row.examId;
           
-        } 
-      
+        if (row.id != "" && row.id != null && row.id != undefined) {
+          this.pageRequest.params = [{ name: "itemId", value: row.id },];
+          this.$api.exam.examContent.findList(this.pageRequest)
+            .then((res) => {
+              console.log(res);
+              if (res.data != null) {
+                console.log(res.data);
+                this.problemListForm.tableData = res.data.content;
+              }
+          })
+        }
+        //显示对话框
+        this.problemListVisible = true;
+        console.log(this.problemListForm);
     },
     closeProblemListForm() {
       this.problemListVisible = false;
@@ -1370,19 +1489,17 @@ export default {
         tableData: [
         ],
       };
-
     },
-    
     submitProblemList() {
-
       console.log(this.problemListForm.tableData);
+
       let score = 0;
       for (let index = 0; index < this.problemListForm.tableData.length; index++) {
          let s= this.problemListForm.tableData[index].score;
          score = score + s;
       }
-      console.log("当前各题分数总和"+typeof score);
-      console.log("预设分值"+typeof this.problemListForm.score);
+      console.log("当前各题分数总和"+ score);
+      console.log("预设分值"+ this.problemListForm.score);
 
       if (this.problemListForm.score != score) {
         this.$message({
@@ -1392,19 +1509,17 @@ export default {
       } else {
         console.log(this.problemListForm);
         console.log(this.problemListForm.tableData);
-        console.log(this.itemForm.tableData);
+        console.log(this.itemListForm.tableData);
         
         let params = [];
         for (let i = 0; i < this.problemListForm.tableData.length; i++) {
-          // if (this.itemForm.tableData[i].problemTypeId == this.problemListForm.problemTypeId) {
-          //   this.itemForm.tableData[i].itemList = this.problemListForm.tableData;
-          // }
           params.push({
             itemId: this.problemListForm.itemId,
             problemId: this.problemListForm.tableData[i].id,
             problemTypeId: this.problemListForm.id,
             score: this.problemListForm.tableData[i].score,
             knowledgeName: this.problemListForm.tableData[i].knowledgeName,
+            examId: this.problemListForm.examId,
           })
         }
         console.log(params);
@@ -1423,13 +1538,14 @@ export default {
           })
         });
 
-        console.log(this.itemForm.tableData);
+        console.log(this.itemListForm.tableData);
         console.log(this.generateForm);
         this.clearSelections();
         
       }
 
     },
+
 
     handleSelectedKnowledge(item) {
       console.log(item);
@@ -1490,16 +1606,14 @@ export default {
       } 
       // console.log(this.pageRequest);
     },
-
     showSelections(list) {
       this.$refs.problemTable.showSelections(list);
     },
 
-
     changeAllProblemVisible() {
       console.log(this.allProblemType);
       console.log(this.generateForm);
-      console.log(this.itemForm);
+      console.log(this.itemListForm);
       console.log(this.problemListForm);
 
       console.log(this.knowledgeOption);
@@ -1516,13 +1630,8 @@ export default {
         selected.push(parseInt(this.problemListForm.tableData[i].problemId));
       }
       console.log(selected);
-      
-      // this.$refs.problemTable.showSelections();
-
       this.allProblemVisible = true;
       this.showSelections(selected);
-      
-
     },
     handleAllProblemSelect(suggests){
       console.log(this.problemListForm.num);
@@ -1541,13 +1650,13 @@ export default {
       console.log(this.allProblemForm);
       this.pageRequest.params = [{ name: "itemId", value: this.problemListForm.itemId },];
       this.$api.exam.examContent.findList(this.pageRequest)
-          .then((res) => {
-            console.log(res);
-            if (res.data != null) {
-              console.log(res.data);
-              this.problemListForm.tableData = res.data.content;
-              console.log();
-            }
+        .then((res) => {
+          console.log(res);
+          if (res.data != null) {
+            console.log(res.data);
+            this.problemListForm.tableData = res.data.content;
+            console.log();
+          }
       })
       // 清除组件内选中项
       this.clearSelections();
@@ -1557,62 +1666,143 @@ export default {
     },
 
     submitAllProblem() {
-      // console.log(typeof this.problemListForm.num);
-      // console.log(this.problemListForm.tableData);
-      // console.log(typeof this.problemListForm.tableData.length);
+      // 校验
       if( this.problemListForm.num != this.problemListForm.tableData.length
         ) {
         this.$message({
           message: "请按规定数量选题" ,
           type: "error",
         });
-        // this.problemListForm.problemListTable = [];
       } else {
-        
         this.allProblemVisible = false;
-
-        // console.log(this.allProblemType);s
       }
     },
 
 
-    closeGenerateForm() {
-      this.generateVisible = false;
-      this.itemForm={
-        tableData: [],
+    // 双向细目页面
+    findAllObjectiveType() {
+      let suggests = [];
+      this.$api.course.courseTarget
+      .findAllTargets({cinstanceId: this.$store.state.course.courseCinstanceId})
+      .then((res) => {
+          console.log(res);
+          for (let index = 0; index < res.data.content.length; index++) {
+            suggests.push({
+              value: res.data.content[index].name,
+              id: res.data.content[index].id,
+              lable: res.data.content[index].objectiveTypeName
+            });
+          }
+          this.allObjective = JSON.parse(JSON.stringify(suggests));
+          console.log(this.allObjective);
+        });
+    },
+    changeObjectiveListVisible(row) {
+      console.log(row);
+      let examId = row.id;
+
+      this.pageRequest.params = [{ name: "examId", value: examId },];
+      this.$api.exam.examContent.findByExamId(this.pageRequest).then((res) => {
+        console.log(res.data);
+        if(res.data !== null) {
+          this.objectiveListForm = res.data;
+          this.objectiveListForm.tableData = this.objectiveListForm.content;
+          console.log(this.objectiveListForm.tableData);
+        } 
+        this.objectiveListVisible = true;
+      }).catch(err => {})
+
+    },
+    closeObjectiveList() {
+      this.objectiveListForm = {
+        tableData:[]
       };
-      this.generateForm = {};
-      // this.findAllProblemType();
-      this.handleAllProblemType(null);
+      this.objectiveListVisible = false;
+    },
+    submitObjectiveList() {
+      console.log(this.objectiveListForm.tableData);
+
+      let params = JSON.parse(JSON.stringify(this.objectiveListForm.tableData))
+
+      for (let i = 0; i < params.length; i++) {
+        if (params[i].objectiveId == null ||
+            params[i].objectiveId == "" ||
+            params[i].objectiveId == undefined) 
+         {
+            this.$message({
+              message: "请填写完整" ,
+              type: "error",
+            }) 
+            return null;
+         }
+      }
+      console.log(params);
+      this.$confirm("确认提交吗？", "提示", {}).then(() => {
+          this.$api.exam.examContent.updateObj(params).then((res) => {
+            if (res.code == 200) {
+              this.$message({
+                message: res.msg,
+                type: "success",
+              });
+              // this.problemListVisible = false;
+            }
+          })
+          .catch((err) => {
+          })
+        });
     },
 
-    submitGenerate() {
-     
+    // 预览全部
+    handlePreview(row) {
+      console.log(row);
+      let url = this.global.baseUrl + '/exam/setup/pdf?examId='
+      // console.log(url);
+      window.open( url+ row.id)
     },
 
-    handlePub() {},
+    // 发布
+    handlePub(row) {
+      console.log(row);
+      let examId = row.id;
+      this.$confirm("确认提交吗？", "提示", {}).then(() => {
+        this.$api.exam.examSetup.pub({examId:examId}).then((res) =>{
+          if (res.code == 200) {
+            this.$message({message: res.msg,type: "success",});
+            this.findPersonPage(null);
+          }
+        })
+        .catch((err) =>{})
+      })
+    },
 
     openProblemInfo(row) {
       console.log(row);
 
-      if (row.problemTypeId == 1) {
+      let problemTypeId = row.problemTypeId;
+      let problemId = row.problemId;
+
+      if (problemTypeId == 1) {
         // 选择题
-        this.$api.problem.choice.findById({id:row.problemId}).then((res) => {
+        this.$api.problem.choice.findById({id:problemId}).then((res) => {
           console.log(res.data);
-          this.viewProblemForm = JSON.parse(JSON.stringify(res.data))
-        })
-        
+          if (res.data != null) {
+            this.viewProblemForm = JSON.parse(JSON.stringify(res.data))
+            this.viewProblemVisible = true;
+          }    
+        }) 
       }
-      if (row.problemTypeId == 7) {
+      if (problemTypeId == 7) {
         // 编程题
-        this.$api.problem.prog.findById({id:row.problemId}).then((res) =>{
+        this.$api.problem.prog.findById({id:problemId}).then((res) =>{
           console.log(res.data);
-          this.viewProblemForm = JSON.parse(JSON.stringify(res.data))
+          if (res.data != null) {
+            this.viewProblemForm = JSON.parse(JSON.stringify(res.data))
+            this.viewProblemVisible = true;
+          }
         })
-        
       }
 
-      this.viewProblemVisible = true;
+      
     },
     closeViewProblemForm() {
       this.viewProblemVisible = false;
@@ -1622,12 +1812,7 @@ export default {
 
 
 
-    handleRemove(data) {
-      console.log(data.params);
-      this.$api.exam.examSetup
-        .del(data.params)
-        .then(data != null ? data.callback : "");
-    },
+    
   },
 };
 </script>
