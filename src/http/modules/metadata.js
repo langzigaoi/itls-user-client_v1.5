@@ -10,6 +10,8 @@
  import * as title from './metadata/title'
  import * as examType from './metadata/examType'
  import * as objective from './metadata/objective'
+ import * as evaluation from './metadata/evaluation'
+ import * as evaluationDetailed from './metadata/evaluationDetailed'
 
 
  
@@ -23,4 +25,6 @@
   title,
   examType,
   objective,
+  evaluation,
+  evaluationDetailed,
  }

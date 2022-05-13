@@ -7,11 +7,11 @@ import axios from '../../axios'
  const preUrl = "course/instance/teacher/";
 
 // 查询Assistant助教
-export const findAllAssistant = (params) => {
+export const findAllAssistant = (data) => {
   return axios({
     url: preUrl + 'findAll',
-    method: 'get',
-    params
+    method: 'post',
+    data
   })
 }
 // 添加助教
@@ -31,7 +31,7 @@ export const updateAssistant = (data) => {
   })
 }
 // 删除助教信息
-export const delTarget = (params) => {
+export const delAssistant = (params) => {
   return axios({
     url: preUrl + 'delete',
     method: 'get',

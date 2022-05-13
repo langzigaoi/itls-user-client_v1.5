@@ -36,7 +36,7 @@
     <el-dialog
       title="添加课程目标"
       :visible.sync="addDialogVisible"
-      width="500px"
+      width="700px"
       center
     >
       <el-form
@@ -65,7 +65,7 @@
           <el-row type="flex">
             <el-input
               type="textarea"
-              :rows="4"
+              :rows="8"
               placeholder="请输入课程目标内容"
               v-model="addtextarea"
             >
@@ -88,7 +88,7 @@
     <el-dialog
       title="编辑课程目标"
       :visible.sync="updateDialogVisible"
-      width="500px"
+      width="700px"
       center
     >
       <el-form
@@ -117,7 +117,7 @@
           <el-row type="flex">
             <el-input
               type="textarea"
-              :rows="4"
+              :rows="8"
               placeholder="请输入内容"
               v-model="updatetextarea"
             >
@@ -153,7 +153,7 @@ export default {
         {
           prop: "name",
           label: "课程目标 (最多可添加五条)",
-          minWidth: 150,
+          minWidth: 500,
           align: "center",
         },
         {

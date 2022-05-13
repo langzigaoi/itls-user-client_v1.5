@@ -16,6 +16,7 @@ import * as choosing from './course/choosing'
  import * as language from './course/language'
  import * as shortAnserQues from './course/shortAnserQues'
  import * as teachingTeam from './course/teachingTeam'
+ import * as courseEvaluation from './course/courseEvaluation'
  
  // 默认全部导出
  export {
@@ -32,5 +33,6 @@ import * as choosing from './course/choosing'
   courseTarget,
   language,
   shortAnserQues,
-  teachingTeam
+  teachingTeam,
+  courseEvaluation
  }

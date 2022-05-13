@@ -213,6 +213,7 @@ export default {
   data() {
     return {
       pageResults: {}, //存放教学团队查回来的的所有信息
+      pageRequest: { pageNum: 1, pageSize: 10 },
       editForm: {}, //存放编辑表格所有信息
       addForm: {}, //存放添加表格所有信息
       columns: [
@@ -239,79 +240,150 @@ export default {
       addtextarea: "", //用于添加弹框
       updatetextarea: "", //用于更新弹框
       current: -1, //表示当前操作位置
-      target: "", //用于存放修改的课程项目
       updateId: -1,
       allAssistantType: ["助教"],
     };
   },
   mounted() {},
   methods: {
-    // 分页查询全部助教信息
+    // 分页查询全部教学成员
     findPage(data) {
       if (data !== null) {
         this.pageRequest = data.pageRequest;
       }
+      this.pageRequest.params = [
+        {
+          name: "cinstanceId",
+          value: this.$store.state.course.courseCinstanceId,
+        },
+      ];
       this.$api.course.teachingTeam
-        .findAllAssistant({
-          cinstanceId: this.$store.state.course.courseCinstanceId,
-        })
+        .findAllAssistant(this.pageRequest)
         .then((res) => {
           // console.log(res.data);
           this.pageResults = res.data;
         })
         .then(data != null ? data.callback : "");
     },
-    // 获取全部助教信息
-    findAllAssistant() {
-      this.$api.course.teachingTeam
-        .findAllAssistant({
-          cinstanceId: this.$store.state.course.courseCinstanceId,
-        })
-        .then((res) => {
-          // console.log(res.data);
-          this.pageResults = res.data;
-        });
-    },
-    // 打开增加课程目标的弹窗
+    // 打开增加教学成员的弹窗
     openAddDialog() {
       this.addDialogVisible = true;
     },
-    // 打开编辑课程目标的弹窗
+    // 打开编辑教学成员的弹窗
     handleEditChange(row) {
       this.updateDialogVisible = true;
       this.editForm = JSON.parse(JSON.stringify(row));
     },
-    // 确定修改课程目标
+    // 确定修改教学成员
     updateTeamMember() {
       let data = Object.assign({}, this.editForm);
-      this.$api.course.teachingTeam
-        .updateAssistant(data)
-        .then((res) => {
-          this.succMsg(res.msg);
-          this.updateDialogVisible = false;
-          this.findAllAssistant();
+      let suggests = JSON.parse(JSON.stringify(this.editForm));
+      if (
+        suggests.name == null ||
+        suggests.name == "" ||
+        suggests.name == undefined ||
+        suggests.no == null ||
+        suggests.no == "" ||
+        suggests.telNum == null ||
+        suggests.telNum == ""
+      ) {
+        this.$message({
+          message: "表格不能为空",
+          type: "error",
         });
+        return null;
+      } else if (suggests.no == undefined || !/^[1-9]\d*$/.test(suggests.no)) {
+        this.$message({
+          message: "职工号只能为数字！",
+          type: "error",
+        });
+        return null;
+      } else if (
+        suggests.telNum == undefined ||
+        !/^1\d{10}$/.test(suggests.telNum)
+      ) {
+        this.$message({
+          message: "手机号格式不对！",
+          type: "error",
+        });
+        return null;
+      } else if (
+        suggests.email == undefined ||
+        !/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(suggests.email)
+      ) {
+        this.$message({
+          message: "邮箱格式不对！",
+          type: "error",
+        });
+        return null;
+      }
+
+      this.$api.course.teachingTeam.updateAssistant(data).then((res) => {
+        this.succMsg(res.msg);
+        this.updateDialogVisible = false;
+        this.findPage(null);
+      });
     },
-    // 删除课程目标
+    // 删除教学成员
     handleRemove(data) {
-      let ids = data.params.map((item) => {return item.id})
-      console.log("hhh",ids.toString())
+      let ids = data.params.map((item) => {
+        return item.id;
+      });
+      console.log("hhh", ids.toString());
       this.$api.course.teachingTeam
-        .delTarget({IDs: ids.toString()})
+        .delTarget({ IDs: ids.toString() })
         .then(data != null ? data.callback : "");
     },
-    // 添加课程目标
+    // 添加教学成员
     addTeamMember() {
-      this.addForm.position="助教";
-      this.addForm.cinstanceId=this.$store.state.course.courseCinstanceId;
+      this.addForm.position = "助教";
+      this.addForm.cinstanceId = this.$store.state.course.courseCinstanceId;
       let data = Object.assign({}, this.addForm);
-      this.$api.course.teachingTeam
-        .addAssistant(data)
-        .then((res) => {
-          this.succMsg(res.msg);
-          this.addDialogVisible = false;
-          this.findAllAssistant();
+      let suggests = JSON.parse(JSON.stringify(this.addForm));
+      if (
+        suggests.name == null ||
+        suggests.name == "" ||
+        suggests.name == undefined ||
+        suggests.no == null ||
+        suggests.no == "" ||
+        suggests.telNum == null ||
+        suggests.telNum == ""
+      ) {
+        this.$message({
+          message: "表格不能为空",
+          type: "error",
         });
+        return null;
+      } else if (suggests.no == undefined || !/^[1-9]\d*$/.test(suggests.no)) {
+        this.$message({
+          message: "职工号只能为数字！",
+          type: "error",
+        });
+        return null;
+      } else if (
+        suggests.telNum == undefined ||
+        !/^1\d{10}$/.test(suggests.telNum)
+      ) {
+        this.$message({
+          message: "手机号格式不对！",
+          type: "error",
+        });
+        return null;
+      } else if (
+        suggests.email == undefined ||
+        !/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(suggests.email)
+      ) {
+        this.$message({
+          message: "邮箱格式不对！",
+          type: "error",
+        });
+        return null;
+      }
+      this.$api.course.teachingTeam.addAssistant(data).then((res) => {
+        this.succMsg(res.msg);
+        this.addDialogVisible = false;
+        this.findPage(null);
+      });
     },
   },
 };

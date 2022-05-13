@@ -10,15 +10,6 @@
         >
           新增
         </el-button>
-
-        <el-button
-          @click="choose"
-          size="mini"
-          type="primary"
-          v-if="columnFlag.selectButton == true"
-        >
-          选题
-        </el-button>
       </el-row>
     </div>
 
@@ -48,21 +39,36 @@
       ></el-table-column>
 
       <!--题型设置-->
-      <el-table-column prop="evaluateType" label="过程评价">
+      <el-table-column
+        prop="evaluateType"
+        label="类别"
+        width="380"
+        v-if="columnFlag.showType"
+      >
         <template scope="scope">
-          <el-select ref="selectLable" v-model="scope.row.id">
+          <el-select
+            ref="selectLable"
+            v-model="scope.row.typeId"
+            style="width: 100%"
+            @click.native="beforeChangeEvaluateType(scope.$index, scope.row)"
+            @change="changeEvaluateType(scope.row)"
+          >
             <el-option
               v-for="item in allEvaluateType"
-              :key="item.id"
-              :label="item.value"
-              :value="item.id"
+              :key="item.typeId"
+              :label="item.typeName"
+              :value="item.typeId"
               :disabled="item.disabled"
             >
             </el-option>
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column prop="problemType" label="目标">
+      <el-table-column
+        prop="problemType"
+        label="目标"
+        v-if="columnFlag.showObject == true"
+      >
         <template scope="scope">
           <el-select ref="selectLable" v-model="scope.row.problemTypeId">
             <el-option
@@ -84,17 +90,85 @@
       <el-table-column
         prop="score"
         label="分数占比(%)"
-        width="120"
+        width="420"
         v-if="columnFlag.score == true"
       >
         <template scope="scope">
-          <el-input size="mini" v-model="scope.row.score"> </el-input>
+          <el-input
+            size="mini"
+            v-model="scope.row.proportion"
+            style="width: 100%"
+          >
+          </el-input>
+        </template>
+      </el-table-column>
+
+      <!--详情题型设置-->
+      <el-table-column
+        prop="evaluateType"
+        label="类别"
+        width="150"
+        v-if="columnFlag.detailedType"
+      >
+        <template scope="scope">
+          <el-select
+            ref="selectLable"
+            v-model="scope.row.typeId"
+            style="width: 100%"
+            @click.native="beforeChangeEvaluateType(scope.$index, scope.row)"
+            @change="changeEvaluateType(scope.row)"
+          >
+            <el-option
+              v-for="item in allEvaluateType"
+              :key="item.typeId"
+              :label="item.typeName"
+              :value="item.typeId"
+              :disabled="item.disabled"
+            >
+            </el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="score"
+        label="分数占比(%)"
+        width="120"
+        v-if="columnFlag.detailedScore"
+      >
+        <template scope="scope">
+          <el-input size="mini" v-model="scope.row.proportion"> </el-input>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="problemType"
+        label="目标"
+        v-if="columnFlag.disabledObject == true"
+      >
+        <template scope="scope">
+          <el-select
+            ref="selectLable"
+            v-model="scope.row.objectId"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in allObjective"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+              :disabled="item.disabled"
+            >
+              <span style="float: left">{{ item.name }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">
+                {{ item.objectiveTypeName }}目标
+              </span>
+            </el-option>
+          </el-select>
         </template>
       </el-table-column>
 
       <el-table-column
         label="操作"
-        width="200"
+        width="180"
         fixed="right"
         v-if="showOperation"
         header-align="center"
@@ -133,26 +207,6 @@
 
     <div class="toolbar" style="padding: 20px, 20px">
       <el-row type="flex" align="bottom" justify="end">
-        <!-- <el-col :span="12" align="left">
-            <el-button 
-              size="mini" 
-              type="primary" 
-              @click="addRow(data)"
-              v-if="columnFlag.addButton == true "
-              >
-             新增
-            </el-button>
-
-            <el-button
-              @click="choose"
-              size="mini"
-              type="primary" 
-              v-if="columnFlag.selectButton == true "
-            >
-            选题
-            </el-button>
-          </el-col> -->
-
         <el-col :span="12">
           <el-pagination
             layout="total, prev, pager, next, jumper "
@@ -270,6 +324,12 @@ export default {
         objKnowledgeName: false,
         objScore: false,
         objObjective: false,
+        showObject: false,
+        showType: false,
+
+        detailedType: false,
+        disabledObject: false,
+        detailedScore: false,
       }),
     },
   },
@@ -299,18 +359,19 @@ export default {
     // },
     //题目类型选择栏相关
     getType(id, suggests) {
-      console.log("拿出来");
+      // console.log("ggg拿出来");
       for (let index = 0; index < suggests.length; index++) {
-        if (suggests[index].id == id) {
+        if (suggests[index].typeId == id) {
+          // console.log("ddd"+suggests[index].disabled);
           suggests[index].disabled = true;
         }
       }
       return suggests;
     },
     putType(lastid, suggests) {
-      console.log("放回去");
+      // console.log("放回去");
       for (let index = 0; index < suggests.length; index++) {
-        if (suggests[index].id == lastid) {
+        if (suggests[index].typeId == lastid) {
           suggests[index].disabled = false;
         }
       }
@@ -321,50 +382,47 @@ export default {
       // console.log(id, list);
       let lable = "";
       for (let index = 0; index < list.length; index++) {
-        if (list[index].id == id) {
+        if (list[index].typeId == id) {
           lable = list[index].value;
         }
       }
       // console.log(lable);
       return lable;
     },
-    beforeChangeProblemType(index, row) {
-      // console.log(row);
-      row.lastProblemTypeId = row.problemTypeId;
+    beforeChangeEvaluateType(index, row) {
+      // console.log("111"+row.typeId);
+      row.lasttypeId = row.typeId;
       // console.log(row);
     },
-    changeProblemType(row) {
-      console.log(row);
-      let id = row.problemTypeId;
-      let lastid = row.lastProblemTypeId;
-      let suggests = this.allProblemType;
+    changeEvaluateType(row) {
+      // console.log('hhh'+row);
+      let id = row.typeId;
+      let lastid = row.lasttypeId;
+      let suggests = this.allEvaluateType;
       // 获取选中题型的lable
-      row.problemTypeName = this.findLableById(id, suggests);
-      // console.log(row);
+      // console.log("ssu"+suggests);
+      row.typeName = this.findLableById(id, suggests);
       if (id != "" && id != null && id != undefined) {
-        console.log("拿出来");
+        // console.log("拿出来");
         suggests = this.getType(id, suggests);
       }
       if (lastid != "" && lastid != null && lastid != undefined) {
-        console.log("放回去");
+        // console.log("放回去");
         suggests = this.putType(lastid, suggests);
       }
     },
 
     // 表格行操作：增减
     addRow(tableData) {
-      // console.log(tableData);
-      // console.log(this.allProblemType);
       tableData.push({});
-      // console.log(this.data);
     },
     deleteRow(index, rows) {
       // 恢复被禁用的选项
-      // console.log(rows[index]);
-      // if (rows[index].problemTypeId != "") {
-      //   let suggests = [...this.allProblemType];
-      //   this.putType(rows[index].problemTypeId, suggests);
-      // }
+      console.log(rows[index]);
+      if (rows[index].typeId != "") {
+        let suggests = [...this.allEvaluateType];
+        this.putType(rows[index].typeId, suggests);
+      }
       // 删除该行
       rows.splice(index, 1);
       // console.log(this.data);
@@ -404,7 +462,6 @@ export default {
         pageRequest: this.pageRequest,
         callback: callback,
       });
-      // console.log(this.data);
     },
 
     // 选择切换
