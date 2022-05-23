@@ -111,6 +111,7 @@
                 :key="item.value"
                 :label="item.value"
                 :value="item.id"
+                :disabled="item.disabled"
               >
               </el-option>
             </el-select>
@@ -230,7 +231,7 @@ export default {
           objective.push({
             value: res.data[index].name,
             id: res.data[index].id,
-            disabled:false,
+            disabled: false,
           });
         }
         // console.log(suggests);
@@ -268,7 +269,7 @@ export default {
         for (let index = 0; index < this.pageResults.content.length; index++) {
           let idx = this.pageResults.content[index].objectiveTypeId;
           // console.log(idx+'idx');
-          this.allObjectiveType[idx-1].disabled = true;
+          this.allObjectiveType[idx - 1].disabled = true;
           // console.log(this.allObjectiveType[idx-1].id);
         }
       } else {
@@ -281,6 +282,12 @@ export default {
       this.updateId = row.id;
       this.updatetextarea = JSON.parse(JSON.stringify(row.name));
       this.editTypeId = JSON.parse(JSON.stringify(row.objectiveTypeId));
+      for (let index = 0; index < this.pageResults.content.length; index++) {
+        let idx = this.pageResults.content[index].objectiveTypeId;
+        // console.log(idx+'idx');
+        this.allObjectiveType[idx - 1].disabled = true;
+        // console.log(this.allObjectiveType[idx-1].id);
+      }
     },
     // 确定修改课程目标
     updateTarget() {
@@ -305,7 +312,7 @@ export default {
       this.$api.course.courseTarget
         .delTarget(data.params)
         .then(data != null ? data.callback : "");
-        this.findAllObjectiveType();
+      this.findAllObjectiveType();
     },
     //批量发布课程目标
     batchRelease() {
@@ -348,7 +355,7 @@ export default {
             this.succMsg(res.msg);
             this.addDialogVisible = false;
             this.isNull = 0;
-            this.objectiveType="";
+            this.objectiveType = "";
             this.findCinstanceTargets();
           });
       }
