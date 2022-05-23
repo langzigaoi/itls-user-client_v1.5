@@ -35,7 +35,7 @@
     <el-dialog
       top="5vh"
       align="center"
-      title="详情"
+      title="详情设置"
       :visible.sync="itemListVisible"
       width="80%"
       style=""
