@@ -149,3 +149,7 @@ ul {
   height: 125%;
   display: inline;
 }
+
+.el-radio__input.is-checked+.el-radio__label {
+  color: #14889A;
+}

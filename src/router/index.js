@@ -375,6 +375,13 @@ const routes = [
           import('@/components/coursedetail/student/exam/ExamList'),
         meta: { title: '课程考试' }
       },
+      // {
+      //   path: 'startexam',
+      //   name: 'startexam',
+      //   component: () =>
+      //     import('@/components/coursedetail/student/exam/StartExam'),
+      //   meta: { title: '开始考试' }
+      // },
 
 
 

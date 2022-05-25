@@ -106,7 +106,7 @@
                     v-model="addForm.knowledgeId"
                     placeholder="请选择第一级菜单中的选项"
                     :options="allKnowledge"
-                    multi
+                    
                     :props="{
                       checkStrictly: true,
                       emitPath: false,
@@ -128,10 +128,9 @@
                     size="small"
                     align="left"
                     v-model="addForm.startTime"
-                    type="date"
-                    placeholder="选择日期"
-                    :picker-options="pickerOptions"
-                  >
+                    type="datetime"
+                    placeholder="选择日期时间"
+                    default-time="12:00:00">
                   </el-date-picker>
                 </el-row>
               </el-form-item>
@@ -142,7 +141,7 @@
                     size="small"
                     align="left"
                     v-model="addForm.endTime"
-                    type="date"
+                    type="datetime"
                     placeholder="选择日期"
                     :picker-options="pickerOptions"
                   >
@@ -216,13 +215,11 @@
                     v-model="infoForm.knowledgeId"
                     placeholder="请选择第一级菜单中的选项"
                     :options="allKnowledge"
-                    multi
                     :props="{
                       checkStrictly: true,
                       emitPath: false,
                       multiple: true,
                     }"
-                    clearable
                   ></el-cascader>
                 </el-row>
               </el-form-item>
@@ -260,7 +257,7 @@
                     size="small"
                     align="left"
                     v-model="infoForm.startTime"
-                    type="date"
+                    type="datetime"
                     placeholder="选择日期"
                     :picker-options="pickerOptions"
                   >
@@ -274,7 +271,7 @@
                     size="small"
                     align="left"
                     v-model="infoForm.endTime"
-                    type="date"
+                    type="datetime"
                     placeholder="选择日期"
                     :picker-options="pickerOptions"
                   >
@@ -535,7 +532,8 @@
                 :columnFlag= "objColumnFlag"
                 :allObjective="allObjective"
                 @open="openProblemInfo"
-                @choose="changeAllProblemVisible">
+                @choose="changeAllProblemVisible"
+                @findPage="findObjectiveList">
               </modifiable-table>
           </div>
         </el-form-item>
@@ -959,6 +957,13 @@ export default {
           align: "center",
           formatter: this.getIsPub,
         },
+        {
+          prop: "pubTime",
+          label: "发布时间",
+          minWidth: 150,
+          align: "center",
+          formatter: this.dateFormat,
+        },
       ],
       chapterList: [],
       pickerOptions: {},
@@ -1055,7 +1060,7 @@ export default {
       });
     },
     dateFormat(row, column) {
-      return this.time(row.lastUpdateTime);
+      return this.timeByMinutes(row[column.property]);
     },
     indexMethod: function (index) {
       return index + 1;
@@ -1064,11 +1069,11 @@ export default {
     handleChangeTypeFlag(){
       if( this.typeFlag == "1") {
         // 期末考试
-            this.findPersonPage(null);
+        this.findPersonPage(null);
       }
       if( this.typeFlag == "2") {
         // 非期末考试
-            this.findPersonPage(null);
+        this.findPersonPage(null);
       }
 
     },
@@ -1191,6 +1196,9 @@ export default {
     },
 
     // 信息设置
+    // handleChapterChange() {
+
+    // },
     changeInfoFormVisible(row) {
       this.infoForm = JSON.parse(JSON.stringify(row));
       console.log(row.chapterOfList);
@@ -1206,9 +1214,13 @@ export default {
     closeInfoForm() {
       this.infoFormVisible = false;
       this.$refs.infoForm.resetFields();
-      this.infoForm = {};
+      this.infoForm = {
+        knowledgeId: []
+      };
+      this.chapterList=[];
     },
     submitInfoForm() {
+      console.log(this.infoForm.knowledgeId);
       for (let index = 0; index < this.infoForm.knowledgeId.length; index++) {
         console.log(this.infoForm.knowledgeId[index]);
         this.chapterList.push({ chapterId: this.infoForm.knowledgeId[index] });
@@ -1239,6 +1251,7 @@ export default {
                 }
               })
               .catch((err) => {
+                this.infoForm.knowledgeId = [];
                 this.chapterList = [];
               });
           });
@@ -1512,17 +1525,37 @@ export default {
         console.log(this.itemListForm.tableData);
         
         let params = [];
-        for (let i = 0; i < this.problemListForm.tableData.length; i++) {
-          params.push({
-            itemId: this.problemListForm.itemId,
-            problemId: this.problemListForm.tableData[i].id,
-            problemTypeId: this.problemListForm.id,
-            score: this.problemListForm.tableData[i].score,
-            knowledgeName: this.problemListForm.tableData[i].knowledgeName,
-            examId: this.problemListForm.examId,
-          })
+        // 单选题
+        if(this.problemListForm.id == 1) {
+          for (let i = 0; i < this.problemListForm.tableData.length; i++) {
+            params.push({
+              itemId: this.problemListForm.itemId,
+              problemId: this.problemListForm.tableData[i].id,
+              problemTypeId: this.problemListForm.id,
+              score: this.problemListForm.tableData[i].score,
+              knowledgeName: this.problemListForm.tableData[i].knowledgeName,
+              examId: this.problemListForm.examId,
+            })
+          }
         }
+        // 编程题
+        if(this.problemListForm.id == 7) {
+          for (let i = 0; i < this.problemListForm.tableData.length; i++) {
+            params.push({
+              itemId: this.problemListForm.itemId,
+              problemId: this.problemListForm.tableData[i].problemId,
+              problemTypeId: this.problemListForm.id,
+              score: this.problemListForm.tableData[i].score,
+              knowledgeName: this.problemListForm.tableData[i].knowledgeName,
+              examId: this.problemListForm.examId,
+            })
+          }
+        }
+
+        
         console.log(params);
+
+
 
         this.$confirm("确认提交吗？", "提示", {}).then(() => {
           this.$api.exam.examContent.update(params).then((res) => {
@@ -1690,7 +1723,7 @@ export default {
             suggests.push({
               value: res.data.content[index].name,
               id: res.data.content[index].id,
-              lable: res.data.content[index].objectiveTypeName
+              label: res.data.content[index].objectiveTypeName
             });
           }
           this.allObjective = JSON.parse(JSON.stringify(suggests));
@@ -1700,7 +1733,7 @@ export default {
     changeObjectiveListVisible(row) {
       console.log(row);
       let examId = row.id;
-
+      this.examId = examId;
       this.pageRequest.params = [{ name: "examId", value: examId },];
       this.$api.exam.examContent.findByExamId(this.pageRequest).then((res) => {
         console.log(res.data);
@@ -1712,6 +1745,23 @@ export default {
         this.objectiveListVisible = true;
       }).catch(err => {})
 
+    },
+    findObjectiveList(data) {
+       if (data !== null) {
+        this.pageRequest = data.pageRequest;
+      }
+      this.pageRequest.params = [
+        { name: "examId", value: this.examId }
+      ];
+      this.$api.exam.examContent.findByExamId(this.pageRequest).then((res) => {
+        console.log(res.data);
+        if(res.data !== null) {
+          this.objectiveListForm = res.data;
+          this.objectiveListForm.tableData = this.objectiveListForm.content;
+          console.log(this.objectiveListForm.tableData);
+        } 
+        this.objectiveListVisible = true;
+      }).catch(err => {})
     },
     closeObjectiveList() {
       this.objectiveListForm = {
@@ -1777,11 +1827,16 @@ export default {
 
     openProblemInfo(row) {
       console.log(row);
+      console.log(this.problemListForm);
 
+      let problemTypeName = this.problemListForm.name;
       let problemTypeId = row.problemTypeId;
       let problemId = row.problemId;
 
-      if (problemTypeId == 1) {
+      console.log(problemId);
+
+      if (problemTypeName == "单选题" || problemTypeId == 1) {
+        console.log("jinlaile");
         // 选择题
         this.$api.problem.choice.findById({id:problemId}).then((res) => {
           console.log(res.data);
@@ -1791,9 +1846,9 @@ export default {
           }    
         }) 
       }
-      if (problemTypeId == 7) {
+      if (problemTypeName == "编程题" || problemTypeId == 7) {
         // 编程题
-        this.$api.problem.prog.findById({id:problemId}).then((res) =>{
+        this.$api.problem.prog.findByProblemId({problemId:problemId}).then((res) =>{
           console.log(res.data);
           if (res.data != null) {
             this.viewProblemForm = JSON.parse(JSON.stringify(res.data))

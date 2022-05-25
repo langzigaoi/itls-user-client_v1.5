@@ -1,0 +1,34 @@
+import axios from '../../axios'
+
+const preUrl = "/exam/summary/";
+
+
+//添加学生考试记录
+export const addSummary = (params) => {
+  return axios({
+    url: preUrl + 'add',
+    method: 'patch',
+    params
+  })
+}
+export const updateSummary = (data) => {
+  return axios({
+    url: preUrl + 'update',
+    method: 'post',
+    data
+  })
+}
+export const doneSummary = (data) => {
+  return axios({
+    url: preUrl + 'done',
+    method: 'post',
+    data
+  })
+}
+export const findSummary = (params) => {
+  return axios({
+    url: preUrl + 'find',
+    method: 'get',
+    params
+  })
+}

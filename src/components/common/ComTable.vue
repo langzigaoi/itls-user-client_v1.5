@@ -200,13 +200,30 @@
                 size="mini"
                 type="danger"
                 v-if="showFlag.removeExam == true "
-                :disabled="disableFlag.removeExam == true || scope.row.isPub == 1"
+                :disabled="disableFlag.removeExam == true "
                 @click="remove(scope.$index, scope.row)"
                 >删除</el-button
               >
             </el-row>
-            <!-- </el-col> -->
           </el-row>
+
+          <!--控制学生考试页面-->
+          <el-button
+              style="width: 40%" size="mini" 
+              v-if="showFlag.startExam == true"
+              :disabled="disableFlag.startExam == true "
+              @click="startExam(scope.$index, scope.row)"
+            >开始考试
+          </el-button>
+          <el-button
+              style="width: 40%" size="mini" 
+              v-if="showFlag.summary == true"
+              :disabled="disableFlag.summary == true"
+              @click="summary(scope.$index, scope.row)"
+            >考试成绩
+          </el-button>
+
+
         </template>
       </el-table-column>
     </el-table>
@@ -333,6 +350,10 @@ export default {
           preview: false,
           pub: false,
           removeExam: false,
+          // 学生考试
+          startExam: false,
+          summary: false,
+
         }),
       },
     },
@@ -363,6 +384,10 @@ export default {
         preview: false,
         pub: false,
         removeExam: false,
+        // 学生考试
+        startExam: false,
+        summary: false,
+
       }),
     },
   },
@@ -581,6 +606,30 @@ export default {
     pub(index, row) {
       this.$emit("handlePub", row);
     },
+
+    // 学生考试
+    startExam(index, row) {
+      // console.log(row);
+      var now = new Date().getTime();
+      // if (now < row.startTime) {
+      //   this.$message({
+      //     message: "未开放考试",
+      //     type: "error",
+      //   });
+      //   return null;
+      // }
+      // if (now > row.endTime) {
+      //   this.$message({
+      //     message: "考试已结束",
+      //     type: "error",
+      //   });
+      //   return null;
+      // }
+      this.$emit("handleStartExam", row);
+    },
+    summary(index, row) {
+      this.$emit("handleSummary", row);
+    }
   },
 };
 </script>

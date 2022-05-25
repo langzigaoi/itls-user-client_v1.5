@@ -4,14 +4,10 @@
     <div class="tcommonBox">
       <el-row>
         <el-col :span="5">
-          <div>
-            <el-avatar
-              shape="square"
-              fit="contain"
-              :size="120"
-              :src="courseInstance.image"
-            ></el-avatar>
+          <div style="text-align:center">
+            <el-image fit="fit" style="width:130px" :src="courseInstance.image"> </el-image>
           </div>
+          
         </el-col>
 
         <el-col :span="7">

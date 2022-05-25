@@ -544,9 +544,7 @@ export default {
   methods: {
 
     dateFormat(row, column) {
-      // console.log("1111");
-      // console.log(time(row.lastUpdateTime));
-        return this.time(row.lastUpdateTime);        
+      return this.time(row[column.property]);
     },
     getStatu(row) {
       if (row.status == "0") {

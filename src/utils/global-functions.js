@@ -117,6 +117,25 @@ Vue.prototype.time = function(datetime) {
   return y + '-' + MM + '-' + d 
 }
 
+Vue.prototype.timeByMinutes = function(datetime) {
+  if (datetime == null && datetime == undefined){
+    return null;
+  }
+  let date = new Date(parseInt(datetime))
+  let y = date.getFullYear()
+  let MM = date.getMonth() + 1
+  MM = MM < 10 ? ('0' + MM) : MM
+  let d = date.getDate()
+  d = d < 10 ? ('0' + d) : d
+  let h = date.getHours()
+  h = h < 10 ? ('0' + h) : h
+  let m = date.getMinutes()
+  m = m < 10 ? ('0' + m) : m
+  let s = date.getSeconds()
+  s = s < 10 ? ('0' + s) : s
+  return y + '-' + MM + '-' + d + ' ' + h + ':' + m
+}
+
 Vue.prototype.isEmail = function(email) {
   return /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/.test(email)
 }

@@ -387,8 +387,7 @@ export default {
         // 设置默认头像
         if (res.data.avatar == '' || res.data.avatar == null|| res.data.avatar == undefined ) {
           res.data.avatar = this.defaultAvatar;
-          }
-
+        }
         this.info = JSON.parse(JSON.stringify(res.data));
         if (res.code == 200) this.loading = false;
         this.infoForm = JSON.parse(JSON.stringify(this.info));
@@ -443,9 +442,7 @@ export default {
     },
 
     handleAvatarSuccess(res, file) {
-      // console.log("上传成功的回调", res);
       this.infoForm.avatar = res.data;
-      // console.log(this.infoForm);
     },
 
     handleTitleSelect(item) {

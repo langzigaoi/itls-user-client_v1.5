@@ -37,6 +37,13 @@ export const findById = (params) => {
     params
   })
 }
+export const findByProblemId = (params) => {
+  return axios({
+    url: preUrl + 'findProByPid',
+    method: 'get',
+    params
+  })
+}
 export const findPersonList = (params) => {
   return axios({
     url: preUrl + 'findPer',

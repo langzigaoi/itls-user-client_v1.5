@@ -168,18 +168,15 @@
       >
         <template scope="scope">
           <el-select 
-          style="width:100%" 
-          popper-class="popper" 
-          
+          popper-class="popper"           
           v-model="scope.row.objectiveId">
             <el-option
-              
               v-for="item in allObjective"
               :key="item.id"
-              :label="item.value"
+              :label="item.label"
               :value="item.id"
             >
-            <el-row>
+            <!-- <el-row>
               <el-col :span="20">
                 <div style="width:100%; overflow:hidden; text-overflow: ellipsis; display:inline-block">
                     {{ item.value }}
@@ -188,7 +185,7 @@
               <el-col :span="4" align="right">
                   <el-tag>{{ item.lable }}目标</el-tag>
               </el-col>
-            </el-row>
+            </el-row> -->
             
             
               <!-- <span style="float: right; color: #8492a6; font-size: 13px">
@@ -254,7 +251,7 @@
             @current-change="refreshPageRequest"
             :current-page="pageRequest.pageNum"
             :page-size="pageRequest.pageSize"
-            :total="data.tableData.length"
+            :total="data.totalSize"
             style="float: right"
           >
           </el-pagination>

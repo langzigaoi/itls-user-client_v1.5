@@ -723,7 +723,7 @@ export default {
   },
   methods: {
     dateFormat(row, column) {
-        return this.time(row.lastUpdateTime)        
+      return this.time(row[column.property]);
     },
     getStatu(row) {
       if (row.status == "0") {
