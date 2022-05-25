@@ -39,8 +39,8 @@
       :visible.sync="addDialogVisible"
       width="700px"
       center
+      close="closeDialog()"
     >
-    
       <el-form
         ref="addObjectiveForm"
         :model="addObjectiveForm"
@@ -58,6 +58,7 @@
                 :key="item.value"
                 :label="item.value"
                 :value="item.id"
+                :disabled="item.disabled"
               >
               </el-option>
             </el-select>
@@ -110,6 +111,7 @@
                 :key="item.value"
                 :label="item.value"
                 :value="item.id"
+                :disabled="item.disabled"
               >
               </el-option>
             </el-select>
@@ -188,7 +190,7 @@ export default {
       allObjectiveType: [], //课程目标类型
       objectiveType: "",
       addObjectiveForm: {},
-      editTypeId:"",
+      editTypeId: "",
     };
   },
   mounted() {
@@ -229,6 +231,7 @@ export default {
           objective.push({
             value: res.data[index].name,
             id: res.data[index].id,
+            disabled: false,
           });
         }
         // console.log(suggests);
@@ -259,8 +262,16 @@ export default {
     // 打开增加课程目标的弹窗
     openAddDialog() {
       this.addtextarea = "";
+      this.objectiveType = "";
       if (this.pageResults.content.length < 5) {
         this.addDialogVisible = true;
+        // console.log(this.pageResults.content.length);
+        for (let index = 0; index < this.pageResults.content.length; index++) {
+          let idx = this.pageResults.content[index].objectiveTypeId;
+          // console.log(idx+'idx');
+          this.allObjectiveType[idx - 1].disabled = true;
+          // console.log(this.allObjectiveType[idx-1].id);
+        }
       } else {
         this.warnMsg("最多只能添加五条课程目标");
       }
@@ -271,6 +282,12 @@ export default {
       this.updateId = row.id;
       this.updatetextarea = JSON.parse(JSON.stringify(row.name));
       this.editTypeId = JSON.parse(JSON.stringify(row.objectiveTypeId));
+      for (let index = 0; index < this.pageResults.content.length; index++) {
+        let idx = this.pageResults.content[index].objectiveTypeId;
+        // console.log(idx+'idx');
+        this.allObjectiveType[idx - 1].disabled = true;
+        // console.log(this.allObjectiveType[idx-1].id);
+      }
     },
     // 确定修改课程目标
     updateTarget() {
@@ -295,6 +312,7 @@ export default {
       this.$api.course.courseTarget
         .delTarget(data.params)
         .then(data != null ? data.callback : "");
+      this.findAllObjectiveType();
     },
     //批量发布课程目标
     batchRelease() {
@@ -337,6 +355,7 @@ export default {
             this.succMsg(res.msg);
             this.addDialogVisible = false;
             this.isNull = 0;
+            this.objectiveType = "";
             this.findCinstanceTargets();
           });
       }

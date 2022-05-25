@@ -42,7 +42,7 @@
       <el-table-column
         prop="evaluateType"
         label="类别"
-        width="380"
+        width="360"
         v-if="columnFlag.showType"
       >
         <template scope="scope">
@@ -90,7 +90,7 @@
       <el-table-column
         prop="score"
         label="分数占比(%)"
-        width="420"
+        width="360"
         v-if="columnFlag.score == true"
       >
         <template scope="scope">
@@ -157,9 +157,9 @@
               :value="item.id"
               :disabled="item.disabled"
             >
-              <span style="float: left">{{ item.name }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">
-                {{ item.objectiveTypeName }}目标
+              <!-- <span style="float: left">{{ item.name }}</span> -->
+              <span style="float: left; font-size: 13px">
+                {{ item.objectiveTypeName }}
               </span>
             </el-option>
           </el-select>
@@ -189,7 +189,7 @@
             size="mini"
             v-if="columnFlag.problemButton == true"
           >
-            详情
+            详情设置
           </el-button>
 
           <!--公用-->
