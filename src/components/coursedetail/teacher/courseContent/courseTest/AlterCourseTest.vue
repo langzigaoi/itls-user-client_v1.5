@@ -37,7 +37,7 @@
           </div>
         </el-form>
         <!-- .slice((currentPage-1)*pageSize,currentPage*pageSize) -->
-        <el-table  :data="cInstanceSectionTest.listCInstanceSectionTestProblem.slice((currentPage-1)*pageSize,currentPage*pageSize)"  height="400" border style="overflow: scroll;width: 100%;" >
+        <el-table v-if="cInstanceSectionTest.listCInstanceSectionTestProblem" :data="cInstanceSectionTest.listCInstanceSectionTestProblem.slice((currentPage-1)*pageSize,currentPage*pageSize)"  height="400" border style="overflow: scroll;width: 100%;" >
           <el-table-column type="index" label="ID" width="60"> </el-table-column>
           <el-table-column prop="problemChoice.title" label="题干" width="520"> </el-table-column>
           <el-table-column  prop="problemChoice.options" label="选项" width="400">
