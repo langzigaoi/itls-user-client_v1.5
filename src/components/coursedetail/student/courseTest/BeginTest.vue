@@ -129,14 +129,8 @@ export default {
       this.getProblem();
       this.getStudentId();
       this.ansRadio = this.stuAns;
-     
       // console.log(this.getAns());
       },
-    // //字符串分割
-    // getAns(str){
-    //   let op = str.split('@');
-    //   return op;
-    // },
 
     //保存答案
     storeAnswer(){
@@ -224,11 +218,6 @@ export default {
             this.proIdList.push(this.ProblemChoiceList[index].choiceProblemId);
           }
           this.ansRadio = ansRadio
-          // console.log("daan")
-          // console.log(this.ansRadio);
-          // console.log(this.proIdList);
-          // console.log(this.userId);
-          // console.log(this.testId);
         });
         
     },
@@ -243,44 +232,11 @@ export default {
     correct() {
       this.dialogVisible = false;
 
-      //原getProblemnumber()内容
       this.stuRecords={};
       this.compute = 1;
-      // this.TestResult.testId = this.ProblemChoiceList[0].testId;
-      // this.TestResult.stuNo =  this.userId;
-      //this.dialogVisible = true;
-      // this.stuRecords.push(this.userId);
-      // this.stuRecords.push(this.testId);
-      // this.stuRecords.push(this.proIdList);
-      // this.stuRecords.push(this.ansRadio);
       this.stuRecords.stuNo = this.userId;
       this.stuRecords.testId = this.testId;
       this.stuRecords.proIdList = this.proIdList;
-      // for (let index = 0; index < this.ansRadio.length; index++) {
-      //   switch(this.ansRadio[index]){
-      //     case 1:
-      //       this.ansRadio[index] = "A";
-      //       break;
-      //     case 2:
-      //       this.ansRadio[index] = "B";
-      //       break;
-      //     case 3:
-      //       this.ansRadio[index] = "C";
-      //       break;
-      //     case 4:
-      //       this.ansRadio[index] = "D";
-      //       break;
-      //     case 5:
-      //       this.ansRadio[index] = "E";
-      //       break;
-      //     case 6:
-      //       this.ansRadio[index] = "F";
-      //       break;
-      //     default:
-      //       this.ansRadio[index] = "M";    //选项设定为6个，M代表错误选项
-      //       break;
-      //   }
-      // }
       this.stuRecords.ansList = this.ansRadio;
       // console.log(this.stuRecords);
       // for (let i = 0; i < this.TestResult.TestTraces.length; i++) {
@@ -309,17 +265,18 @@ export default {
         //  this.testRec = JSON.stringify(this.stuRecords);
         //  console.log(this.testRec);
         //  console.log(JSON.parseArray(this.testRec));
-        console.log(this.stuRecords);
-         this.$api.student.getTest.testStuRecords(this.stuRecords).then(() => {
-          this.isSubmit = 1;
-          this.diaVisible = false;
-          this.$message({
-            type: "success",
-            message: "提交成功!",
+        // console.log(this.stuRecords);
+        this.$api.student.getTest.testStuRecords(this.stuRecords).then(() => {
+        this.isSubmit = 1;
+        this.diaVisible = false;
+        this.$message({
+          type: "success",
+          message: "提交成功!",
           });
-          this.$router.push({
-            path: "/studycourse/coursestudenttest"
-          });
+          // this.$router.push({
+          //   path: "/studycourse/coursestudenttest"
+          // });
+        this.$router.push(this.path)
         })
         .catch(() => {
           this.$message({

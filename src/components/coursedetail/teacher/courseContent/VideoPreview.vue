@@ -9,6 +9,7 @@
 export default {
     data() {
         return {
+            path:"",
             dialogVisible: false,
             section:{
                 cinstanceWeekId: null,
