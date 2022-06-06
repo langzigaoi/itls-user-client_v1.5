@@ -9,7 +9,11 @@ import store from '../store'
 function hasKeyPerm(perms) {
     let hasPermission = false
     let permissions = store.state.user.keyPerm
+<<<<<<< HEAD
     for(let i = 0, len=permissions.length; i<len; i++) {
+=======
+    for(let i=0;i<permissions.length;i++) {
+>>>>>>> 455d3dfb784042487a4ec2c2670ef0e67413ae68
         if(permissions[i] === perms) {
             hasPermission = true;
             break
@@ -22,8 +26,12 @@ function hasKeyPerm(perms) {
 function hasMenuPerm(perms) {
     let hasPermission = false
     let permissions = store.state.user.menuPerm
+<<<<<<< HEAD
     var l = permissions.length
     for(let i = 0; i< l; i++) {
+=======
+    for(let i=0; i<permissions.length; i++) {
+>>>>>>> 455d3dfb784042487a4ec2c2670ef0e67413ae68
         if(permissions[i] === perms) {
             hasPermission = true;
             break

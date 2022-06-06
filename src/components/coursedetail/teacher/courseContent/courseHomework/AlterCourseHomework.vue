@@ -267,7 +267,7 @@ export default {
     changeDialogVisible(id) {
       this.diaVisible = !this.diaVisible;
       this.sectionId = id;
-      this.getAllKnowledge();
+      // this.getAllKnowledge();  修复打开作业详情页面时弹出未选择知识点问题
       this.gethomeworkProblemProg();
       this.getHomeworkInfo();
     },
