@@ -329,7 +329,7 @@ export default {
     };
   },
   mounted() {
-    console.log(this.examFormVisible);
+    
   },
   created() {},
   methods: {
@@ -513,7 +513,7 @@ export default {
       }
       console.log(traceList);
       this.$api.exam.examTrace.editChoose(traceList).then((res) =>{
-        console.log(res);
+        // console.log(res);
         if (res.code == 200) {
           this.$message({ message: "保存成功", type: "success" });
         }
@@ -533,7 +533,7 @@ export default {
           languageName: this.itemList.program.contentList[i].languageName,
         })
       }
-      console.log(traceList);
+      // console.log(traceList);
 
       this.$api.exam.examTrace.editChoose(traceList).then((res) =>{
         console.log(res);
@@ -577,7 +577,7 @@ export default {
         remainingTime: this.summary.remainingTime,
       }
       this.$api.exam.examSummary.doneSummary(data).then((res) =>{
-        console.log(res);
+        // console.log(res);
       })
     },
 

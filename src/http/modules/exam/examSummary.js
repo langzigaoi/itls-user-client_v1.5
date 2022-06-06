@@ -32,3 +32,13 @@ export const findSummary = (params) => {
     params
   })
 }
+export const findSummaryResult = (params) => {
+  return axios({
+    url: preUrl + 'result',
+    method: 'get',
+    params
+  })
+}
+
+
+

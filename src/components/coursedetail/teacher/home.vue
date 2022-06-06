@@ -273,7 +273,6 @@ export default {
       isCollapse: false,
       courseProblemTypeList: [], //课程实例题型
       courseInstance: null, //显示再head的信息
-
       allKnowledge: [],
     };
   },
@@ -284,7 +283,7 @@ export default {
       var data = localStorage.getItem("uInfo");
       if (data) data = JSON.parse(data);
       if (data) {
-        console.log("恢复用户数据");
+        // console.log("恢复用户数据");
         this.$store.commit("recoverUserData", data);
       }
     }
@@ -303,8 +302,6 @@ export default {
       localStorage.setItem("CinstanceId", this.$route.query.id);
     }
     this.findACourseInstance();
-
-
     this.getKnowledge( this.$store.state.course.courseId);
   },
   methods: {
@@ -320,7 +317,6 @@ export default {
             .findCourseProblemType(res.data.courseId)
             .then((res1) => {
               this.$store.commit("setcourseProblemTypeList", res1.data);
-
             });
           
           // this.$api.course.courseProblemType.findCourseProblemType(this.courseInstance.courseId).then((res1) => {
@@ -340,7 +336,7 @@ export default {
       return flag;
     },
     toOtherPathWithId(path, id) {
-      console.log(path + "---" + id);
+      // console.log(path + "---" + id);
       this.$router.push({
         path: path,
         query: {
@@ -489,7 +485,7 @@ export default {
       for (let index = 0; index < newDeep2.length; index++) {
         deep2[index].children = newDeep2[index];
       }
-      console.log(deep2);
+      // console.log(deep2);
       this.$store.commit("setknowledge", deep2);
     },
     

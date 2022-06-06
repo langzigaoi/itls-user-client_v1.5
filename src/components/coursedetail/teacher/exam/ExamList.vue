@@ -67,7 +67,7 @@
           <el-row type="flex" justify="center">
             <el-col :span="7"></el-col>
             <el-col :span="18">
-              <el-form-item label="标题" label-width="80px" prop="examName">
+              <el-form-item label="标题" label-width="110px" prop="examName">
                 <el-row type="flex">
                   <el-input
                     style="width: 205px"
@@ -78,7 +78,7 @@
                 </el-row>
               </el-form-item>
 
-              <el-form-item label="类型" label-width="80px" prop="examTypeId">
+              <el-form-item label="类型" label-width="110px" prop="examTypeId">
                 <el-row type="flex">
                   <el-select
                     size="small"
@@ -96,7 +96,7 @@
                 </el-row>
               </el-form-item>
 
-              <el-form-item label="范围" label-width="80px" prop="knowledgeId">
+              <el-form-item label="范围" label-width="110px" prop="knowledgeId">
                 <el-row type="flex">
                   <el-cascader
                     ref="knowledge"
@@ -104,9 +104,8 @@
                     size="mini"
                     style="width: 205px"
                     v-model="addForm.knowledgeId"
-                    placeholder="请选择第一级菜单中的选项"
+                    placeholder="请选择"
                     :options="allKnowledge"
-                    
                     :props="{
                       checkStrictly: true,
                       emitPath: false,
@@ -119,7 +118,7 @@
 
               <el-form-item
                 label="开始时间"
-                label-width="80px"
+                label-width="110px"
                 prop="startTime"
               >
                 <el-row type="flex">
@@ -134,7 +133,7 @@
                   </el-date-picker>
                 </el-row>
               </el-form-item>
-              <el-form-item label="结束时间" label-width="80px" prop="endTime">
+              <el-form-item label="结束时间" label-width="110px" prop="endTime">
                 <el-row type="flex">
                   <el-date-picker
                     style="width: 205px"
@@ -148,6 +147,21 @@
                   </el-date-picker>
                 </el-row>
               </el-form-item>
+              <el-form-item label="成绩公布时间" label-width="110px" prop="resultPubTime">
+                <el-row type="flex">
+                  <el-date-picker
+                    style="width: 205px"
+                    size="small"
+                    align="left"
+                    v-model="addForm.resultPubTime"
+                    type="datetime"
+                    placeholder="选择日期"
+                    :picker-options="pickerOptions"
+                  >
+                  </el-date-picker>
+                </el-row>
+              </el-form-item>
+              
             </el-col>
           </el-row>
           <el-row>
@@ -173,12 +187,12 @@
       style=""
       @close="closeInfoForm"
     >
-      <el-form ref="infoForm" :model="infoForm" :rules="addFormRules">
+      <el-form ref="infoForm" :model="infoForm" :rules="infoFormRules">
         <div>
           <el-row type="flex" justify="center">
             <el-col :span="7"></el-col>
             <el-col :span="18">
-              <el-form-item label="标题" label-width="80px" prop="examName">
+              <el-form-item label="标题" label-width="110px" prop="examName">
                 <el-row type="flex">
                   <el-input
                     style="width: 205px"
@@ -188,7 +202,7 @@
                   ></el-input>
                 </el-row>
               </el-form-item>
-              <el-form-item label="类型" label-width="80px" prop="examTypeId">
+              <el-form-item label="类型" label-width="110px" prop="examTypeId">
                 <el-row type="flex">
                   <el-select
                     size="mini"
@@ -205,7 +219,7 @@
                   </el-select>
                 </el-row>
               </el-form-item>
-              <el-form-item label="范围" label-width="80px" prop="knowledgeId">
+              <el-form-item label="范围" label-width="110px" prop="knowledgeId">
                 <el-row type="flex">
                   <el-cascader
                     ref="knowledge"
@@ -213,17 +227,18 @@
                     size="mini"
                     style="width: 205px"
                     v-model="infoForm.knowledgeId"
-                    placeholder="请选择第一级菜单中的选项"
+                    placeholder="请选择"
                     :options="allKnowledge"
                     :props="{
                       checkStrictly: true,
                       emitPath: false,
                       multiple: true,
                     }"
+                    :clearable="true"
                   ></el-cascader>
                 </el-row>
               </el-form-item>
-              <el-form-item label="总题数" label-width="80px" prop="examName">
+              <el-form-item label="总题数" label-width="110px" prop="examName">
                 <el-row type="flex">
                   <el-input
                     disabled
@@ -234,7 +249,7 @@
                   ></el-input>
                 </el-row>
               </el-form-item>
-              <el-form-item label="总分" label-width="80px" prop="examName">
+              <el-form-item label="总分" label-width="110px" prop="examName">
                 <el-row type="flex">
                   <el-input
                     disabled
@@ -248,7 +263,7 @@
 
               <el-form-item
                 label="开始时间"
-                label-width="80px"
+                label-width="110px"
                 prop="startTime"
               >
                 <el-row type="flex">
@@ -264,7 +279,7 @@
                   </el-date-picker>
                 </el-row>
               </el-form-item>
-              <el-form-item label="结束时间" label-width="80px" prop="endTime">
+              <el-form-item label="结束时间" label-width="110px" prop="endTime">
                 <el-row type="flex">
                   <el-date-picker
                     style="width: 205px"
@@ -278,6 +293,21 @@
                   </el-date-picker>
                 </el-row>
               </el-form-item>
+              <el-form-item label="成绩发布时间" label-width="110px" prop="resultPubTime">
+                <el-row type="flex">
+                  <el-date-picker
+                    style="width: 205px"
+                    size="small"
+                    align="left"
+                    v-model="infoForm.resultPubTime"
+                    type="datetime"
+                    placeholder="选择日期"
+                    :picker-options="pickerOptions"
+                  >
+                  </el-date-picker>
+                </el-row>
+              </el-form-item>
+              
             </el-col>
           </el-row>
           <el-row>
@@ -464,8 +494,26 @@
       <el-form ref="allProblemForm" :model="allProblemForm" >
         <div>
           <el-row>
-            <el-col :span="15" align="left">
-              <el-select 
+            <el-col :span="6" align="left">
+              <el-cascader
+                ref="knowledge"
+                size="mini"
+                style="width: 100%;"
+                :props="{
+                  checkStrictly: true,
+                  emitPath: false, 
+                  multiple: true,
+                  collapse: true,
+                }"
+                :collapse-tags="true"
+                :show-all-levels="false"
+                placeholder="请选择第一级菜单中的选项"
+                :options="allKnowledge"
+                v-model="allProblemForm.knowledgeId"
+                @change="handleSelectedKnowledge"
+              ></el-cascader>
+
+              <!-- <el-select 
                   v-model="selectedKnowledge"
                   @change="handleSelectedKnowledge"
                   size="mini"
@@ -477,7 +525,7 @@
                     :value="item.chapterId"
                 >
                 </el-option>
-              </el-select>
+              </el-select> -->
             </el-col>
           </el-row>
 
@@ -864,11 +912,20 @@ export default {
         knowledgeId: [{ required: true, message: "请选择", trigger: "blur" }],
         startTime: [{ required: true, message: "请选择", trigger: "blur" }],
         endTime: [{ required: true, message: "请选择", trigger: "blur" }],
+        resultPubTime: [{ required: true, message: "请选择", trigger: "blur" }],
+      },
+      infoFormRules: {
+        examName: [{ required: true, message: "请输入", trigger: "blur" }],
+        examTypeId: [{ required: true, message: "请选择", trigger: "blur" }],
+        knowledgeId: [{ required: true, message: "请选择", trigger: "blur" }],
+        startTime: [{ required: true, message: "请选择", trigger: "blur" }],
+        endTime: [{ required: true, message: "请选择", trigger: "blur" }],
+        resultPubTime: [{ required: true, message: "请选择", trigger: "blur" }],
       },
       // 信息设置
       infoFormVisible: false,
       infoForm: {
-        knowledgeId: [],
+        // knowledgeId: "",
       },
       // 题型设置
       allProblemType: [],
@@ -964,12 +1021,20 @@ export default {
           align: "center",
           formatter: this.dateFormat,
         },
+        {
+          prop: "resultPubTime",
+          label: "成绩公布时间",
+          minWidth: 150,
+          align: "center",
+          formatter: this.dateFormat,
+        },
       ],
       chapterList: [],
       pickerOptions: {},
 
       allProblemVisible: false,
       allProblemForm: {
+        knowledgeId: "",
         tableData: [
         ],
       },
@@ -1088,7 +1153,7 @@ export default {
         { name: "isPub", value: this.isPub },
         { name: "typeFlag", value: this.typeFlag}
       ];
-      console.log(this.pageRequest.params);
+      // console.log(this.pageRequest.params);
       this.$api.exam.examSetup
         .findPersonPage(this.pageRequest)
         .then((res) => {
@@ -1149,13 +1214,17 @@ export default {
       this.addForm = {};
     },
     submitAdd() {
-      for (let index = 0; index < this.addForm.knowledgeId.length; index++) {
-        console.log(this.addForm.knowledgeId[index]);
-        this.chapterList.push({ chapterId: this.addForm.knowledgeId[index] });
-      }
-      console.log(this.chapterList);
+      console.log(this.addForm.knowledgeId);
       this.$refs["addForm"].validate((valid) => {
         if (valid) {
+          // 处理考试范围知识点[]
+          let suggests = [];
+          for (let index = 0; index < this.addForm.knowledgeId.length; index++) {
+            suggests.push({ chapterId: this.addForm.knowledgeId[index] });
+          }
+          suggests = this.removeDuplicate(suggests);
+          this.chapterList = JSON.parse(JSON.stringify(suggests));
+          console.log(this.chapterList);
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
             let params = Object.assign({}, this.addForm);
             params.insId = this.$store.state.course.courseCinstanceId;
@@ -1194,40 +1263,53 @@ export default {
         .del(data.params)
         .then(data != null ? data.callback : "");
     },
+    // 除去数组中chapterId值重复的对象
+    // 数组操作
+    removeDuplicate(arr) {
+      const res = new Map();
+      return arr.filter((arr) => !res.has(arr.chapterId) && res.set(arr.chapterId, 1));
+    },
 
     // 信息设置
-    // handleChapterChange() {
-
-    // },
     changeInfoFormVisible(row) {
       this.infoForm = JSON.parse(JSON.stringify(row));
-      console.log(row.chapterOfList);
       // 所选考试范围回显
-      let chapterList = [];
-      for (let index = 0; index < row.chapterOfList.length; index++) {
-        chapterList.push(parseInt(row.chapterOfList[index].chapterId));
+      if ( row.chapterOfList != null && row.chapterOfList != undefined && row.chapterOfList.length > 0) {
+        // console.log("jinlaile");
+        let chapterList = [];
+        for (let index = 0; index < row.chapterOfList.length; index++) {
+          chapterList.push(parseInt(row.chapterOfList[index].chapterId));
+        }
+        console.log(chapterList);
+        this.infoForm.knowledgeId = chapterList;
       }
-      console.log(chapterList);
-      this.infoForm.knowledgeId = chapterList;
+      
       this.infoFormVisible = true;
     },
     closeInfoForm() {
       this.infoFormVisible = false;
       this.$refs.infoForm.resetFields();
       this.infoForm = {
-        knowledgeId: []
+        // knowledgeId: []
       };
       this.chapterList=[];
     },
     submitInfoForm() {
-      console.log(this.infoForm.knowledgeId);
-      for (let index = 0; index < this.infoForm.knowledgeId.length; index++) {
-        console.log(this.infoForm.knowledgeId[index]);
-        this.chapterList.push({ chapterId: this.infoForm.knowledgeId[index] });
+      if (this.infoForm.knowledgeId.length == 0) {
+        this.chapterList = [];
       }
-      console.log(this.chapterList);
       this.$refs["infoForm"].validate((valid) => {
         if (valid) {
+          console.log(this.infoForm.knowledgeId);
+          let suggests = [];
+          for (let index = 0; index < this.infoForm.knowledgeId.length; index++) {
+            suggests.push({ chapterId: this.infoForm.knowledgeId[index] });
+          }
+          suggests = this.removeDuplicate(suggests);
+          // console.log(this.chapterList);
+          this.chapterList = JSON.parse(JSON.stringify(suggests));
+          console.log(this.chapterList);
+
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
             let params = Object.assign({}, this.infoForm);
             params.insId = this.$store.state.course.courseCinstanceId;
@@ -1388,7 +1470,14 @@ export default {
 
     // 题目设置
     handleGenerateChange(row) {
-      console.log(row);
+      // 本考试范围回显 预处理
+      let chapterList = [];
+      for (let index = 0; index < row.chapterOfList.length; index++) {
+        chapterList.push(parseInt(row.chapterOfList[index].chapterId));
+      }
+      console.log(chapterList);
+      this.allProblemForm.knowledgeId = chapterList;
+      // console.log(row);
       //item项回显
       this.examId = row.id;
       this.pageRequest.params = [{ name: "examId", value: this.examId },];
@@ -1396,7 +1485,7 @@ export default {
         .then((res) => {
           // console.log(res);
           if (res.data != null) {
-            console.log(res.data);
+            // console.log(res.data);
             this.viewItemForm.tableData = res.data.content;
             this.viewItemForm.totalSize = res.data.totalSize;
             this.generateForm = JSON.parse(JSON.stringify(row))
@@ -1408,14 +1497,14 @@ export default {
               knowledgeString = knowledgeString + this.knowledgeOption[index].chapterId + ','
             }
             this.allKnowledgeString = knowledgeString;
-            console.log(this.allKnowledgeString);
+            // console.log(this.allKnowledgeString);
           }
           this.generateVisible = true;
        }).catch((err) => {})
     },
     closeGenerateForm() {
       this.generateVisible = false;
-      this.viewItemForm={
+      this.viewIcontenthandleSelectedKnowledgetemForm={
         tableData: [],
       };
       this.generateForm = {};
@@ -1427,9 +1516,7 @@ export default {
       let itemId = row.id;
       this.$api.exam.examContent.findProblemList({itemId:itemId}).then((res) =>{
         console.log(res.data);
-
         let m = 0;
-
         if (res.code == 200) {
           for (let i = 0; i < res.data.length; i++) {
             m++;
@@ -1448,39 +1535,29 @@ export default {
               content.knowledgeName = res.data[i].knowledgeName;
               content.title = res.data[i].program.problemDescription;
               this.previewProblemListForm.tableData.push(content);
-
             }
           }
           console.log(this.previewProblemListForm.tableData);
         }
       })
-
-
-
-
       this.previewProblemListVisible = true;
-
-
     },
     closePreviewProblemListForm() {
       this.previewProblemListVisible = false;
       this.previewProblemListForm = {
         tableData:[],
       };
-
     },
 
-
     changeProblemListVisible(row) {
+      
         console.log(row);
-   
         this.problemListForm.name = row.problemTypeName;
         this.problemListForm.id = row.problemTypeId;
         this.problemListForm.num = row.num;
         this.problemListForm.score = row.score;
         this.problemListForm.itemId = row.id;
         this.problemListForm.examId = row.examId;
-          
         if (row.id != "" && row.id != null && row.id != undefined) {
           this.pageRequest.params = [{ name: "itemId", value: row.id },];
           this.$api.exam.examContent.findList(this.pageRequest)
@@ -1551,12 +1628,7 @@ export default {
             })
           }
         }
-
-        
         console.log(params);
-
-
-
         this.$confirm("确认提交吗？", "提示", {}).then(() => {
           this.$api.exam.examContent.update(params).then((res) => {
             if (res.code == 200) {
@@ -1570,22 +1642,21 @@ export default {
           .catch((err) => {
           })
         });
-
         console.log(this.itemListForm.tableData);
         console.log(this.generateForm);
         this.clearSelections();
-        
       }
-
     },
-
 
     handleSelectedKnowledge(item) {
       console.log(item);
       if (item == "" || item == null || item == undefined) {
         this.knowledgeString = this.allKnowledgeString;
       } else {
-        this.knowledgeString = item;
+        console.log(item);
+        console.log(item.toString());
+        this.knowledgeString = item.toString();
+        console.log(this.knowledgeString);
       }
       //区分题型
       this.findProblemPage(null);
@@ -1644,13 +1715,14 @@ export default {
     },
 
     changeAllProblemVisible() {
-      console.log(this.allProblemType);
-      console.log(this.generateForm);
-      console.log(this.itemListForm);
-      console.log(this.problemListForm);
+      // console.log(this.allProblemType);
+      // console.log(this.generateForm);
+      // console.log(this.itemListForm);
+      // console.log(this.problemListForm);
 
-      console.log(this.knowledgeOption);
-      console.log(this.generateForm.chapterOfList);
+      // console.log(this.knowledgeOption);
+      // console.log(this.generateForm.chapterOfList);
+      // console.log(this.allProblemForm);
 
       // 调用查询题目页面方法
       this.knowledgeString = this.allKnowledgeString
@@ -1663,6 +1735,11 @@ export default {
         selected.push(parseInt(this.problemListForm.tableData[i].problemId));
       }
       console.log(selected);
+      // 考试范围在级联选择器中的回显
+
+
+
+
       this.allProblemVisible = true;
       this.showSelections(selected);
     },

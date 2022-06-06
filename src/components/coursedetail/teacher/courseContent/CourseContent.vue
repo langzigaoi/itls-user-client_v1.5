@@ -23,7 +23,7 @@
               <div>
                 <span
                   style="font-weight: 700; font-size: 1em; padding-right: 10px"
-                  >{{ section.title }}</span
+                  >第{{ section.title }}讲</span
                 >
                 {{ section.content }}
                 <p style="float: right" v-if="section.isPublic === 0">

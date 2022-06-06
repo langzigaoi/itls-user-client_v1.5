@@ -485,7 +485,7 @@ export default {
     findAllTitle() {
       let suggests = [];
       this.$api.metadata.title.findAll().then((res) => {
-        // console.log(res);
+        // console.log(res.data.length);
         for (let index = 0; index < res.data.length; index++) {
           suggests.push({
             value: res.data[index].name,

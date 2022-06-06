@@ -138,7 +138,7 @@
               <el-button
                 size="mini"
                 v-if="showFlag.infoForm == true "
-                :disabled="disableFlag.infoForm == true || scope.row.isPub == 1"
+                :disabled="disableFlag.infoForm == true "
                 @click="openInfoForm(scope.$index, scope.row)"
                 >信息设置</el-button
               >
@@ -218,9 +218,10 @@
           <el-button
               style="width: 40%" size="mini" 
               v-if="showFlag.summary == true"
+              type="primary"
               :disabled="disableFlag.summary == true"
               @click="summary(scope.$index, scope.row)"
-            >考试成绩
+            >成绩查询
           </el-button>
 
 
@@ -453,7 +454,7 @@ export default {
     // 换页刷新
     refreshPageRequest(pageNum) {
       this.pageRequest.pageNum = pageNum;
-      console.log(this.pageRequest.pageNum);
+      // console.log(this.pageRequest.pageNum);
       if (this.flag == "1") {
         this.findPage();
       }

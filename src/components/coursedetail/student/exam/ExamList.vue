@@ -32,14 +32,52 @@
 
     <exam-dialog
       ref="examDialog"
-
     ></exam-dialog>
-    
 
-    
-    
+    <el-dialog
+      top="5vh"
+      align="center"
+      :visible.sync="examSummaryVisible"
+      width="40%"
+      style=""
+      @close="closeExamSummaryForm"
+      title="成绩查询"
+    >
+    <el-form ref="examSummaryForm" :model="examSummaryForm" label-width="50px"  >
+      <el-form-item align="center">
+        <el-row>
+          <el-col :span="10" align="center">
+            <el-row>
+              学号: 
+            </el-row>
+            <el-row>
+              成绩: 
+            </el-row>
+            <el-row>
+              状态: 
+            </el-row>
+          </el-col>
+          <el-col :span="14" align="left">
+            <el-row>
+              {{examSummaryForm.stuNo}}
+            </el-row>
+            <el-row>
+              {{examSummaryForm.score}}
+              <el-tooltip effect="dark" class="item" content="对成绩有疑问请联系任课老师" placement="top-start">
+                <i class="el-icon-info" style="color:#14889A"></i>
+              </el-tooltip>
+            </el-row>
+            <el-row>
+              {{completeFormat(examSummaryForm.isCompleted)}}
+            </el-row>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <el-button type="primary" size="mini" @click="closeExamSummaryForm">确定</el-button>
+    </el-form>
 
-
+    </el-dialog>
+  
   </div>
 </template>
 <script>
@@ -78,16 +116,17 @@ export default {
         // { prop: "num", label: "总题数", minWidth: 100, align: "center", formatter: this.getIsGenerate },
         // { prop: "fraction", label: "总分", minWidth: 100, align: "center", formatter: this.getIsGenerate },
         // { prop: "list", label: "范围", minWidth: 250, align: "center" },
-        { prop: "pubTime",label: "发布时间",minWidth: 100,align: "center",formatter: this.dateFormat},
-        { prop: "startTime",label: "开始时间",minWidth: 100,align: "center",formatter: this.dateFormat},
-        { prop: "endTime",label: "结束时间",minWidth: 100,align: "center",formatter: this.dateFormat},
+        { prop: "resultPubTime",label: "成绩公布时间",minWidth: 110,align: "center",formatter: this.dateFormat},
+        { prop: "startTime",label: "开始时间",minWidth: 110,align: "center",formatter: this.dateFormat},
+        { prop: "endTime",label: "结束时间",minWidth: 110,align: "center",formatter: this.dateFormat},
         { prop: "isCompleted", label: "完成状态", minWidth: 100, align: "center", formatter: this.isCompleted },
       ],
 
       examFormVisible: false,
-      examForm: {
+      examForm: {},
 
-      },
+      examSummaryVisible: false,
+      examSummaryForm: {},
       
     };
   },
@@ -106,7 +145,14 @@ export default {
         return "已完成";
       }
     },
-    
+    completeFormat(flag) {
+      if (flag == 0) {
+        return "缺考";
+      }
+      if(flag == 1) {
+        return "正常"
+      }
+    },
     dateFormat(row, column) {
       return this.timeByMinutes(row[column.property]);
     },
@@ -173,13 +219,38 @@ export default {
 
     changeStartExamVisible(row) {
       console.log(row);
+      let startTime = row.startTime;
+      console.log(startTime);
+      let endTime = row.endTime;
+      let now = Date.parse(new Date());
+      console.log(now);
+      if (now < startTime ) {
+        this.$message({ message: "考试未开始", type: "warning" });
+        return null;
+      }
+      if(now > endTime ) {
+        this.$message({ message: "考试已结束", type: "warning" });
+        return null;
+      }
       this.$api.exam.examSummary.addSummary({examId:row.id});
       this.$refs.examDialog.openExamForm(row);
     },
 
     changeSummaryVisible(row) {
-      console.log(row);
+      let examId = row.id;
+      this.$api.exam.examSummary.findSummaryResult({examId: examId}).then((res) =>{
+        console.log(res);
+        if (res.code == 200) {
+          this.examSummaryForm = JSON.parse(JSON.stringify(res.data));
+          this.examSummaryVisible = true;
+        }
+      })
       
+    },
+    closeExamSummaryForm() {
+      this.examSummaryForm = {};
+      this.examSummaryVisible = false;
+
     },
   
    

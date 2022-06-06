@@ -136,6 +136,7 @@ Vue.prototype.timeByMinutes = function(datetime) {
   return y + '-' + MM + '-' + d + ' ' + h + ':' + m
 }
 
+// 格式校验
 Vue.prototype.isEmail = function(email) {
   return /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/.test(email)
 }
@@ -147,6 +148,7 @@ Vue.prototype.isMobile = function(mobile) {
 Vue.prototype.isInterger = function(str) {
   return /^\d+$/.test(str)
 }
+
 
 
 
