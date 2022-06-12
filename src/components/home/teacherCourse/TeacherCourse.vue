@@ -828,8 +828,8 @@ export default {
         // langlist: [{required: true, message: "请选择", trigger: "blur"}],
         intro: [{required: true, message: "请输入", trigger: "blur"}],
 
-        hoursOfWeek: [{required: true, validator: this.checkHoursOfWeek, trigger: "blur" }],
-        grade: [{required: true, validator: this.checkGrade, trigger: "blur" }],
+        hoursOfWeek: [{required: true,message: "请输入", validator: this.checkHoursOfWeek, trigger: "blur" }],
+        grade: [{required: true,message: "请输入", validator: this.checkGrade, trigger: "blur" }],
       },
       addCourseRules: {
         name: [{required: true, message: "请选择", trigger: "blur"}],
@@ -975,7 +975,7 @@ export default {
     checkHoursOfWeek(rule, value, callback) {
       // console.log(value);
       if (!value) {
-        callback();
+        return callback(new Error())
       } 
       if (this.isInterger(value) && value > 0 ) {
           callback();
@@ -986,10 +986,10 @@ export default {
     checkGrade(rule, value, callback) {
       // console.log(value);
       if (!value) {
-        callback();
+        return callback(new Error())
       } 
       if (value%0.5 ==0 && value > 0) {
-          callback(); 
+        callback(); 
       }
       return callback(new Error("请输入0.5的倍数"));
     },
