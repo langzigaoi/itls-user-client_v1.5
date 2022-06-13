@@ -5,8 +5,8 @@
  import * as choice from './problem/choice'
  import * as filling from './problem/filling'
  import * as judgment from './problem/judgment'
- import * as prog from './problem/prog'
  import * as program from './problem/program'
+ import * as judge from './problem/judge'
  import * as submission from './problem/submission'
  
  
@@ -16,6 +16,6 @@
   filling,
   judgment,
   program,
-  prog,
+  judge,
   submission
  }
