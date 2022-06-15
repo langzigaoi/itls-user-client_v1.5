@@ -531,7 +531,6 @@ export default {
         disableFlag:{
           batchRemove: true,
         },
-
         viewVisible: false,
         viewForm: {},
         editVisible: false,

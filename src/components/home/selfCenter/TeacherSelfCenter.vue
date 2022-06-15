@@ -1,7 +1,5 @@
 <template>
   <div class="content">
-    
-      
       <el-row>
         <el-col :span="5">
           <div style="text-align:center">
@@ -240,7 +238,6 @@
                   align="left"
                   style="width: 205px"
                   v-model="infoForm.entranceYear"
-                  
                   type="date"
                   placeholder="选择日期"
                   :picker-options="pickerOptions"
@@ -497,7 +494,7 @@ export default {
     },
 
     handleAvatarSuccess(res, file) {
-      // console.log("上传成功的回调", res);
+      console.log("上传成功的回调", res);
       this.infoForm.avatar = res.data;
       // console.log(this.infoForm);
     },

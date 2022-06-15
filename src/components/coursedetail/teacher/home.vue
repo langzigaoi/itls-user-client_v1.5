@@ -147,6 +147,12 @@
                   >
                   <i class="el-icon-edit-outline"></i>编程题</el-menu-item
                 >
+                <el-menu-item index="/course/problemjudge" 
+                   style="width: 160px"
+                   v-if="hasProblemType('判断题')"
+                  >
+                  <i class="el-icon-check"></i>判断题</el-menu-item
+                >
 
 
 
@@ -163,12 +169,7 @@
                   >
                   <i class="el-icon-document"></i>填空题</el-menu-item
                 >
-                <el-menu-item index="" 
-                   style="width: 160px"
-                   v-if="hasProblemType('判断题')"
-                  >
-                  <i class="el-icon-check"></i>判断题</el-menu-item
-                >
+                
                 <el-menu-item index="" 
                    style="width: 160px"
                    v-if="hasProblemType('简答题')"

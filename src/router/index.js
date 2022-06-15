@@ -65,6 +65,7 @@ const routes = [
         name: 'StudentCourse',
         component: () => import('@/components/home/studentCourse/StudentCourse'),
       },
+
     ]
   },
 
@@ -130,8 +131,6 @@ const routes = [
         meta: { title: '课程内容' }
       },
 
-
-
       {
         path: 'examList',
         name: 'examList',
@@ -154,6 +153,13 @@ const routes = [
           import('@/components/coursedetail/teacher/problemBank/prog/ProgramList'),
         meta: { title: '题库-编程题列表' }
       },
+      {
+        path: 'problemjudge',
+        name: 'problemjudge',
+        component: () =>
+          import('@/components/coursedetail/teacher/problemBank/judge/judge'),
+        meta: { title: '判断题' }
+      },
 
 
 
@@ -166,13 +172,7 @@ const routes = [
           import('@/components/coursedetail/teacher/problemBank/filling/FillingProblemView'),
         meta: { title: '填空题' }
       },
-      {
-        path: 'problemJudgment',
-        name: 'problemJudgment',
-        component: () =>
-          import('@/components/coursedetail/teacher/problemBank/judgment/JudgmentProblemView'),
-        meta: { title: '判断题' }
-      },
+      
       {
         path: 'JudgmentExcel',
         name: 'JudgmentExcel',
