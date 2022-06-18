@@ -775,7 +775,7 @@ export default {
         { name: "knowledgeId", value: this.knowledgeId },
       ];
       // console.log(this.pageRequest);
-      this.$api.problem.prog
+      this.$api.problem.program
         .findPage(this.pageRequest)
         .then((res) => {
             console.log(res.data);
@@ -800,7 +800,7 @@ export default {
         { name: "knowledgeId", value: "" },
         { name: "status", value: this.statu },
       ];
-      this.$api.problem.prog
+      this.$api.problem.program
         .findPerPage(this.pageRequest)
         .then((res) => {
             if(res.data == null) {
@@ -834,7 +834,7 @@ export default {
               params.courseId =  this.$store.state.course.courseId;
               params.knowledgeId = this.knowledgeId;
               // console.log(params);
-              this.$api.problem.prog.add(params).then((res) => {
+              this.$api.problem.program.add(params).then((res) => {
                 if (res.code == 200) {
                   this.$message({ message: "操作成功", type: "success" });
                   this.closeAddForm();
@@ -883,7 +883,7 @@ export default {
               params.courseId =  this.$store.state.course.courseId;
               params.knowledgeId = this.knowledgeId;
               // console.log(params);
-              this.$api.problem.prog.update(params).then((res) => {
+              this.$api.problem.program.update(params).then((res) => {
                 if (res.code == 200) {
                   this.$message({ message: "操作成功", type: "success" });
                   this.closeEditForm();
@@ -905,7 +905,7 @@ export default {
 
     handleRemove(data){
         console.log(data.params);
-        this.$api.problem.prog.del(data.params)
+        this.$api.problem.program.del(data.params)
         .then(data != null ? data.callback : "");
     },
 

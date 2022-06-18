@@ -277,8 +277,14 @@ export default {
       allKnowledge: [],
     };
   },
-  computed: {},
+  computed: {
+    
+  },
+  created() {
+    
+  },
   mounted() {
+    console.log(this.$route.query.id);
     // 刷新时获取用户数据
     if (!this.$store.state.user.userInfo.isLogin) {
       var data = localStorage.getItem("uInfo");
@@ -303,7 +309,8 @@ export default {
       localStorage.setItem("CinstanceId", this.$route.query.id);
     }
     this.findACourseInstance();
-    this.getKnowledge( this.$store.state.course.courseId);
+    
+    
   },
   methods: {
     //获取课程实例详情 显示head里面
@@ -312,8 +319,12 @@ export default {
         .findCourseInstance({ id: this.$store.state.course.courseCinstanceId })
         .then((res) => {
           this.courseInstance = res.data;
+          console.log(this.courseInstance.courseId);
           // 存放课程id
           this.$store.commit("setcourseId", this.courseInstance.courseId);
+          // 查询知识点
+          this.getKnowledge(this.courseInstance.courseId);
+
           this.$api.course.courseProblemType
             .findCourseProblemType(res.data.courseId)
             .then((res1) => {
@@ -397,6 +408,7 @@ export default {
       return arr1;
     },
     async getKnowledge(params) {
+      console.log(params);
       let deep1 = [];
       let deep2 = [];
       let deep3 = [];
@@ -406,7 +418,7 @@ export default {
       await this.$api.knowledge.knowledge
         .findList({ courseId: params })
         .then((res) => {
-          // console.log(res);
+          console.log(res);
           let data = res.data;
           
           for (let index = 0; index < data.length; index++) {
@@ -486,7 +498,8 @@ export default {
       for (let index = 0; index < newDeep2.length; index++) {
         deep2[index].children = newDeep2[index];
       }
-      // console.log(deep2);
+      console.log("在查");
+      console.log(deep2);
       this.$store.commit("setknowledge", deep2);
     },
     

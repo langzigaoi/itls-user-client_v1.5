@@ -1078,13 +1078,13 @@ export default {
     };
   },
   mounted() {
-    this.allKnowledge = JSON.parse(JSON.stringify(this.$store.state.course.knowledge));
     this.findAllExamType();
     this.findAllProblemType();
     this.findAllObjectiveType();
 
   },
   created() {
+    this.allKnowledge = JSON.parse(JSON.stringify(this.$store.state.course.knowledge));
     this.$nextTick(() => {
       // 禁用右键
       document.oncontextmenu = new Function("event.returnValue=false");
@@ -1550,7 +1550,6 @@ export default {
     },
 
     changeProblemListVisible(row) {
-      
         console.log(row);
         this.problemListForm.name = row.problemTypeName;
         this.problemListForm.id = row.problemTypeId;
@@ -1727,7 +1726,7 @@ export default {
       // 调用查询题目页面方法
       this.knowledgeString = this.allKnowledgeString
       console.log(this.knowledgeString);
-      this.findProblemPage(null);
+      // this.findProblemPage(null);
       // 已有题目在选题表格中的回显
       console.log(this.problemListForm.tableData);
       let selected = [];
