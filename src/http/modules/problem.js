@@ -4,9 +4,9 @@
 
  import * as choice from './problem/choice'
  import * as filling from './problem/filling'
- import * as judgment from './problem/judgment'
- import * as program from './problem/program'
  import * as judge from './problem/judge'
+ import * as program from './problem/program'
+ import * as judger from './problem/judger'
  import * as submission from './problem/submission'
  
  
@@ -14,8 +14,8 @@
  export {
   choice,
   filling,
-  judgment,
-  program,
   judge,
+  program,
+  judger,
   submission
  }

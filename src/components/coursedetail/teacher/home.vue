@@ -147,9 +147,10 @@
                   >
                   <i class="el-icon-edit-outline"></i>编程题</el-menu-item
                 >
-                <el-menu-item index="/course/problemjudge" 
-                   style="width: 160px"
+                <el-menu-item index="/course/judge"
                    v-if="hasProblemType('判断题')"
+                   style="width: 160px"
+                   @click="toOtherPathWithId('/course/judge', $route.query.id)"
                   >
                   <i class="el-icon-check"></i>判断题</el-menu-item
                 >

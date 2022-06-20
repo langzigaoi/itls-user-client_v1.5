@@ -687,6 +687,48 @@
                     </el-row>
                 </el-form-item>
 
+                <!--判断题特有字段-->
+                <el-form-item v-if="viewProblemForm.title"
+                              label="题干" label-width="80px" prop="title">
+                  <el-row type="flex">
+                    <el-input
+                        onfocus="this.blur();"
+                        style="textarea"
+                        :rows="4"
+                        size="mini"
+                        type="textarea"
+                        v-model="viewProblemForm.title"
+                        placeholder="请输入内容"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+                <el-form-item label="答案" label-width="80px" prop="answer"
+                              v-if="viewProblemForm.answer">
+                  <el-row type="flex">
+                    <el-input
+                        onfocus="this.blur();"
+                        type="textarea"
+                        :rows="4"
+                        v-model="viewProblemForm.answer"
+                        auto-complete="off"
+                        size="mini"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+                <el-form-item label="解析" label-width="80px" prop="analysis"
+                              v-if="viewProblemForm.analysis">
+                  <el-row type="flex">
+                    <el-input
+                        onfocus="this.blur();"
+                        type="textarea"
+                        :rows="4"
+                        v-model="viewProblemForm.analysis"
+                        auto-complete="off"
+                        size="mini"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+
                 <!--编程题特有字段-->
                 <el-form-item label="名称" label-width="80px" prop="problemName" 
                       v-if="viewProblemForm.problemName">
@@ -1051,6 +1093,11 @@ export default {
       programColumns: [
          { prop: "knowledgeName", label: "知识点", minWidth: 150, align: "center" },
          { prop: "problemId", label: "problemId", minWidth: 250, align: "center" },
+      ],
+      judgeColumns: [
+        { prop: "knowledgeName", label: "知识点", minWidth: 150, align: "center" },
+        { prop: "title", label: "题干", minWidth: 250, align: "center" },
+        { prop: "id", label: "id", minWidth: 250, align: "center" },
       ],
 
       // 查看单个题目表单
@@ -1536,6 +1583,14 @@ export default {
               content.title = res.data[i].program.problemDescription;
               this.previewProblemListForm.tableData.push(content);
             }
+            if (res.data[i].problemTypeName == "判断题") {
+              let content = {};
+              content.id = res.data[i].id;
+              content.index = m;
+              content.knowledgeName = res.data[i].knowledgeName;
+              content.title = res.data[i].judge.title;
+              this.previewProblemListForm.tableData.push(content);
+            }
           }
           console.log(this.previewProblemListForm.tableData);
         }
@@ -1627,6 +1682,19 @@ export default {
             })
           }
         }
+        //判断题
+        if(this.problemListForm.id == 3) {
+          for (let i = 0; i < this.problemListForm.tableData.length; i++) {
+            params.push({
+              itemId: this.problemListForm.itemId,
+              problemId: this.problemListForm.tableData[i].id,
+              problemTypeId: this.problemListForm.id,
+              score: this.problemListForm.tableData[i].score,
+              knowledgeName: this.problemListForm.tableData[i].knowledgeName,
+              examId: this.problemListForm.examId,
+            })
+          }
+        }
         console.log(params);
         this.$confirm("确认提交吗？", "提示", {}).then(() => {
           this.$api.exam.examContent.update(params).then((res) => {
@@ -1706,7 +1774,24 @@ export default {
               // this.findPage(null);
         })
         .then(data != null ? data.callback : "");
-      } 
+      }
+      if (lable == "判断题") {
+        this.$api.problem.judge
+            .findByKid(this.pageRequest)
+            .then((res) => {
+              if(res.data !== null) {
+                this.problemColumns = [...this.judgeColumns]
+                console.log(res.data);
+                this.allProblemForm.tableData = res.data;
+              }
+              console.log(this.knowledgeOption);
+            }).catch(err => {
+          this.selectedKnowledge = "";
+          // this.knowledgeString = "";
+          // this.findPage(null);
+        })
+            .then(data != null ? data.callback : "");
+      }
       // console.log(this.pageRequest);
     },
     showSelections(list) {
@@ -1932,15 +2017,24 @@ export default {
           }
         })
       }
-
+      if (problemTypeName == "判断题" || problemTypeId == 3) {
+        console.log("jinlaile");
+        // 判断题
+        this.$api.problem.judge.findById({id:problemId}).then((res) => {
+          console.log(res.data);
+          if (res.data != null) {
+            this.viewProblemForm = JSON.parse(JSON.stringify(res.data))
+            this.viewProblemVisible = true;
+          }
+        })
+      }
+F
       
     },
     closeViewProblemForm() {
       this.viewProblemVisible = false;
       this.viewProblemForm = {};
     },
-
-
 
 
     

@@ -25,7 +25,7 @@
               style="min-width: auto;"><span>选择题</span></el-menu-item>
             <el-menu-item v-if="hasMenu('/course')" index="/problemBank/problemFilling"
               style="min-width: auto;"><span>填空题</span></el-menu-item>
-            <el-menu-item v-if="hasMenu('/course')" index="/problemBank/problemJudgment"
+            <el-menu-item v-if="hasMenu('/course')" index="/problemBank/problemJudge"
               style="min-width: auto;"><span>判断题</span></el-menu-item>
             <el-menu-item v-if="hasMenu('/course')" index="/problemBank/problemProg" style="min-width: auto;"><span>编程题</span></el-menu-item>
             <el-menu-item v-if="hasMenu('/course')" index="/problemBank/problemProgram" style="min-width: auto;"><span>编程题lgy</span></el-menu-item>

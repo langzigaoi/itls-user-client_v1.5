@@ -15,6 +15,16 @@ export const findProblemChoice = (params) => {
   })
 }
 
+// 根据知识点获取对应的所有判断题
+export const findProblemJudge = (params) => {
+    console.log(params);
+    return axios({
+        url: preUrl + 'findProblemJudge',
+        method: 'get',
+        params,
+    })
+}
+
 // 将生成的测试传给后端
 
 export const addTest = (params) => {

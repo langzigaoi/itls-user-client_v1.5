@@ -154,11 +154,11 @@ const routes = [
         meta: { title: '题库-编程题列表' }
       },
       {
-        path: 'problemjudge',
-        name: 'problemjudge',
+        path: 'judge',
+        name: 'judge',
         component: () =>
           import('@/components/coursedetail/teacher/problemBank/judge/judge'),
-        meta: { title: '判断题' }
+        meta: { title: '题库-判断题列表' }
       },
 
 
