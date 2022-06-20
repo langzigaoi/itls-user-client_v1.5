@@ -524,7 +524,7 @@ export default {
         // 设置需显示和禁用的标记
         showFlag:{
           view: true,
-          batchRemove:true,
+          batchRemove:false,
           editProblem: true,
           removeProblem: true,
         },
@@ -576,12 +576,13 @@ export default {
     },
     handleChangeFlag() {
         if( this.flag == "1") {
-            this.showFlag.batchRemove = false;
+          this.showFlag.batchRemove = false;
             this.findPage(null);
         }
         if( this.flag == "2") {
-            this.showFlag.batchRemove = true;
-            this.findPersonPage(null);
+          this.showFlag.batchRemove = true;
+          this.disableFlag.batchRemove = false;
+          this.findPersonPage(null);
         }
     },
     // 分页查询

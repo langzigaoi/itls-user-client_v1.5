@@ -702,14 +702,13 @@ export default {
         // 设置需显示和禁用的标记
         showFlag:{
           view: true,
-          batchRemove:true,
+          batchRemove:false,
           editProblem: true,
           removeProblem: true,
         },
         disableFlag:{
-          batchRemove: true,
+          batchRemove: false,
         },
-
 
         viewVisible: false,
         viewForm: {},
@@ -758,10 +757,12 @@ export default {
     handleChangeFlag() {
         if( this.flag == "1") {
           this.showFlag.batchRemove = false;
+          this.disableFlag.batchRemove = true;
           this.findPage(null);
         }
         if( this.flag == "2") {
           this.showFlag.batchRemove = true;
+          this.disableFlag.batchRemove = false;
           this.findPersonPage(null);
         }
     },
