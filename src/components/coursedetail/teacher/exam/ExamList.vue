@@ -1671,6 +1671,7 @@ export default {
         }
         // 编程题
         if(this.problemListForm.id == 7) {
+          console.log(this.problemListForm.tableData);
           for (let i = 0; i < this.problemListForm.tableData.length; i++) {
             params.push({
               itemId: this.problemListForm.itemId,
@@ -1760,7 +1761,7 @@ export default {
         .then(data != null ? data.callback : "");
       }
       if (lable == "编程题") {
-        this.$api.problem.prog.findByKid(this.pageRequest)
+        this.$api.problem.program.findByKid(this.pageRequest)
         .then((res) => {
             if(res.data !== null) {
                 this.problemColumns = [...this.programColumns]
@@ -1811,7 +1812,7 @@ export default {
       // 调用查询题目页面方法
       this.knowledgeString = this.allKnowledgeString
       console.log(this.knowledgeString);
-      // this.findProblemPage(null);
+      this.findProblemPage(null);
       // 已有题目在选题表格中的回显
       console.log(this.problemListForm.tableData);
       let selected = [];
@@ -2009,7 +2010,7 @@ export default {
       }
       if (problemTypeName == "编程题" || problemTypeId == 7) {
         // 编程题
-        this.$api.problem.prog.findByProblemId({problemId:problemId}).then((res) =>{
+        this.$api.problem.program.findByProblemId({problemId:problemId}).then((res) =>{
           console.log(res.data);
           if (res.data != null) {
             this.viewProblemForm = JSON.parse(JSON.stringify(res.data))
@@ -2028,7 +2029,6 @@ export default {
           }
         })
       }
-F
       
     },
     closeViewProblemForm() {
