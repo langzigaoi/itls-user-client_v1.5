@@ -160,6 +160,13 @@ const routes = [
           import('@/components/coursedetail/teacher/problemBank/judge/judge'),
         meta: { title: '题库-判断题列表' }
       },
+      {
+        path: 'multiChoice',
+        name: 'multiChoice',
+        component: () =>
+            import('@/components/coursedetail/teacher/problemBank/multichoice/MultiChoice'),
+        meta: { title: '题库-多选题列表' }
+      },
 
 
 

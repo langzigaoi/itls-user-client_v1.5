@@ -154,16 +154,17 @@
                   >
                   <i class="el-icon-check"></i>判断题</el-menu-item
                 >
-
-
-
-                <el-menu-item
-                  index=""
-                  style="width: 160px"
-                  v-if="hasProblemType('多选题')"
-                  >
+                <el-menu-item index="/course/multiChoice"
+                   v-if="hasProblemType('多选题')"
+                   style="width: 160px"
+                   @click="toOtherPathWithId('/course/multiChoice', $route.query.id)"
+                >
                   <i class="el-icon-thumb"></i>多选题</el-menu-item
                 >
+
+
+
+
                 <el-menu-item index="/course/problemFilling" 
                    style="width: 160px"
                    v-if="hasProblemType('填空题')"

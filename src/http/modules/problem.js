@@ -6,6 +6,7 @@
  import * as filling from './problem/filling'
  import * as judge from './problem/judge'
  import * as program from './problem/program'
+ import * as multichoice from './problem/multichoice'
  import * as judger from './problem/judger'
  import * as submission from './problem/submission'
  
@@ -16,6 +17,7 @@
   filling,
   judge,
   program,
+  multichoice,
   judger,
   submission
  }
