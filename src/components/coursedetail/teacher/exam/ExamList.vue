@@ -1132,12 +1132,12 @@ export default {
   },
   created() {
     this.allKnowledge = JSON.parse(JSON.stringify(this.$store.state.course.knowledge));
-    this.$nextTick(() => {
-      // 禁用右键
-      document.oncontextmenu = new Function("event.returnValue=false");
-      // 禁用选择
-      document.onselectstart = new Function("event.returnValue=false");
-    });
+    // this.$nextTick(() => {
+    //   // 禁用右键
+    //   document.oncontextmenu = new Function("event.returnValue=false");
+    //   // 禁用选择
+    //   document.onselectstart = new Function("event.returnValue=false");
+    // });
   },
   methods: {
     // 元数据及处理
@@ -1993,11 +1993,10 @@ export default {
 
       let problemTypeName = this.problemListForm.name;
       let problemTypeId = row.problemTypeId;
-      let problemId = row.problemId;
-
-      console.log(problemId);
 
       if (problemTypeName == "单选题" || problemTypeId == 1) {
+        // 参数获取(由于不同题型的id字段不同，故条件选择后再获取)
+        let problemId = row.id;
         console.log("jinlaile");
         // 选择题
         this.$api.problem.choice.findById({id:problemId}).then((res) => {
@@ -2009,6 +2008,7 @@ export default {
         }) 
       }
       if (problemTypeName == "编程题" || problemTypeId == 7) {
+        let problemId = row.problemId;
         // 编程题
         this.$api.problem.program.findByProblemId({problemId:problemId}).then((res) =>{
           console.log(res.data);
@@ -2019,6 +2019,7 @@ export default {
         })
       }
       if (problemTypeName == "判断题" || problemTypeId == 3) {
+        let problemId = row.id;
         console.log("jinlaile");
         // 判断题
         this.$api.problem.judge.findById({id:problemId}).then((res) => {

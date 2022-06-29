@@ -410,9 +410,14 @@ export default {
             // console.log(suggests[i]);
 
             if (suggests[i].problemTypeName == "单选题") {
+              // console.log("单选题");
+
               suggests[i].index = index;
                await this.$api.exam.examContent.findStudentContent({ itemId: suggests[i].id }).then((res) => {
                 suggests[i].contentList = res.data;
+                console.log(res.data);
+
+                // console.log(suggests[i].contentLis);
                 // 处理选项
                 for (let m = 0; m < suggests[i].contentList.length; m++) {
                   let optionString =  suggests[i].contentList[m].choice.options.toString();
@@ -467,7 +472,6 @@ export default {
               })
               this.itemTab.choose = true;
               this.examForm.itemSize = index;
-              // console.log("我是单选题");
               continue;
             }
 
