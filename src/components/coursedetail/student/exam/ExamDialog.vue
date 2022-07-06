@@ -416,51 +416,25 @@ export default {
                await this.$api.exam.examContent.findStudentContent({ itemId: suggests[i].id }).then((res) => {
                 suggests[i].contentList = res.data;
                 console.log(res.data);
-
                 // console.log(suggests[i].contentLis);
                 // 处理选项
+                var sep = ["A.","B.","C.","D.","E.","F.","G.",]
                 for (let m = 0; m < suggests[i].contentList.length; m++) {
                   let optionString =  suggests[i].contentList[m].choice.options.toString();
                   let optionList = [];
-                  let first = optionString.split("A.");
-                  if (first.length == 2) {
-                    // console.log(first);
-                    var second = first[1].split("B.");
-                    if (second.length == 2) {
-                      //A选项
-                      optionList.push({
-                        title:"A."+second[0].trim(),
-                        index: "A" 
-                      });
-                      var third = second[1].split("C.")
-                      if (third.length == 2) {
-                        //B选项
-                        optionList.push({
-                          title:"B."+third[0].trim(),
-                          index: "B"
-                        });
-                        var forth = third[1].split("D.");
-                        if (forth.length == 2) {
-                          optionList.push({
-                            title:"C."+forth[0].trim(),
-                            index: "C" 
-                          });
-                          var fifth = forth[1].split("E.");
-                          optionList.push({
-                            title: "D."+fifth[0].trim(),
-                            index: "D"
-                          });
-                          if (fifth.length == 2) {
-                            var sixth = fifth[1].split("F.")
-                            optionList.push({
-                              title: "E."+sixth[0].trim(),
-                              index: "E"
-                            });
-                          }  
-                        }
-                      }
+                  for (let n = 0; n < sep.length; n++) {
+                    console.log(sep[n]);
+                    var list = this.splitString(optionString,sep[n]);
+                    if(n != 0 ) {
+                      optionList.push({title: sep[n-1]+list[0].trim(), index:sep[n-1]});
+                    }
+                    if (list.length != 1) {
+                      optionString = list[1];
+                    } else {
+                      break
                     }
                   }
+                  // console.log(optionList);
                   suggests[i].contentList[m].optionList = optionList;
                   indexNum = indexNum +1;
                   // console.log("单选"+indexNum);
@@ -472,6 +446,7 @@ export default {
               })
               this.itemTab.choose = true;
               this.examForm.itemSize = index;
+              console.log("123123");
               continue;
             }
 
@@ -494,6 +469,14 @@ export default {
           }
         }
       }).catch((err) =>{})
+    },
+
+    handleChoiceOption(str) {
+      let optionString = str;
+      let list = [];
+
+
+
     },
 
     findContentList(itemId) {
