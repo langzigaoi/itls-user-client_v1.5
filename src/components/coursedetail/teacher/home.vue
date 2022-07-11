@@ -112,12 +112,12 @@
                 >
               </el-submenu> -->
 
-              <!-- <el-menu-item
+              <el-menu-item
                 index="/studycourse/courseExperiment"
                 style="width: 160px"
                 ><i class="el-icon-suitcase"></i>
                 <span> 课程实验</span>
-              </el-menu-item> -->
+              </el-menu-item>
 
               <el-menu-item
                 index="/course/examList"

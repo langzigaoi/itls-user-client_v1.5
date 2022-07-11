@@ -10,24 +10,32 @@
     >
       <div style="">
         <el-row>
-          <el-tabs
-            v-model="itemTabFlag"
-            @tab-click="handleChangeTab"
-            style="width: 50%; float: left; font-size: 18px"
-          >
-            <el-tab-pane label="考试须知" name="0"></el-tab-pane>
-            <el-tab-pane
-              v-if="itemTab.choose == true"
-              label="单选题"
-              name="1"
-            ></el-tab-pane>
-            <el-tab-pane
-              v-if="itemTab.program == true"
-              label="编程题"
-              name="2"
-            ></el-tab-pane>
+          <el-col :span="12">
+            <el-tabs
+              v-model="itemTabFlag"
+              style="width: 50%; float: left; font-size: 18px"
+            >
+              <el-tab-pane label="考试须知" name="0"></el-tab-pane>
+              <el-tab-pane
+                v-if="itemTab.choose == true"
+                label="单选题"
+                name="1"
+              ></el-tab-pane>
+              <el-tab-pane
+                v-if="itemTab.program == true"
+                label="编程题"
+                name="2"
+              ></el-tab-pane>
           </el-tabs>
+          </el-col>
+
+          <el-col :span="12">
+            <CountDown v-if="this.summary.isCompleted == 0" :countTime="countTime" @handleTimeout="handleTimeout"></CountDown>
+          </el-col>
+          
+
         </el-row>
+        
 
         <el-row>
           <!--考试须知-->
@@ -40,6 +48,7 @@
                       examForm.examTypeName
                     }}
                   </h3>
+                  
                 </el-col>
               </el-row>
             </div>
@@ -66,7 +75,7 @@
                     {{ dateFormat(examForm.endTime) }}
                   </el-row>
                   <el-row class="row">
-                    {{ (examForm.endTime - examForm.startTime) / 3600000 }}小时
+                    {{examForm.duration}}分钟
                   </el-row>
                 </el-col>
               </el-row>
@@ -147,12 +156,9 @@
                         <h4>输出格式:</h4>
                         <span>{{ content.program.problemOutputFormat }}</span>
                         <br/>
-                      <!-- </div> -->
-
-                      
+                      <!-- </div> -->   
                     </el-col>
 
-                    
                     <el-col :span="12">
                       <el-row>
                         <el-col :span="12">
@@ -181,9 +187,7 @@
                             </el-option>
                           </el-select>
                         </el-col>
-
                       </el-row>
-
                       <codemirror v-model="content.answer" :options="cmOptions"></codemirror>
                     </el-col>
 
@@ -201,53 +205,24 @@
           text-algin="center"
         >
           <el-row>
-            <el-col :span="5" align="left">
-              <el-button size="mini"  @click="closeExamForm">离开 </el-button>
-            </el-col>
-
-            <el-col :span="14" align="center">
-              <!--保存选择题-->
-              <el-button size="mini" type="primary"
-                v-if="itemTabFlag == 1" 
-                @click="saveChoose"
-                :disabled="this.summary.isCompleted == 1">
-                保存
-              </el-button>
-
-              <!--保存编程题-->
-              <!-- <el-button size="mini" 
-                v-if="itemTabFlag == 2" @click="lastProgram">
-                上一题
-              </el-button> -->
-              <el-button size="mini" type="primary"
-                v-if="itemTabFlag == 2" 
-                @click="saveProgram"
-                :disabled="this.summary.isCompleted == 1">
-                保存
-              </el-button>
-              <!-- <el-button size="mini" 
-                v-if="itemTabFlag == 2" @click="nextProgram">
-                下一题
-              </el-button> -->
-            </el-col>
-
-            <el-col :span="5" align="right">
-              <el-button size="mini" 
-                type="danger"
-                v-if="itemTabFlag != 0" 
-                @click="doneSummary"
-                :disabled="this.summary.isCompleted == 1">
-                提交
-              </el-button>
-            </el-col>
-            
+            <el-button size="mini" v-if="this.summary.isCompleted == 1"
+              @click="closeExamForm">离开 </el-button>
+            <el-button size="mini" 
+              type="danger"
+              v-if="itemTabFlag != 0" 
+              @click="doneSummary"
+              :disabled="this.summary.isCompleted == 1">
+              提交
+            </el-button>            
           </el-row>
         </el-form>
+
       </div>
     </el-dialog>
   </div>
 </template>
 <script>
+import CountDown from "./CountDown.vue";
 import { codemirror } from "vue-codemirror";
 import "codemirror/lib/codemirror.css";
 import 'codemirror/theme/base16-dark.css'
@@ -257,6 +232,7 @@ import 'codemirror/mode/javascript/javascript.js'
 export default {
   components: {
     codemirror,
+    CountDown,
   },
   props: {},
   data() {
@@ -267,7 +243,6 @@ export default {
 
       examForm: {
         itemSize: null,
-        
       },
       summary: {
         isCompleted: 0,
@@ -285,6 +260,10 @@ export default {
       },
 
       contentList: [],
+      countTime: {
+        minute: null,
+        second: null
+      },
 
       cmOptions: {
         mode: "text/javascript",
@@ -329,9 +308,11 @@ export default {
     };
   },
   mounted() {
-    
+    // this.findSummary();
   },
-  created() {},
+  created() {
+    // this.findSummary();
+  },
   methods: {
     indexFormat(index) {
       switch (index) {
@@ -356,50 +337,48 @@ export default {
     async openExamForm(exam) {
       this.examForm = JSON.parse(JSON.stringify(exam));
       console.log(this.examForm);
-      this.findSummary(this.examForm.id);
+      await this.findSummary(this.examForm.id);
       await this.findItemList(this.examForm.id);
-      console.log(this.itemList.program);
-
-
+      // console.log(this.itemList.program);
       this.examFormVisible = true;
     },
 
-    findSummary(examId) {
+    async findSummary(examId) {
       this.$api.exam.examSummary.findSummary({examId:examId}).then((res) =>{
         console.log(res);
         this.summary.isCompleted = res.data.isCompleted;
         this.summary.remainingTime = res.data.remainingTime;
+        // 倒计时时间
+        // this.countTime.minute = res.data.remainingTime;
+        if (this.summary.isCompleted != 1 ) {
+          this.countTime.minute = res.data.remainingTime;
+          this.countTime.second = 0;
+        }
+
+
 
       })
-
     },
-
     closeExamForm() {
-      // this.updateSummary();
-      this.$confirm("确认离开吗？", "提示", {}).then(() => {
-        this.examForm = {};
-        this.itemList = {
-          choose: {},
-          program: {},
-        };
-        this.itemTab ={
-          choose: false,
-          program: false,
-        };
+      this.examForm = {};
+      this.itemList = {
+        choose: {},
+        program: {},
+      };
+      this.itemTab ={
+        choose: false,
+        program: false,
+      };
+      this.examFormVisible = false;
 
-        this.examFormVisible = false;
-      });
+      this.countTime.minute = 999; 
     },
-
-    handleChangeTab() {},
-
 
     async findItemList(examId) {
-
       this.pageRequest.params = [{ name: "examId", value: examId }];
       await this.$api.exam.examItem.findList(this.pageRequest).then(async (res) => {
         if (res.data != null) {
-          console.log(res.data.content);
+          // console.log(res.data.content);
           // 循环查询结果，获取题型list
           let suggests = res.data.content;
           let index = 0;
@@ -408,14 +387,11 @@ export default {
           for (let i = 0; i < suggests.length; i++) {
             index = index + 1;
             // console.log(suggests[i]);
-
             if (suggests[i].problemTypeName == "单选题") {
-              // console.log("单选题");
-
               suggests[i].index = index;
                await this.$api.exam.examContent.findStudentContent({ itemId: suggests[i].id }).then((res) => {
                 suggests[i].contentList = res.data;
-                console.log(res.data);
+                // console.log(res.data);
                 // console.log(suggests[i].contentLis);
                 // 处理选项
                 var sep = ["A.","B.","C.","D.","E.","F.","G.",]
@@ -423,10 +399,9 @@ export default {
                   let optionString =  suggests[i].contentList[m].choice.options.toString();
                   let optionList = [];
                   for (let n = 0; n < sep.length; n++) {
-                    console.log(sep[n]);
                     var list = this.splitString(optionString,sep[n]);
                     if(n != 0 ) {
-                      optionList.push({title: sep[n-1]+list[0].trim(), index:sep[n-1]});
+                      optionList.push({title: sep[n-1]+list[0].trim(), index:sep[n-1].replace(".","")});
                     }
                     if (list.length != 1) {
                       optionString = list[1];
@@ -442,11 +417,9 @@ export default {
                 }
                 this.itemList.choose = JSON.parse(JSON.stringify(suggests[i]));
                 // console.log(this.itemList.choose);
-                
               })
               this.itemTab.choose = true;
               this.examForm.itemSize = index;
-              console.log("123123");
               continue;
             }
 
@@ -471,101 +444,102 @@ export default {
       }).catch((err) =>{})
     },
 
-    handleChoiceOption(str) {
-      let optionString = str;
-      let list = [];
-
-
-
-    },
-
-    findContentList(itemId) {
-      this.$api.exam.examContent
-        .findProblemList({ itemId: itemId })
-        .then((res) => {
-          return res.data;
-        });
-    },
-
-    // 保存选择题
-    saveChoose() {
+    doneSummary() {
       console.log(this.itemList.choose.contentList);
-      // 处理答案
+      let examId = this.examForm.id;
+      // 构造traceList
       let traceList = [];
-      for (let i = 0; i < this.itemList.choose.contentList.length; i++) {
-        traceList.push({
-          contentId: this.itemList.choose.contentList[i].id,
-          answer: this.itemList.choose.contentList[i].answer,
-        })
+      // 处理选择题
+      if (this.itemTab.choose == true && this.itemList.choose.contentList != null && this.itemList.choose.contentList != undefined) {
+        for (let i = 0; i < this.itemList.choose.contentList.length; i++) {
+          traceList.push({
+            contentId: this.itemList.choose.contentList[i].id,
+            answer: this.itemList.choose.contentList[i].answer,
+          })
+        }
+      }
+      // 处理编程题
+      if (this.itemTab.program == true && this.itemList.program.contentList != null && this.itemList.program.contentList != undefined) {
+        for (let i = 0; i < this.itemList.program.contentList.length; i++) {
+          traceList.push({
+            problemId: this.itemList.program.contentList[i].problemId,
+            contentId: this.itemList.program.contentList[i].id,
+            answer: this.itemList.program.contentList[i].answer,
+            languageName: this.itemList.program.contentList[i].languageName,
+          })
+        }
       }
       console.log(traceList);
-      this.$api.exam.examTrace.editChoose(traceList).then((res) =>{
-        // console.log(res);
-        if (res.code == 200) {
-          this.$message({ message: "保存成功", type: "success" });
-        }
+      this.$confirm("提交后不可修改, 确认提交吗？", "提示", {}).then(() => {
+        this.$api.exam.examTrace.edit(traceList).then((res) =>{
+          // console.log(res);
+          if (res.code == 200) {
+            this.$message({ message: "提交成功", type: "success" });
+            // 处理examSummary
+            let data = {
+              examId: examId,
+              remainingTime: this.summary.remainingTime,
+            }
+            this.$api.exam.examSummary.doneSummary(data).then((res) =>{
+              // console.log(res);
+              this.closeExamForm();
+            })
+          }
+          
+        }).catch((err) => { });
       })
-      this.updateSummary();
+
     },
 
-    saveProgram() {
-      console.log(this.itemList.program.contentList);
-      // 处理答案
+    handleTimeout() {
+      this.$alert("考试结束, 点击确定提交答案", "提示", {
+        confirmButtonText: '确定',
+        type: 'warning'
+      }).then(() => {
+        this.handleTimeoutSummary();
+      }).catch(() =>{
+        this.handleTimeoutSummary();
+      })
+    },
+    async handleTimeoutSummary() {
+      console.log(this.itemList.choose.contentList);
+      let examId = this.examForm.id;
+      // 构造traceList
       let traceList = [];
-      for (let i = 0; i < this.itemList.program.contentList.length; i++) {
-        traceList.push({
-          problemId: this.itemList.program.contentList[i].problemId,
-          contentId: this.itemList.program.contentList[i].id,
-          answer: this.itemList.program.contentList[i].answer,
-          languageName: this.itemList.program.contentList[i].languageName,
-        })
-      }
-      // console.log(traceList);
-
-      this.$api.exam.examTrace.editChoose(traceList).then((res) =>{
-        console.log(res);
-        if (res.code == 200) {
-          this.$message({ message: "保存成功", type: "success" });
+      // 处理选择题
+      if (this.itemTab.choose == true && this.itemList.choose.contentList != null && this.itemList.choose.contentList != undefined) {
+        for (let i = 0; i < this.itemList.choose.contentList.length; i++) {
+          traceList.push({
+            contentId: this.itemList.choose.contentList[i].id,
+            answer: this.itemList.choose.contentList[i].answer,
+          })
         }
-      })
-      this.updateSummary();
-
-
-    },
-
-    lastProgram() {
-
-    },
-    nextProgram() {
-
-    },
-
-
-    updateSummary() {
-      console.log(this.examForm);
-      let examId = this.examForm.id;
-
-      let data = {
-        examId: examId,
-        remainingTime: this.summary.remainingTime,
       }
-
-      this.$api.exam.examSummary.updateSummary(data).then((res) =>{
-        console.log(res);
-      })
-      
-    },
-
-    doneSummary() {
-      let examId = this.examForm.id;
-
-      let data = {
-        examId: examId,
-        remainingTime: this.summary.remainingTime,
+      // 处理编程题
+      if (this.itemTab.program == true && this.itemList.program.contentList != null && this.itemList.program.contentList != undefined) {
+        for (let i = 0; i < this.itemList.program.contentList.length; i++) {
+          traceList.push({
+            problemId: this.itemList.program.contentList[i].problemId,
+            contentId: this.itemList.program.contentList[i].id,
+            answer: this.itemList.program.contentList[i].answer,
+            languageName: this.itemList.program.contentList[i].languageName,
+          })
+        }
       }
-      this.$api.exam.examSummary.doneSummary(data).then((res) =>{
+      console.log(traceList);
+      this.$api.exam.examTrace.edit(traceList).then((res) =>{
         // console.log(res);
-      })
+        if (res.code == 200) {
+          let data = {
+            examId: examId,
+            remainingTime: this.summary.remainingTime,
+          }
+          this.$api.exam.examSummary.doneSummary(data).then((res) =>{
+            // console.log(res);
+            this.closeExamForm();
+          })
+        }
+      }).catch((err) =>{})
     },
 
 
@@ -597,7 +571,7 @@ export default {
 }
 .examInfo {
   font-size: 18px;
-  color: rgb(85, 88, 88);
+  color: rgb(15, 16, 16);
   margin-top: 100px;
   width: 300px;
 }

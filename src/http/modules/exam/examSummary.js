@@ -11,13 +11,6 @@ export const addSummary = (params) => {
     params
   })
 }
-export const updateSummary = (data) => {
-  return axios({
-    url: preUrl + 'update',
-    method: 'post',
-    data
-  })
-}
 export const doneSummary = (data) => {
   return axios({
     url: preUrl + 'done',

@@ -154,19 +154,16 @@ Vue.prototype.splitString = function(str, mark) {
   var option = str;
   var flag = mark;
   var list = option.split(mark);
-  console.log(list);
-
+  // console.log(list);
   if (list.length == 1) {
-    console.log("停了");
     return list;
   }
-
   for (let i = 2; i < list.length; i++) {
     list[1] += mark + list[i];
   }
   var optionList = [];
   optionList.push(list[0],list[1]);
-  console.log(optionList);
+  // console.log(optionList);
   return optionList;
 }
 

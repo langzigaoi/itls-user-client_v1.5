@@ -147,7 +147,7 @@
               <el-button
                 size="mini"
                 v-if="showFlag.itemList == true "
-                :disabled="disableFlag.itemList == true || scope.row.isPub == 1"
+                :disabled="disableFlag.itemList == true "
                 @click="openItemList(scope.$index, scope.row)"
                 >题型设置</el-button
               >
@@ -156,7 +156,7 @@
               <el-button
                 size="mini"
                 v-if="showFlag.problemList == true "
-                :disabled="disableFlag.problemList == true || scope.row.isPub == 1"
+                :disabled="disableFlag.problemList == true "
                 @click="openProblemList(scope.$index, scope.row)"
                 >题目设置</el-button
               >
@@ -165,7 +165,7 @@
               <el-button
                 size="mini"
                 v-if="showFlag.problemList == true "
-                :disabled="disableFlag.problemList == true || scope.row.isPub == 1"
+                :disabled="disableFlag.problemList == true "
                 @click="openObjectiveList(scope.$index, scope.row)"
                 >双向细目</el-button
               >
@@ -490,9 +490,9 @@ export default {
     },
     // 选题中使用
     selectItem(item) {
-      console.log(item);
+      // console.log(item);
       this.transientSelections = item;
-      console.log(this.transientSelections);
+      // console.log(this.transientSelections);
       this.handleSelections();
     },
     // 传递数据
@@ -515,7 +515,6 @@ export default {
     },
     // 清空复选框
     clearSelections() {
-      console.log("进来了");
       // console.log(this.transientSelections);
       this.$refs.table.clearSelection();
     },
