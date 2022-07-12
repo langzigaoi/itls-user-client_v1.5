@@ -147,6 +147,16 @@
                   </el-date-picker>
                 </el-row>
               </el-form-item>
+              <el-form-item label="时长(分钟)" label-width="110px" prop="duration">
+                <el-row type="flex">
+                  <el-input
+                    style="width: 205px"
+                    size="mini"
+                    v-model="addForm.duration"
+                    placeholder="请输入内容"
+                  ></el-input>
+                </el-row>
+              </el-form-item>
               <el-form-item label="成绩公布时间" label-width="110px" prop="resultPubTime">
                 <el-row type="flex">
                   <el-date-picker
@@ -291,6 +301,16 @@
                     :picker-options="pickerOptions"
                   >
                   </el-date-picker>
+                </el-row>
+              </el-form-item>
+              <el-form-item label="时长(分钟)" label-width="110px" prop="duration">
+                <el-row type="flex">
+                  <el-input
+                    style="width: 205px"
+                    size="mini"
+                    v-model="infoForm.duration"
+                    placeholder="请输入内容"
+                  ></el-input>
                 </el-row>
               </el-form-item>
               <el-form-item label="成绩发布时间" label-width="110px" prop="resultPubTime">
@@ -954,6 +974,7 @@ export default {
         knowledgeId: [{ required: true, message: "请选择", trigger: "blur" }],
         startTime: [{ required: true, message: "请选择", trigger: "blur" }],
         endTime: [{ required: true, message: "请选择", trigger: "blur" }],
+        duration: [{ required: true, trigger: "blur", validator: this.checkDuration }],
         resultPubTime: [{ required: true, message: "请选择", trigger: "blur" }],
       },
       infoFormRules: {
@@ -962,6 +983,7 @@ export default {
         knowledgeId: [{ required: true, message: "请选择", trigger: "blur" }],
         startTime: [{ required: true, message: "请选择", trigger: "blur" }],
         endTime: [{ required: true, message: "请选择", trigger: "blur" }],
+        duration: [{ required: true, trigger: "blur", validator: this.checkDuration }],
         resultPubTime: [{ required: true, message: "请选择", trigger: "blur" }],
       },
       // 信息设置
@@ -1050,9 +1072,15 @@ export default {
           formatter: this.dateFormat,
         },
         {
+          prop: "duration",
+          label: "时长(分钟)",
+          minWidth: 150,
+          align: "center",
+        },
+        {
           prop: "isPub",
           label: "状态",
-          minWidth: 250,
+          minWidth: 150,
           align: "center",
           formatter: this.getIsPub,
         },
@@ -1156,6 +1184,16 @@ export default {
           row.fraction == undefined) {
         return "空(请组卷)";
       }
+    },
+    checkDuration(rule, value, callback) {
+      // console.log(value);
+      if (!value) {
+        return callback(new Error("请输入"))
+      } 
+      if (this.isInterger(value) && value > 0 ) {
+          callback();
+      }
+      return callback(new Error("请输入大于0的整数"));
     },
     // 元数据查询
     findAllExamType() {
@@ -1327,10 +1365,9 @@ export default {
         for (let index = 0; index < row.chapterOfList.length; index++) {
           chapterList.push(parseInt(row.chapterOfList[index].chapterId));
         }
-        console.log(chapterList);
+        // console.log(chapterList);
         this.infoForm.knowledgeId = chapterList;
-      }
-      
+      } 
       this.infoFormVisible = true;
     },
     closeInfoForm() {
@@ -1470,6 +1507,7 @@ export default {
       this.itemListForm = {
         tableData: [],
       }
+      this.findPersonPage(null);
       this.itemListVisible = false;
     },
     submitItemListForm() {
@@ -1478,7 +1516,6 @@ export default {
       console.log(this.itemListForm.tableData);
       let suggests = JSON.parse(JSON.stringify(this.itemListForm.tableData));
       for (let m = 0; m < suggests.length; m++) {
-        
         if (suggests[m].problemTypeId == null || suggests[m].problemTypeId == "" ||
             suggests[m].problemTypeId == undefined ||
             suggests[m].num == null || suggests[m].num == "" ||
@@ -1506,6 +1543,7 @@ export default {
                 type: "success",
               });
               this.findItemList();
+              // this.findPersonPage(null);
             }
           })
           .catch((err) => {
@@ -1966,7 +2004,7 @@ export default {
 
     // 预览全部
     handlePreview(row) {
-      console.log(row);
+      // console.log(row);
       let url = this.global.baseUrl + '/exam/setup/pdf?examId='
       // console.log(url);
       window.open( url+ row.id)
@@ -1974,7 +2012,7 @@ export default {
 
     // 发布
     handlePub(row) {
-      console.log(row);
+      // console.log(row);
       let examId = row.id;
       this.$confirm("确认提交吗？", "提示", {}).then(() => {
         this.$api.exam.examSetup.pub({examId:examId}).then((res) =>{
@@ -1988,8 +2026,8 @@ export default {
     },
 
     openProblemInfo(row) {
-      console.log(row);
-      console.log(this.problemListForm);
+      // console.log(row);
+      // console.log(this.problemListForm);
 
       let problemTypeName = this.problemListForm.name;
       let problemTypeId = row.problemTypeId;
@@ -1997,7 +2035,6 @@ export default {
       if (problemTypeName == "单选题" || problemTypeId == 1) {
         // 参数获取(由于不同题型的id字段不同，故条件选择后再获取)
         let problemId = row.id;
-        console.log("jinlaile");
         // 选择题
         this.$api.problem.choice.findById({id:problemId}).then((res) => {
           console.log(res.data);
@@ -2020,7 +2057,6 @@ export default {
       }
       if (problemTypeName == "判断题" || problemTypeId == 3) {
         let problemId = row.id;
-        console.log("jinlaile");
         // 判断题
         this.$api.problem.judge.findById({id:problemId}).then((res) => {
           console.log(res.data);

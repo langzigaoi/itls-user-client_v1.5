@@ -149,7 +149,23 @@ Vue.prototype.isInterger = function(str) {
   return /^\d+$/.test(str)
 }
 
-
+// 字符串操作
+Vue.prototype.splitString = function(str, mark) {
+  var option = str;
+  var flag = mark;
+  var list = option.split(mark);
+  // console.log(list);
+  if (list.length == 1) {
+    return list;
+  }
+  for (let i = 2; i < list.length; i++) {
+    list[1] += mark + list[i];
+  }
+  var optionList = [];
+  optionList.push(list[0],list[1]);
+  // console.log(optionList);
+  return optionList;
+}
 
 
 

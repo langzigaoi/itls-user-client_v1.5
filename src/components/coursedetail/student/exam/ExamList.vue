@@ -116,9 +116,10 @@ export default {
         // { prop: "num", label: "总题数", minWidth: 100, align: "center", formatter: this.getIsGenerate },
         // { prop: "fraction", label: "总分", minWidth: 100, align: "center", formatter: this.getIsGenerate },
         // { prop: "list", label: "范围", minWidth: 250, align: "center" },
-        { prop: "resultPubTime",label: "成绩公布时间",minWidth: 110,align: "center",formatter: this.dateFormat},
-        { prop: "startTime",label: "开始时间",minWidth: 110,align: "center",formatter: this.dateFormat},
-        { prop: "endTime",label: "结束时间",minWidth: 110,align: "center",formatter: this.dateFormat},
+        { prop: "startTime",label: "开始时间",minWidth: 150,align: "center",formatter: this.dateFormat},
+        { prop: "endTime",label: "结束时间",minWidth: 150,align: "center",formatter: this.dateFormat},
+        { prop: "duration",label: "时长(分钟)",minWidth: 150,align: "center",},
+        { prop: "resultPubTime",label: "成绩公布时间",minWidth: 150,align: "center",formatter: this.dateFormat},
         { prop: "isCompleted", label: "完成状态", minWidth: 100, align: "center", formatter: this.isCompleted },
       ],
 
@@ -220,10 +221,8 @@ export default {
     changeStartExamVisible(row) {
       console.log(row);
       let startTime = row.startTime;
-      console.log(startTime);
       let endTime = row.endTime;
       let now = Date.parse(new Date());
-      console.log(now);
       if (now < startTime ) {
         this.$message({ message: "考试未开始", type: "warning" });
         return null;
@@ -233,11 +232,19 @@ export default {
         return null;
       }
       this.$api.exam.examSummary.addSummary({examId:row.id});
-      this.$refs.examDialog.openExamForm(row);
+      this.$confirm("确认开始考试吗？", "提示", {}).then(() => {
+        this.$refs.examDialog.openExamForm(row);
+      })
     },
 
     changeSummaryVisible(row) {
       let examId = row.id;
+      let pubTime = row.pubTime;
+      let now = Date.parse(new Date());
+      if (now < pubTime) {
+        this.$message({ message: "成绩查询未开放", type: "warning" });
+        return null;
+      }
       this.$api.exam.examSummary.findSummaryResult({examId: examId}).then((res) =>{
         console.log(res);
         if (res.code == 200) {
@@ -245,7 +252,6 @@ export default {
           this.examSummaryVisible = true;
         }
       })
-      
     },
     closeExamSummaryForm() {
       this.examSummaryForm = {};
