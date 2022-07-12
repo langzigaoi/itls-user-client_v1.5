@@ -167,19 +167,18 @@ const routes = [
             import('@/components/coursedetail/teacher/problemBank/multichoice/MultiChoice'),
         meta: { title: '题库-多选题列表' }
       },
-
-
-
-
-
       {
-        path: 'problemFilling',
-        name: 'problemFilling',
+        path: 'fillingList',
+        name: 'fillingList',
         component: () =>
-          import('@/components/coursedetail/teacher/problemBank/filling/FillingProblemView'),
-        meta: { title: '填空题' }
+          import('@/components/coursedetail/teacher/problemBank/filling/FillingList'),
+        meta: { title: '题库-填空题列表' }
       },
-      
+
+
+
+
+
       {
         path: 'JudgmentExcel',
         name: 'JudgmentExcel',

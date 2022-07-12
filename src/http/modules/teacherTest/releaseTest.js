@@ -35,6 +35,16 @@ export const findProblemMultiChoice = (params) => {
     })
 }
 
+// 根据知识点获取对应的所有填空题
+export const findProblemFilling = (params) => {
+    console.log(params);
+    return axios({
+        url: preUrl + 'findProblemFilling',
+        method: 'get',
+        params,
+    })
+}
+
 // 将生成的测试传给后端
 
 export const addTest = (params) => {
