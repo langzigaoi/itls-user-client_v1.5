@@ -261,6 +261,7 @@ export default {
 
       contentList: [],
       countTime: {
+        hour: null,
         minute: null,
         second: null
       },
@@ -351,8 +352,11 @@ export default {
         // 倒计时时间
         // this.countTime.minute = res.data.remainingTime;
         if (this.summary.isCompleted != 1 ) {
-          this.countTime.minute = res.data.remainingTime;
+          this.countTime.hour = Math.floor(res.data.remainingTime/60) ;
+          console.log(Math.floor(res.data.remainingTime/60));
+          this.countTime.minute = res.data.remainingTime%60;
           this.countTime.second = 0;
+          console.log(this.countTime);
         }
 
 
@@ -539,7 +543,9 @@ export default {
             this.closeExamForm();
           })
         }
-      }).catch((err) =>{})
+      }).catch((err) =>{
+        this.closeExamForm();
+      })
     },
 
 

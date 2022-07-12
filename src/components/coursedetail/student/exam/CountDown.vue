@@ -1,7 +1,7 @@
 <template>
   <div class="CountDown">
 
-    <h3> {{ minute }}:{{ second }}</h3>
+    <h3> {{ hour }}:{{ minute }}:{{ second }}</h3>
   </div>
 </template>
     
@@ -11,8 +11,9 @@ export default {
   name: 'CountDown',
   data() {
     return {
-      minutes: 70,
-      seconds: 10
+      hours: 0,
+      minutes: 0,
+      seconds: 0
     }
   },
   props: {
@@ -31,19 +32,24 @@ export default {
     add: function () {
       var _this = this
       var time = window.setInterval(function () {
-        if (_this.seconds === 0 && _this.minutes !== 0) {
+        if (_this.seconds === 0 && _this.minutes === 0 &&_this.hours !== 0 ) {
+          _this.seconds = 59
+          _this.minutes = 59
+          _this.hours -= 1
+        } 
+
+        else if (_this.seconds === 0 && _this.minutes !== 0 ) {
           _this.seconds = 59
           _this.minutes -= 1
-        } else if (_this.minutes === 0 && _this.seconds === 0) {
+
+
+        } else if (_this.minutes === 0 && _this.seconds === 0 &&_this.hours === 0) {
           _this.handleTimeout();
           _this.seconds = 0
           window.clearInterval(time)
           // this.$emit("handleTimeout");
           
         } 
-        // else if (condition) {
-          
-        // } 
         else {
           _this.seconds -= 1
         }
@@ -60,7 +66,7 @@ export default {
       handler: function (newVal) {
         this.minutes = newVal.minute;
         this.seconds = newVal.second;
-
+        this.hours = newVal.hour;
       }
     },
     second: {
@@ -72,6 +78,11 @@ export default {
       handler(newVal) {
         this.num(newVal)
       }
+    },
+    hour: {
+      handler(newVal) {
+        this.num(newVal)
+      }
     }
   },
   computed: {
@@ -80,6 +91,9 @@ export default {
     },
     minute: function () {
       return this.num(this.minutes)
+    },
+    hour: function () {
+      return this.num(this.hours)
     }
   }
 }
