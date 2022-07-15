@@ -231,8 +231,9 @@ export default {
         this.$message({ message: "考试已结束", type: "warning" });
         return null;
       }
-      this.$api.exam.examSummary.addSummary({examId:row.id});
+      
       this.$confirm("确认开始考试吗？", "提示", {}).then(() => {
+        this.$api.exam.examSummary.addSummary({examId:row.id});
         this.$refs.examDialog.openExamForm(row);
       })
     },

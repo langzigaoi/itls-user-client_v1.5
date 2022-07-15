@@ -58,6 +58,12 @@ export default {
     handleTimeout: function() {
       this.$emit("handleTimeout");
     },
+
+    getCountTime() {
+      // console.log(this.hours);
+      // console.log(this.minutes);
+      return this.hours*60+this.minutes
+    },
   },
   watch: {
     countTime: {
@@ -65,7 +71,7 @@ export default {
       immediate: true,
       handler: function (newVal) {
         this.minutes = newVal.minute;
-        this.seconds = newVal.second;
+        this.hours = newVal.second;
         this.hours = newVal.hour;
       }
     },

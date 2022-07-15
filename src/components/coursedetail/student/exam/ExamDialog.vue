@@ -30,7 +30,10 @@
           </el-col>
 
           <el-col :span="12">
-            <CountDown v-if="this.summary.isCompleted == 0" :countTime="countTime" @handleTimeout="handleTimeout"></CountDown>
+            <CountDown ref="count" 
+              v-if="this.summary.isCompleted == 0"
+              :countTime="countTime" 
+              @handleTimeout="handleTimeout"></CountDown>
           </el-col>
           
 
@@ -115,7 +118,6 @@
                     </el-row>
                 </div>
               </el-radio-group>
-
 
               <el-divider></el-divider>
             </div>
@@ -358,9 +360,6 @@ export default {
           this.countTime.second = 0;
           console.log(this.countTime);
         }
-
-
-
       })
     },
     closeExamForm() {
@@ -374,7 +373,6 @@ export default {
         program: false,
       };
       this.examFormVisible = false;
-
       this.countTime.minute = 999; 
     },
 
@@ -482,8 +480,9 @@ export default {
             // 处理examSummary
             let data = {
               examId: examId,
-              remainingTime: this.summary.remainingTime,
+              remainingTime: this.getCountTime(),
             }
+            console.log(data);
             this.$api.exam.examSummary.doneSummary(data).then((res) =>{
               // console.log(res);
               this.closeExamForm();
@@ -493,6 +492,10 @@ export default {
         }).catch((err) => { });
       })
 
+    },
+
+    getCountTime() {
+      return this.$refs.count.getCountTime();
     },
 
     handleTimeout() {
@@ -536,8 +539,9 @@ export default {
         if (res.code == 200) {
           let data = {
             examId: examId,
-            remainingTime: this.summary.remainingTime,
+            remainingTime: this.getCountTime(),
           }
+          console.log(data);
           this.$api.exam.examSummary.doneSummary(data).then((res) =>{
             // console.log(res);
             this.closeExamForm();
