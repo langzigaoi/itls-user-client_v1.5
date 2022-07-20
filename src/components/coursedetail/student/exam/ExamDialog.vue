@@ -348,7 +348,7 @@ export default {
 
     async findSummary(examId) {
       this.$api.exam.examSummary.findSummary({examId:examId}).then((res) =>{
-        console.log(res);
+        console.log(res.data);
         this.summary.isCompleted = res.data.isCompleted;
         this.summary.remainingTime = res.data.remainingTime;
         // 倒计时时间

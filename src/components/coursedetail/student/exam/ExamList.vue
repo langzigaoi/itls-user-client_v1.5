@@ -233,8 +233,10 @@ export default {
       }
       
       this.$confirm("确认开始考试吗？", "提示", {}).then(() => {
-        this.$api.exam.examSummary.addSummary({examId:row.id});
-        this.$refs.examDialog.openExamForm(row);
+        this.$api.exam.examSummary.addSummary({examId:row.id}).then((res) =>{
+          this.$refs.examDialog.openExamForm(row);
+        });
+        
       })
     },
 
