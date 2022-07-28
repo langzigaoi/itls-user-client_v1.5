@@ -92,7 +92,7 @@
 
       <!--题目设置-->
       <el-table-column
-        prop="problemTypeName"
+        prop="id"
         label="类型"
         v-if="columnFlag.viewProblemType == true"
       >

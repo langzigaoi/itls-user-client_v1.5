@@ -2,7 +2,7 @@
 
   <div class="outside" style="padding:10px " >
 
-    <el-row>
+    <el-row type="flex">
       <el-col :span="16" align="left">
         <el-tabs
             v-model="flag"

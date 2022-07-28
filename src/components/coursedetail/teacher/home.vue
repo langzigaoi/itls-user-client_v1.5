@@ -113,7 +113,7 @@
               </el-submenu> -->
 
               <el-menu-item
-                index="/studycourse/courseExperiment"
+                index="/course/searchExperiment"
                 style="width: 160px"
                 ><i class="el-icon-suitcase"></i>
                 <span> 课程实验</span>
