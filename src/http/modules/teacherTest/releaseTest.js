@@ -45,6 +45,16 @@ export const findProblemFilling = (params) => {
     })
 }
 
+// 根据知识点获取对应的所有简答题
+export const findProblemShortAnswer = (params) => {
+    console.log(params);
+    return axios({
+        url: preUrl + 'findProblemShortAnswer',
+        method: 'get',
+        params,
+    })
+}
+
 // 将生成的测试传给后端
 
 export const addTest = (params) => {

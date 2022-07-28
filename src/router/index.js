@@ -175,6 +175,14 @@ const routes = [
         meta: { title: '题库-填空题列表' }
       },
 
+      {
+        path: 'shortAnswer',
+        name: 'shortAnswer',
+        component: () =>
+            import('@/components/coursedetail/teacher/problemBank/shortAnswer/shortAnswer'),
+        meta: { title: '题库-简答题列表' }
+      },
+
 
 
 

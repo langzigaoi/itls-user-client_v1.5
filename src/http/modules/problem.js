@@ -9,6 +9,7 @@
  import * as multichoice from './problem/multichoice'
  import * as judger from './problem/judger'
  import * as submission from './problem/submission'
+ import * as shortAnswer from './problem/shortAnswer'
  
  
  // 默认全部导出
@@ -19,5 +20,6 @@
   program,
   multichoice,
   judger,
-  submission
+  submission,
+  shortAnswer
  }

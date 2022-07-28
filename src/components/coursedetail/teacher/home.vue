@@ -166,17 +166,17 @@
                   style="width: 160px"
                   @click="toOtherPathWithId('/course/fillingList', $route.query.id)"
                 >
-                  <i class="el-icon-thumb"></i>填空题</el-menu-item
+                  <i class="el-icon-edit"></i>填空题</el-menu-item
                 >
-
-
-                
-                <el-menu-item index="" 
-                   style="width: 160px"
-                   v-if="hasProblemType('简答题')"
-                  >
+                <el-menu-item index="/course/shortAnswer"
+                  v-if="hasProblemType('简答题')"
+                  style="width: 160px"
+                  @click="toOtherPathWithId('/course/shortAnswer', $route.query.id)"
+                >
                   <i class="el-icon-document"></i>简答题</el-menu-item
                 >
+
+
                 
                 <el-menu-item index="/course/problemApplication" 
                    style="width: 160px"
