@@ -522,7 +522,6 @@
 <script>
 import ComTable from "../../../../common/ComTable.vue";
 import Ueditor from "../../../../Ueditor/index.vue";
-//import Index2 from "../../../../Ueditor/index2.vue";
 export default {
   components: {
     ComTable,

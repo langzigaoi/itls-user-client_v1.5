@@ -1,11 +1,16 @@
 import axios from '../../axios'
 
-/* 
+export function upload(fileFormData) {
+
+}
+
+
+/*
  * 多选题管理模块
- */ 
+ */
 
  const preUrl = "/problem/multiChoice/";
- 
+
 // 查询多选题列表
 export const findAll = (params) => {
   return axios({
@@ -84,7 +89,7 @@ export const add = (data) => {
   })
 }
 
-// 修改 
+// 修改
 export const update = (data) => {
   return axios({
     url: preUrl + 'update',

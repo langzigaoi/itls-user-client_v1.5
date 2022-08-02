@@ -1,13 +1,13 @@
 <template>
   <div class="UE">
     <!--这个地方的大小是可以自己控制的-->
-    <div id="editor" style="width:100%;height:120px;">
+    <div id="editor" type="text/plain" style="width:580px;height:320px;">
+    
     </div>
   </div>
 </template>
 
 <script>
-
 
 export default {
     name:'ue',
@@ -19,12 +19,14 @@ export default {
     },
     data() {
       return {
+        
         editor: null,
       };
     },
     mounted() {
       // 实例化editor编辑器
       this.editor = window.UE.getEditor("editor");
+
       //设置编辑器默认内容
       this.editor.addListener('ready', () => {
         this.editor.setContent(this.value)
@@ -35,12 +37,15 @@ export default {
       getUEContent () {
         return this.editor.getContent()
       }
-    },
+     },
+    
+     
     destroyed() {
       // 将editor进行销毁
       this.editor.destroy();
     }
-}
+     }
+
 </script>
 <style scoped>
 
