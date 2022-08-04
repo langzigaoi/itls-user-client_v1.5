@@ -104,7 +104,7 @@
                     type="textarea"
                     :rows="4"
                     v-model="addForm.title"
-                    @focus="inputClick(form, 'title')"
+                    @focus="inputClick(addForm, 'title')"
                   ></el-input>
                 </el-row>
               </el-form-item>
@@ -121,7 +121,7 @@
                     v-model="addForm.answer"
                     auto-complete="off"
                     size="mini"
-                    @focus="inputClick(form, 'answer')"
+                    @focus="inputClick(addForm, 'answer')"
                   ></el-input>
                 </el-row>
               </el-form-item>
@@ -133,7 +133,7 @@
                     v-model="addForm.analysis"
                     auto-complete="off"
                     size="mini"
-                    @focus="inputClick(form, 'analysis')"
+                    @focus="inputClick(addForm, 'analysis')"
                   ></el-input>
                 </el-row>
               </el-form-item>
@@ -382,7 +382,7 @@
                 prop="title"
                 required
               >
-                <el-row type="flex">
+                 <el-row type="flex"> 
                   <el-input
                     style="textarea"
                     size="mini"
@@ -390,9 +390,9 @@
                     :rows="4"
                     v-model="editForm.title"
                     placeholder="请输入内容"
-                    @focus="inputClick(editForm, 'correct')"
+                    @focus="inputClick(editForm, 'title')"
                   ></el-input>
-                </el-row>
+                 </el-row> 
               </el-form-item>
               <el-form-item
                 label="答案"
@@ -407,7 +407,7 @@
                     v-model="editForm.answer"
                     auto-complete="off"
                     size="mini"
-                    @focus="inputClick(form, 'correct')"
+                    @focus="inputClick(editForm, 'answer')"
                   ></el-input>
                 </el-row>
               </el-form-item>
@@ -419,7 +419,7 @@
                     v-model="editForm.analysis"
                     auto-complete="off"
                     size="mini"
-                    @focus="inputClick(form, 'correct')"
+                    @focus="inputClick(editForm, 'analysis')"
                   ></el-input>
                 </el-row>
               </el-form-item>
@@ -520,9 +520,8 @@
 </template>
 
 <script>
-import ComTable from "../../../../common/ComTable.vue";
-import Ueditor from "../../../../Ueditor/index.vue";
-
+import ComTable from "../../../../common/ComTable.vue"
+import Ueditor from "../../../../Ueditor/index.vue"
 export default {
   components: {
     ComTable,
@@ -619,32 +618,36 @@ export default {
       richEditor: {
         dialogVisible: false,
         object: null,
-        parameterName: "",
-        instance: null,
+        parameterName: '',
+        editor: null,
       },
     };
   },
 
+
+
   methods: {
-    editorReady(instance) {
-      this.richEditor.instance = instance;
+    editorReady(editor) {
+      this.richEditor.editor = editor
       let currentContent =
-        this.richEditor.object[this.richEditor.parameterName];
-      this.richEditor.instance.setContent(currentContent);
+        this.richEditor.object[this.richEditor.parameterName]
+      this.richEditor.editor.setContent(currentContent)
       // 光标定位到Ueditor
-      this.richEditor.instance.focus(true);
+      this.richEditor.editor.focus(true)
     },
     inputClick(object, parameterName) {
-      this.richEditor.object = object;
-      this.richEditor.parameterName = parameterName;
-      this.richEditor.dialogVisible = true;
+      this.richEditor.object = object
+      this.richEditor.parameterName = parameterName
+      this.richEditor.dialogVisible = true
     },
     editorConfirm() {
       // 获取编辑器内容getContent()，获取纯文本内容getPlainTxt()
-      let content = this.richEditor.instance.getContent();
-      console.log(content);
-      this.richEditor.object[this.richEditor.parameterName] = content;
-      this.richEditor.dialogVisible = false;
+      let content = this.richEditor.editor.getContent()
+   
+      // 看看content有没有赋值成功
+     // console.log(content);
+      this.richEditor.object[this.richEditor.parameterName] = content
+      this.richEditor.dialogVisible = false
     },
 
     dateFormat(row, column) {
@@ -700,7 +703,7 @@ export default {
         { name: "knowledgeId", value: this.knowledgeId },
       ];
       // console.log(this.pageRequest);
-      this.$api.problem.filling
+      this.$api.problem.shortAnswer
         .findPage(this.pageRequest)
 
         .then((res) => {
@@ -726,7 +729,7 @@ export default {
         { name: "knowledgeId", value: "" },
         { name: "status", value: this.statu },
       ];
-      this.$api.problem.filling
+      this.$api.problem.shortAnswer
         .findPersonPage(this.pageRequest)
         .then((res) => {
           if (res.data == null) {
@@ -763,7 +766,7 @@ export default {
             // 从addForm.knowledgeId中取选中的值 单选 则只有一个值
             params.knowledgeId = this.addForm.knowledgeId[0];
             // console.log(params);
-            this.$api.problem.filling
+            this.$api.problem.shortAnswer
               .add(params)
               .then((res) => {
                 if (res.code == 200) {
@@ -815,7 +818,7 @@ export default {
             // 从addForm.knowledgeId中取选中的值 单选 则只有一个值
             params.knowledgeId = this.editForm.knowledgeId[0];
             // console.log(params);
-            this.$api.problem.filling
+            this.$api.problem.shortAnswer
               .update(params)
               .then((res) => {
                 if (res.code == 200) {
@@ -839,7 +842,7 @@ export default {
 
     handleRemove(data) {
       console.log(data.params);
-      this.$api.problem.filling
+      this.$api.problem.shortAnswer
         .del(data.params)
         .then(data != null ? data.callback : "");
     },
