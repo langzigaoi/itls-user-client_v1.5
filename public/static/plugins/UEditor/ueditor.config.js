@@ -26,7 +26,7 @@
      */
   window.UEDITOR_CONFIG = {
     //为编辑器实例添加一个路径，这个不能被注释
-    UEDITOR_HOME_URL: "/public/static/plugins/UEditor/",
+    UEDITOR_HOME_URL: "/static/plugins/UEditor/",
 
     // 服务器统一请求接口路径
     serverUrl: URL + "jsp/controller.jsp",
@@ -132,7 +132,8 @@
         "preview",
         "searchreplace",
         "drafts",
-        "help"
+        "help",
+        "kityformula"
       ]
     ]
     //当鼠标放在工具栏上时显示的tooltip提示,留空支持自动多语言配置，否则以配置值为准

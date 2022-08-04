@@ -216,8 +216,8 @@
             style="width: 100%; height: 100%"
             :show-close="false"
             center
-          >
-            <Ueditor @ready="editorReady" />
+          > 
+            <ueditor @ready="editorReady"/>
             <span slot="footer" class="dialog-footer">
               <el-button type="primary" @click="editorConfirm">确 定</el-button>
               <el-button @click="richEditor.dialogVisible = false"
@@ -522,11 +522,12 @@
 <script>
 import ComTable from "../../../../common/ComTable.vue";
 import Ueditor from "../../../../Ueditor/index.vue";
-//import Index2 from "../../../../Ueditor/index2.vue";
+
 export default {
   components: {
     ComTable,
     Ueditor,
+    Index2,
   },
 
   mounted() {
@@ -641,6 +642,7 @@ export default {
     editorConfirm() {
       // 获取编辑器内容getContent()，获取纯文本内容getPlainTxt()
       let content = this.richEditor.instance.getContent();
+      console.log(content);
       this.richEditor.object[this.richEditor.parameterName] = content;
       this.richEditor.dialogVisible = false;
     },
