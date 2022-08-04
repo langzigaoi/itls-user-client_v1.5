@@ -526,7 +526,6 @@ export default {
   components: {
     ComTable,
     Ueditor,
-    Index2,
   },
 
   mounted() {
