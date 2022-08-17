@@ -618,7 +618,7 @@ export default {
         dialogVisible: false,
         object: null,
         parameterName: '',
-        editor: null,
+        instance: null,
       },
     };
   },
@@ -626,13 +626,13 @@ export default {
 
 
   methods: {
-    editorReady(editor) {
-      this.richEditor.editor = editor
+    editorReady(instance) {
+      this.richEditor.instance = instance
       let currentContent =
         this.richEditor.object[this.richEditor.parameterName]
-      this.richEditor.editor.setContent(currentContent)
+      this.richEditor.instance.setContent(currentContent)
       // 光标定位到Ueditor
-      this.richEditor.editor.focus(true)
+      this.richEditor.instance.focus(true)
     },
     inputClick(object, parameterName) {
       this.richEditor.object = object
@@ -641,7 +641,7 @@ export default {
     },
     editorConfirm() {
       // 获取编辑器内容getContent()，获取纯文本内容getPlainTxt()
-      let content = this.richEditor.editor.getContent()
+      let content = this.richEditor.instance.getContent()
    
       // 看看content有没有赋值成功
      // console.log(content);
