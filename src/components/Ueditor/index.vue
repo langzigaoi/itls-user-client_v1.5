@@ -1,6 +1,6 @@
 <template>
   <div>
-    <script :id="randomId" type="text/plain" style="height: 300px"></script>
+    <script :id="randomId" type="text/plain" style="width:100%; height: 300px"></script>
   </div>
 </template>
 

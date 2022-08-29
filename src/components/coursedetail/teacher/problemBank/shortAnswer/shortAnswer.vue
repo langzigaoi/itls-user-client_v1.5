@@ -217,7 +217,7 @@
             :show-close="false"
             center
           > 
-            <ueditor @ready="editorReady"/>
+            <ueditor @ready="editorReady" style="width:100%"/>
             <span slot="footer" class="dialog-footer">
               <el-button type="primary" @click="editorConfirm">确 定</el-button>
               <el-button @click="richEditor.dialogVisible = false"
