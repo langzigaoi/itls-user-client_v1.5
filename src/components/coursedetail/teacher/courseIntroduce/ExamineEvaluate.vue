@@ -26,6 +26,9 @@
               <el-button type="primary" size="mini" @click="submitItemListForm"
                 >保存
               </el-button>
+              <el-button type="primary" size="mini" @click="calculationOfDegree"
+                >计算达成度
+              </el-button>
             </el-row>
           </div>
         </el-row>
@@ -78,6 +81,56 @@
         </el-form>
       </div>
     </el-dialog>
+    <el-dialog
+      top="5vh"
+      align="center"
+      title="达成度结果"
+      :visible.sync="calculationVisible"
+      width="80%"
+      style=""
+      @close="closeCalculation"
+    >
+      <div style="">
+        <el-form
+          :model="detailedListForm"
+          ref="itemListForm"
+          size="small"
+          text-algin="center"
+        >
+          <el-form-item>
+            <div style="width: 90%">
+              <el-table :data="degreeTableData" style="width: 100%">
+                <el-table-column prop="type" label="类别" width="300">
+                </el-table-column>
+                <el-table-column
+                  prop="detailedType"
+                  label="细分类别"
+                  width="300"
+                >
+                </el-table-column>
+                <el-table-column prop="degree" label="达成度" width="200">
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-form-item>
+          <el-row>
+            <div>
+              <el-row type="flex" align="bottom" justify="center">
+                <el-button size="mini" @click="closeCalculation"
+                  >返回
+                </el-button>
+                <!-- <el-button
+                  type="primary"
+                  size="mini"
+                  @click="submitDetailedItemListForm"
+                  >保存
+                </el-button> -->
+              </el-row>
+            </div>
+          </el-row>
+        </el-form>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -97,6 +150,28 @@ export default {
       detailedListForm: {
         tableData: [],
       },
+      degreeTableData: [
+        {
+          type: "期末考试",
+          detailedType: "单选题",
+          degree: "75%",
+        },
+        {
+          type: "期末考试",
+          detailedType: "多选题",
+          degree: "70%",
+        },
+        {
+          type: "过程评价",
+          detailedType: "作业",
+          degree: "80%",
+        },
+        {
+          type: "过程评价",
+          detailedType: "实验",
+          degree: "70%",
+        },
+      ],
       itemColumnFlag: {
         problemType: true,
         num: true,
@@ -121,6 +196,7 @@ export default {
       //评价目标
       allObjective: [],
       itemListVisible: false,
+      calculationVisible: false,
       record: {},
       //分页数据
       pageRequest: { pageNum: 1, pageSize: 10 },
@@ -318,19 +394,31 @@ export default {
         this.allEvaluateType = evaluateType;
       });
     },
-    // 获取课程实例的考核评价详细类型
-    findDetailedEvaluateType() {
+    // 根据上级类型ID获取课程实例的考核评价详细类型
+    findDetailedEvaluateType(typeId) {
       let evaluateType = [];
-      this.$api.metadata.evaluationDetailed.findAll().then((res) => {
-        for (let index = 0; index < res.data.length; index++) {
-          evaluateType.push({
-            typeName: res.data[index].name,
-            typeId: res.data[index].id,
-          });
-        }
-        // console.log(suggests);
-        this.detailedEvaluateType = evaluateType;
-      });
+      if (typeId == 1) {
+         this.$api.metadata.problemType.findAll().then((res) => {
+          for (let index = 0; index < res.data.length; index++) {
+            evaluateType.push({
+              typeName: res.data[index].name,
+              typeId: res.data[index].id,
+            });
+          }
+          this.detailedEvaluateType = evaluateType;
+        });
+      } else {
+        this.$api.metadata.evaluationDetailed.findAll().then((res) => {
+          for (let index = 0; index < res.data.length; index++) {
+            evaluateType.push({
+              typeName: res.data[index].name,
+              typeId: res.data[index].id,
+            });
+          }
+          // console.log(suggests);
+          this.detailedEvaluateType = evaluateType;
+        });
+      }
     },
     submitItemListForm() {
       // 校验
@@ -392,6 +480,9 @@ export default {
             this.closeItemListForm();
           });
       });
+    },
+    calculationOfDegree() {
+      this.calculationVisible = true;
     },
     submitDetailedItemListForm() {
       // 校验
@@ -533,9 +624,9 @@ export default {
     handleitemListVisible(row) {
       this.itemListVisible = true;
       this.evaluationId = row.id;
-      this.findDetailedEvaluateType();
+      this.findDetailedEvaluateType(row.typeId);
       this.findDetailedPage();
-      // console.log(row.id);
+      // console.log(row.typeId);
       // this.editForm = JSON.parse(JSON.stringify(row));
     },
 
@@ -544,6 +635,12 @@ export default {
         tableData: [],
       };
       this.itemListVisible = false;
+    },
+    closeCalculation() {
+      // this.detailedListForm = {
+      //   tableData: [],
+      // };
+      this.calculationVisible = false;
     },
     handleEditChange(row) {
       this.editVisible = true;

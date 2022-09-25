@@ -12,6 +12,7 @@
  import * as objective from './metadata/objective'
  import * as evaluation from './metadata/evaluation'
  import * as evaluationDetailed from './metadata/evaluationDetailed'
+ import * as problemType from './metadata/problemType'
 
 
  
@@ -27,4 +28,5 @@
   objective,
   evaluation,
   evaluationDetailed,
+  problemType,
  }
