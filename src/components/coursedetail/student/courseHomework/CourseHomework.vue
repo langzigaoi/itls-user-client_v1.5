@@ -4,22 +4,22 @@
 
        <el-table :data="sectionInfoList" style="width: 100%" :header-cell-style="{textAlign:'center'}"
       :cell-style="{ textAlign: 'center' }">
-      <el-table-column type="index" min-width="5%" label="序号" align="center" :index="indexMethod">
+      <el-table-column type="index" min-width="5%" label="序号" :index="indexMethod">
       </el-table-column>
-      <el-table-column prop="cinstanceSectionHomework.title" label="作业名称" min-width="20%" >
+      <el-table-column prop="cinstanceSectionHomework.title" label="作业名称" min-width="15%" >
       </el-table-column>
-      <el-table-column prop="title" label="作业所属章节" min-width="20%" >
+      <el-table-column prop="title" label="作业所属章节" min-width="10%" >
       </el-table-column>
-      <el-table-column prop="cinstanceSectionHomework.number" label="题目数量" min-width="20%" >
+      <el-table-column prop="cinstanceSectionHomework.number" label="题目数量" min-width="10%" >
       </el-table-column>
-      <el-table-column prop="cinstanceSectionHomework.pointsPerP" label="每题分数" min-width="20%" >
+      <el-table-column prop="cinstanceSectionHomework.pointsPerP" label="每题分数" min-width="10%" >
       </el-table-column>
       <el-table-column  prop="cinstanceSectionHomework.endTime" label="截止时间" min-width="20%" >
         <template slot-scope="scope">
           {{dateToMinutes(new Date(scope.row.cinstanceSectionHomework.endTime))}}
           </template>
       </el-table-column>
-      <el-table-column prop="totalScore" label="测验得分" min-width="15%" >
+      <el-table-column prop="totalScore" label="测验得分" min-width="10%" >
         <template slot-scope="scope"  >
           <span v-if="scope.row.totalScore != -1">{{scope.row.totalScore}}</span>
           <span v-else-if="scope.row.totalScore == -1 && scope.row.cinstanceSectionHomework.endTime < NowDate.getTime()">测验时间已过</span>
@@ -33,11 +33,10 @@
             @click="Dohomework(scope.row.sectionId,scope.row.cinstanceSectionHomework.id)"
             :disabled="scope.row.cinstanceSectionHomework.endTime < NowDate.getTime() || scope.row.totalScore != -1"
             >测试</el-button>
-            <el-button  type="success" >查看</el-button>
+            <!-- <el-button  type="success" >查看</el-button> -->
           </el-button-group>
         </template>
       </el-table-column>
-        
       </el-table>
       <!-- <div
         class="homework_content"
@@ -110,22 +109,23 @@ export default {
     return {
       activeNames: "1",
       Nowtime:undefined, // 当前时间
-      sectionInfoList: {
-        type: Object,
-        default() {
-          return {};
-        },
-      },
+      // sectionInfoList: {
+      //   type: Object,
+      //   default() {
+      //     return {};
+      //   },
+      // },
+      sectionInfoList:null,
     };
   },
   mounted() {
-    console.log(this.$store.state.course.courseCinstanceId);
+    // console.log(this.$store.state.course.courseCinstanceId);
     this.$api.student.gethomework.getSectionHomework({
         courseId: this.$store.state.course.courseCinstanceId,
       })
       .then((res) => {
         this.sectionInfoList = res.data;
-        console.log(this.sectionInfoList);
+        // console.log(this.sectionInfoList);
       });
       this.setTime();
   },
@@ -133,15 +133,14 @@ export default {
     setTime(){
       var NowDate = new Date();
       this.NowDate = NowDate;
-      // console.log(dateToMinutes(new Date(item.endTime)));
-      console.log(this.NowDate.getTime());
+      // console.log(this.NowDate.getTime());
     },
     indexMethod: function (index) {
       return index + 1;
     },
     handleChange() {},
     Dohomework(sectionId,homeworkId) {
-      console.log(homeworkId);
+      // console.log(homeworkId);
       // 进入准备作业页面
       this.$router.push({
         path: '/studycourse/homeworkdetail',
@@ -165,7 +164,7 @@ export default {
 }
 #CourseHomework {
   margin-left: 30px;
-  width: 80%;
+  width: 100%;
   text-align: left;
 }
 

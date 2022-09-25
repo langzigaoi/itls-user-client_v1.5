@@ -9,6 +9,16 @@ import VueCodemirror from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 import moment from 'moment'
 
+import '/public/static/plugins/UEditor/ueditor.config.js'
+import '/public/static/plugins/UEditor/ueditor.all.min.js'
+import '/public/static/plugins/UEditor/lang/zh-cn/zh-cn.js'
+import '/public/static/plugins/UEditor/ueditor.parse.min.js'
+import '/public/static/plugins/UEditor/themes/default/css/ueditor.css'
+import '/public/static/plugins/UEditor/kityformula-plugin/addKityFormulaDialog.js'
+import '/public/static/plugins/UEditor/kityformula-plugin/defaultFilterFix.js'
+import '/public/static/plugins/UEditor/kityformula-plugin/getKfContent.js'
+
+
 Vue.prototype.global = global // 挂载全局配置模块
 Vue.prototype.hasMenu = permission.hasMenuPerm // 菜单权限判断
 Vue.prototype.hasKey = permission.hasKeyPerm // 按钮权限判断

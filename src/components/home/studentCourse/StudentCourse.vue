@@ -482,7 +482,6 @@ export default {
           id: id
         }
       })
-
     },
 
 

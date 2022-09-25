@@ -53,3 +53,11 @@ export const previewPdf = (params) => {
   })
 }
 
+export const findStudentContent = (params) => {
+  return axios({
+    url: preUrl + 'findStuContent',
+    method: 'get',
+    params
+  })
+}
+

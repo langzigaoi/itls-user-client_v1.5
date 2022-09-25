@@ -1,7 +1,7 @@
 <template>
   <div class="outside" style="padding:10px " >
 
-      <el-row>
+      <el-row type="flex">
           <el-col :span="16" align="left">
             <el-tabs
               v-model="flag"
@@ -702,14 +702,13 @@ export default {
         // 设置需显示和禁用的标记
         showFlag:{
           view: true,
-          batchRemove:true,
+          batchRemove:false,
           editProblem: true,
           removeProblem: true,
         },
         disableFlag:{
-          batchRemove: true,
+          batchRemove: false,
         },
-
 
         viewVisible: false,
         viewForm: {},
@@ -723,7 +722,7 @@ export default {
   },
   methods: {
     dateFormat(row, column) {
-        return this.time(row.lastUpdateTime)        
+      return this.time(row[column.property]);
     },
     getStatu(row) {
       if (row.status == "0") {
@@ -758,10 +757,12 @@ export default {
     handleChangeFlag() {
         if( this.flag == "1") {
           this.showFlag.batchRemove = false;
+          this.disableFlag.batchRemove = true;
           this.findPage(null);
         }
         if( this.flag == "2") {
           this.showFlag.batchRemove = true;
+          this.disableFlag.batchRemove = false;
           this.findPersonPage(null);
         }
     },
@@ -775,7 +776,7 @@ export default {
         { name: "knowledgeId", value: this.knowledgeId },
       ];
       // console.log(this.pageRequest);
-      this.$api.problem.prog
+      this.$api.problem.program
         .findPage(this.pageRequest)
         .then((res) => {
             console.log(res.data);
@@ -800,7 +801,7 @@ export default {
         { name: "knowledgeId", value: "" },
         { name: "status", value: this.statu },
       ];
-      this.$api.problem.prog
+      this.$api.problem.program
         .findPerPage(this.pageRequest)
         .then((res) => {
             if(res.data == null) {
@@ -834,7 +835,7 @@ export default {
               params.courseId =  this.$store.state.course.courseId;
               params.knowledgeId = this.knowledgeId;
               // console.log(params);
-              this.$api.problem.prog.add(params).then((res) => {
+              this.$api.problem.program.add(params).then((res) => {
                 if (res.code == 200) {
                   this.$message({ message: "操作成功", type: "success" });
                   this.closeAddForm();
@@ -883,7 +884,7 @@ export default {
               params.courseId =  this.$store.state.course.courseId;
               params.knowledgeId = this.knowledgeId;
               // console.log(params);
-              this.$api.problem.prog.update(params).then((res) => {
+              this.$api.problem.program.update(params).then((res) => {
                 if (res.code == 200) {
                   this.$message({ message: "操作成功", type: "success" });
                   this.closeEditForm();
@@ -905,7 +906,7 @@ export default {
 
     handleRemove(data){
         console.log(data.params);
-        this.$api.problem.prog.del(data.params)
+        this.$api.problem.program.del(data.params)
         .then(data != null ? data.callback : "");
     },
 

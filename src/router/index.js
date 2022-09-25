@@ -65,6 +65,7 @@ const routes = [
         name: 'StudentCourse',
         component: () => import('@/components/home/studentCourse/StudentCourse'),
       },
+
     ]
   },
 
@@ -130,8 +131,6 @@ const routes = [
         meta: { title: '课程内容' }
       },
 
-
-
       {
         path: 'examList',
         name: 'examList',
@@ -154,25 +153,40 @@ const routes = [
           import('@/components/coursedetail/teacher/problemBank/prog/ProgramList'),
         meta: { title: '题库-编程题列表' }
       },
-
-
-
-
-
       {
-        path: 'problemFilling',
-        name: 'problemFilling',
+        path: 'judge',
+        name: 'judge',
         component: () =>
-          import('@/components/coursedetail/teacher/problemBank/filling/FillingProblemView'),
-        meta: { title: '填空题' }
+          import('@/components/coursedetail/teacher/problemBank/judge/judge'),
+        meta: { title: '题库-判断题列表' }
       },
       {
-        path: 'problemJudgment',
-        name: 'problemJudgment',
+        path: 'multiChoice',
+        name: 'multiChoice',
         component: () =>
-          import('@/components/coursedetail/teacher/problemBank/judgment/JudgmentProblemView'),
-        meta: { title: '判断题' }
+            import('@/components/coursedetail/teacher/problemBank/multichoice/MultiChoice'),
+        meta: { title: '题库-多选题列表' }
       },
+      {
+        path: 'fillingList',
+        name: 'fillingList',
+        component: () =>
+          import('@/components/coursedetail/teacher/problemBank/filling/FillingList'),
+        meta: { title: '题库-填空题列表' }
+      },
+
+      {
+        path: 'shortAnswer',
+        name: 'shortAnswer',
+        component: () =>
+            import('@/components/coursedetail/teacher/problemBank/shortAnswer/shortAnswer'),
+        meta: { title: '题库-简答题列表' }
+      },
+
+
+
+
+
       {
         path: 'JudgmentExcel',
         name: 'JudgmentExcel',
@@ -375,6 +389,13 @@ const routes = [
           import('@/components/coursedetail/student/exam/ExamList'),
         meta: { title: '课程考试' }
       },
+      // {
+      //   path: 'startexam',
+      //   name: 'startexam',
+      //   component: () =>
+      //     import('@/components/coursedetail/student/exam/StartExam'),
+      //   meta: { title: '开始考试' }
+      // },
 
 
 

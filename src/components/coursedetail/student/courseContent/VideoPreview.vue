@@ -9,6 +9,7 @@
 export default {
     data() {
         return {
+            path:"",  //解决报错问题 
             dialogVisible: false,
             section:{
                 cinstanceWeekId: null,

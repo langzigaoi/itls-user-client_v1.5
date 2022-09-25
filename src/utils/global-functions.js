@@ -117,6 +117,26 @@ Vue.prototype.time = function(datetime) {
   return y + '-' + MM + '-' + d 
 }
 
+Vue.prototype.timeByMinutes = function(datetime) {
+  if (datetime == null && datetime == undefined){
+    return null;
+  }
+  let date = new Date(parseInt(datetime))
+  let y = date.getFullYear()
+  let MM = date.getMonth() + 1
+  MM = MM < 10 ? ('0' + MM) : MM
+  let d = date.getDate()
+  d = d < 10 ? ('0' + d) : d
+  let h = date.getHours()
+  h = h < 10 ? ('0' + h) : h
+  let m = date.getMinutes()
+  m = m < 10 ? ('0' + m) : m
+  let s = date.getSeconds()
+  s = s < 10 ? ('0' + s) : s
+  return y + '-' + MM + '-' + d + ' ' + h + ':' + m
+}
+
+// 格式校验
 Vue.prototype.isEmail = function(email) {
   return /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/.test(email)
 }
@@ -129,6 +149,23 @@ Vue.prototype.isInterger = function(str) {
   return /^\d+$/.test(str)
 }
 
+// 字符串操作
+Vue.prototype.splitString = function(str, mark) {
+  var option = str;
+  var flag = mark;
+  var list = option.split(mark);
+  // console.log(list);
+  if (list.length == 1) {
+    return list;
+  }
+  for (let i = 2; i < list.length; i++) {
+    list[1] += mark + list[i];
+  }
+  var optionList = [];
+  optionList.push(list[0],list[1]);
+  // console.log(optionList);
+  return optionList;
+}
 
 
 

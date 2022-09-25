@@ -1,18 +1,13 @@
 <template>
   <div class="outside" style="padding: 30px">
     <el-row>
-      <el-col :span="5">
-        <div>
-          <el-avatar
-            shape="square"
-            fit="contain"
-            :size="120"
-            :src="courseInstance.image"
-          ></el-avatar>
-        </div>
+      <el-col :span="6">
+          <div style="text-align:center">
+            <el-image fit="fit" style="width:200px" v-if="courseInstance.image" :src="courseInstance.image"> </el-image>
+          </div>
       </el-col>
 
-      <el-col :span="7">
+      <el-col :span="6">
         <el-row type="flex" class="el-row-margin">
           <div>
             <span>课程名称</span>
@@ -116,6 +111,7 @@ export default {
   mounted() {
     this.findACourseInstance();
   },
+  
   methods: {
     //获取课程实例详情
     findACourseInstance() {
@@ -123,6 +119,7 @@ export default {
         .findCourseInstance({ id: this.$store.state.course.courseCinstanceId })
         .then((res) => {
           this.courseInstance = res.data;
+          console.log(this.courseInstance);
           this.findCinstanceProblem(this.courseInstance.courseId);
           this.findCinstanceLanguage(this.courseInstance.id);
         })

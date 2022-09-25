@@ -112,12 +112,12 @@
                 >
               </el-submenu> -->
 
-              <!-- <el-menu-item
-                index="/studycourse/courseExperiment"
+              <el-menu-item
+                index="/course/searchExperiment"
                 style="width: 160px"
                 ><i class="el-icon-suitcase"></i>
                 <span> 课程实验</span>
-              </el-menu-item> -->
+              </el-menu-item>
 
               <el-menu-item
                 index="/course/examList"
@@ -147,34 +147,36 @@
                   >
                   <i class="el-icon-edit-outline"></i>编程题</el-menu-item
                 >
-
-
-
-                <el-menu-item
-                  index=""
-                  style="width: 160px"
-                  v-if="hasProblemType('多选题')"
-                  >
-                  <i class="el-icon-thumb"></i>多选题</el-menu-item
-                >
-                <el-menu-item index="/course/problemFilling" 
-                   style="width: 160px"
-                   v-if="hasProblemType('填空题')"
-                  >
-                  <i class="el-icon-document"></i>填空题</el-menu-item
-                >
-                <el-menu-item index="" 
-                   style="width: 160px"
+                <el-menu-item index="/course/judge"
                    v-if="hasProblemType('判断题')"
+                   style="width: 160px"
+                   @click="toOtherPathWithId('/course/judge', $route.query.id)"
                   >
                   <i class="el-icon-check"></i>判断题</el-menu-item
                 >
-                <el-menu-item index="" 
+                <el-menu-item index="/course/multiChoice"
+                   v-if="hasProblemType('多选题')"
                    style="width: 160px"
-                   v-if="hasProblemType('简答题')"
-                  >
+                   @click="toOtherPathWithId('/course/multiChoice', $route.query.id)"
+                >
+                  <i class="el-icon-thumb"></i>多选题</el-menu-item
+                >
+                <el-menu-item index="/course/fillingList"
+                  v-if="hasProblemType('填空题')"
+                  style="width: 160px"
+                  @click="toOtherPathWithId('/course/fillingList', $route.query.id)"
+                >
+                  <i class="el-icon-edit"></i>填空题</el-menu-item
+                >
+                <el-menu-item index="/course/shortAnswer"
+                  v-if="hasProblemType('简答题')"
+                  style="width: 160px"
+                  @click="toOtherPathWithId('/course/shortAnswer', $route.query.id)"
+                >
                   <i class="el-icon-document"></i>简答题</el-menu-item
                 >
+
+
                 
                 <el-menu-item index="/course/problemApplication" 
                    style="width: 160px"
@@ -273,18 +275,23 @@ export default {
       isCollapse: false,
       courseProblemTypeList: [], //课程实例题型
       courseInstance: null, //显示再head的信息
-
       allKnowledge: [],
     };
   },
-  computed: {},
+  computed: {
+    
+  },
+  created() {
+    
+  },
   mounted() {
+    console.log(this.$route.query.id);
     // 刷新时获取用户数据
     if (!this.$store.state.user.userInfo.isLogin) {
       var data = localStorage.getItem("uInfo");
       if (data) data = JSON.parse(data);
       if (data) {
-        console.log("恢复用户数据");
+        // console.log("恢复用户数据");
         this.$store.commit("recoverUserData", data);
       }
     }
@@ -303,9 +310,8 @@ export default {
       localStorage.setItem("CinstanceId", this.$route.query.id);
     }
     this.findACourseInstance();
-
-
-    this.getKnowledge( this.$store.state.course.courseId);
+    
+    
   },
   methods: {
     //获取课程实例详情 显示head里面
@@ -314,13 +320,16 @@ export default {
         .findCourseInstance({ id: this.$store.state.course.courseCinstanceId })
         .then((res) => {
           this.courseInstance = res.data;
+          console.log(this.courseInstance.courseId);
           // 存放课程id
           this.$store.commit("setcourseId", this.courseInstance.courseId);
+          // 查询知识点
+          this.getKnowledge(this.courseInstance.courseId);
+
           this.$api.course.courseProblemType
             .findCourseProblemType(res.data.courseId)
             .then((res1) => {
               this.$store.commit("setcourseProblemTypeList", res1.data);
-
             });
           
           // this.$api.course.courseProblemType.findCourseProblemType(this.courseInstance.courseId).then((res1) => {
@@ -340,7 +349,7 @@ export default {
       return flag;
     },
     toOtherPathWithId(path, id) {
-      console.log(path + "---" + id);
+      // console.log(path + "---" + id);
       this.$router.push({
         path: path,
         query: {
@@ -400,6 +409,7 @@ export default {
       return arr1;
     },
     async getKnowledge(params) {
+      console.log(params);
       let deep1 = [];
       let deep2 = [];
       let deep3 = [];
@@ -409,7 +419,7 @@ export default {
       await this.$api.knowledge.knowledge
         .findList({ courseId: params })
         .then((res) => {
-          // console.log(res);
+          console.log(res);
           let data = res.data;
           
           for (let index = 0; index < data.length; index++) {
@@ -489,6 +499,7 @@ export default {
       for (let index = 0; index < newDeep2.length; index++) {
         deep2[index].children = newDeep2[index];
       }
+      console.log("在查");
       console.log(deep2);
       this.$store.commit("setknowledge", deep2);
     },

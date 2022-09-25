@@ -236,10 +236,6 @@
                   </el-row>
                 </el-form-item>
 
-                
-
-                
-
                 <el-form-item label="需要编程" label-width="80px" prop="isProgram">
                   <el-row type="flex">
                     <div>
@@ -291,7 +287,7 @@
                   </el-row>
                 </el-form-item>
 
-                <el-form-item label="学   期" label-width="80px" prop="semester">
+                <el-form-item label="学期" label-width="80px" prop="semester">
                   <el-row type="flex">
                     <div>
                       <el-select
@@ -344,7 +340,7 @@
                   <el-row type="flex">
                     <div>
                       <el-select
-                       :disabled="program"
+                       :disabled="editInstanceForm.isProgram == 0"
                         multiple
                         size="small"
                         v-model="langlist"
@@ -685,7 +681,7 @@
         destroy-on-close
         
       >
-        <el-form ref="courseForm" v-model="addCourseInform" :rules="addCourseRules">
+        <el-form ref="courseForm" :model="addCourseInform" :rules="addCourseRules">
           <el-row type="flex" align="middle" justify="center">
             <el-col :span="12">
               <!-- <el-form-item label="" label-width="80px">
@@ -832,8 +828,8 @@ export default {
         // langlist: [{required: true, message: "请选择", trigger: "blur"}],
         intro: [{required: true, message: "请输入", trigger: "blur"}],
 
-        hoursOfWeek: [{required: true, validator: this.checkHoursOfWeek, trigger: "blur" }],
-        grade: [{required: true, validator: this.checkGrade, trigger: "blur" }],
+        hoursOfWeek: [{required: true,message: "请输入", validator: this.checkHoursOfWeek, trigger: "blur" }],
+        grade: [{required: true,message: "请输入", validator: this.checkGrade, trigger: "blur" }],
       },
       addCourseRules: {
         name: [{required: true, message: "请选择", trigger: "blur"}],
@@ -979,7 +975,7 @@ export default {
     checkHoursOfWeek(rule, value, callback) {
       // console.log(value);
       if (!value) {
-        callback();
+        return callback(new Error())
       } 
       if (this.isInterger(value) && value > 0 ) {
           callback();
@@ -990,10 +986,10 @@ export default {
     checkGrade(rule, value, callback) {
       // console.log(value);
       if (!value) {
-        callback();
+        return callback(new Error())
       } 
       if (value%0.5 ==0 && value > 0) {
-          callback(); 
+        callback(); 
       }
       return callback(new Error("请输入0.5的倍数"));
     },
@@ -1050,6 +1046,7 @@ export default {
                   message: "申请成功,等待审核中···",
                   type: "success",
                 });
+                this.closeAddCourseVisible();
                 this.chandgeAddCourseVisible();
                 this.closeAddInstanceVisible();
               } else {
@@ -1141,7 +1138,7 @@ export default {
       let data = res.data
       let list = [];
       for (let index = 0; index < data.length; index++) {
-                list.push(data[index].id)
+        list.push(data[index].id)
       };
       // console.log(list);
       this.langlist = list;
@@ -1150,9 +1147,9 @@ export default {
     submitLanguage(cid) {
       let list = [];
       for (let index = 0; index < this.langlist.length; index++) {
-                list.push({cinstanceId: cid, languageId: this.langlist[index]})
+        list.push({cinstanceId: cid, languageId: this.langlist[index]})
       };
-      console.log(list);
+      // console.log(list);
       this.$api.course.language.addCinstanceLanguage(list).then((res) => {
       })
     
@@ -1194,6 +1191,7 @@ export default {
     },
 
     submitEditInstance() {
+      // console.log(this.editInstanceForm);
       this.$refs['editInstanceForm'].validate((valid) => {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
@@ -1201,7 +1199,9 @@ export default {
             let params = Object.assign({}, this.editInstanceForm);
             this.$api.course.cinstance.updateInstance(params).then((res) => {
               this.editLoading = false;
-              this.submitLanguage(this.editInstanceForm.id);
+              if (this.editInstanceForm.isProgram == 1) {
+                this.submitLanguage(this.editInstanceForm.id);
+              }
               if (res.code == 200) {
                 this.$message({
                   message: "修改成功",
@@ -1231,10 +1231,7 @@ export default {
           id: id
         }
       })
-
     },
-
-
   }
 };
 </script>

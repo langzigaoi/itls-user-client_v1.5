@@ -43,7 +43,7 @@ export const findProblemChoice = (params) => {
 
 export const findById = (params) => {
   return axios({
-    url: preUrl + 'findByid',
+    url: preUrl + 'findById',
     method: 'get',
     params
   })

@@ -3,7 +3,7 @@
     <el-collapse v-model="activeNames" @change="handleChange">
       <el-table :data="sectionInfoList" style="width: 100%" :header-cell-style="{textAlign:'center'}"
       :cell-style="{ textAlign: 'center' }">
-      <el-table-column type="index" min-width="5%" label="序号" align="center" :index="indexMethod">
+      <el-table-column type="index" min-width="5%" label="序号" :index="indexMethod">
       </el-table-column>
       <el-table-column prop="testTitle" label="测验名称" min-width="20%" >
       </el-table-column>
@@ -24,10 +24,9 @@
       <el-table-column label="操作" min-width="20%" >
         <template slot-scope="scope">
           <el-button-group>
-            <el-button type="primary"  
+          <el-button type="primary"  
             @click="$refs.beginTest.changeDialogVisible(scope.row.sectionId,scope.row.title)"
             :disabled="scope.row.endTime < NowDate.getTime() || scope.row.score != -1">测试</el-button>
-            <!-- <el-button  type="success" >查看</el-button> -->
           </el-button-group>
         </template>
       </el-table-column>
@@ -123,7 +122,8 @@ export default {
     return {
       activeNames: "1",
       sectionStr:"",
-      sectionInfoList: {},
+      // sectionInfoList: {},
+      sectionInfoList:null,
       Nowtime:undefined, // 当前时间
     };
   },
@@ -136,8 +136,8 @@ export default {
     setTime(){
       var NowDate = new Date();
       this.NowDate = NowDate;
-      // console.log(dateToMinutes(new Date(item.endTime)));
-      console.log(this.NowDate.getTime());
+      
+      // console.log(this.NowDate.getTime());
     },
      sectionInfo(){
       this.$api.student.getTest.gettestinfo({
@@ -145,8 +145,7 @@ export default {
       })
       .then((res) => {
         this.sectionInfoList = res.data;
-        console.log(this.sectionInfoList);
-        // this.sectionInfoList = this.sectionInfoList.length;
+        // console.log(this.sectionInfoList);
         for(let i=0;i<this.sectionInfoList.length;i++){
           this.sectionStr = this.sectionStr + this.sectionInfoList[i].sectionId + ",";
         }

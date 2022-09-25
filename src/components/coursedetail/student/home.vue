@@ -216,7 +216,7 @@ export default {
       menuIndex: this.$route.path,
       isCollapse: false,
       //courseId:null,
-      courseInstance: {}, //显示在head的信息
+      courseInstance: null, //显示在head的信息
     };
   },
 
@@ -226,8 +226,8 @@ export default {
       var data = localStorage.getItem("uInfo");
       if (data) data = JSON.parse(data);
       if (data) {
-        console.log("恢复用户数据");
-        console.log(data);
+        // console.log("恢复用户数据");
+        // console.log(data);
         this.$store.commit("recoverUserData", data);
       }
     }
@@ -236,9 +236,11 @@ export default {
     // console.log(this.$store.state.user.userInfo);
     // console.log("课程实例的id：", this.$route.query.id);
     //this.courseId=this.$route.params.courseid;
-    if (this.$route.query.id)
+    if (this.$route.query.id) {
       this.$store.commit("setcourseCinstanceIdFun", this.$route.query.id); //保存课程实例的id后面 子组件要用到
+    }
     this.findACourseInstance();
+
   },
 
   methods: {
@@ -248,6 +250,7 @@ export default {
         .findCourseInstance({ id: this.$store.state.course.courseCinstanceId })
         .then((res) => {
           this.courseInstance = res.data;
+          this.$store.commit("setcourseId", this.courseInstance.courseId);
         });
     },
     //改变菜单折叠展开状态

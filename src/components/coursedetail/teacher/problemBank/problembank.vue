@@ -23,10 +23,14 @@
           </el-submenu>
           <el-menu-item v-if="hasMenu('/course')" index="/problemBank/problemChoice"
               style="min-width: auto;"><span>选择题</span></el-menu-item>
-            <el-menu-item v-if="hasMenu('/course')" index="/problemBank/problemFilling"
+          <el-menu-item v-if="hasMenu('/course')" index="/problemBank/problemFilling"
               style="min-width: auto;"><span>填空题</span></el-menu-item>
-            <el-menu-item v-if="hasMenu('/course')" index="/problemBank/problemJudgment"
+          <el-menu-item v-if="hasMenu('/course')" index="/problemBank/problemJudge"
               style="min-width: auto;"><span>判断题</span></el-menu-item>
+          <el-menu-item v-if="hasMenu('/course')" index="/problemBank/problemMultiChoice"
+              style="min-width: auto;"><span>多选题</span></el-menu-item>
+          <el-menu-item v-if="hasMenu('/course')" index="/problemBank/problemShortAnswer"
+              style="min-width: auto;"><span>简答题</span></el-menu-item>
             <el-menu-item v-if="hasMenu('/course')" index="/problemBank/problemProg" style="min-width: auto;"><span>编程题</span></el-menu-item>
             <el-menu-item v-if="hasMenu('/course')" index="/problemBank/problemProgram" style="min-width: auto;"><span>编程题lgy</span></el-menu-item>
             <el-menu-item v-if="hasMenu('/course')" index="/problemBank/applicationProgram" style="min-width: auto;"><span></span>应用题</el-menu-item>

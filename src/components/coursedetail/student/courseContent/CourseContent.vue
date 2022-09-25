@@ -382,7 +382,7 @@ export default {
       this.$api.course.cinstance
         .findCourseInstance({ id: this.$store.state.course.courseCinstanceId })
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           this.courseInstance = res.data;
           this.getAllweeks();
         });

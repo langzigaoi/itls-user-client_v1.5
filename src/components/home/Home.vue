@@ -131,24 +131,24 @@ export default {
     },
   },
   //利用路由制作面包屑
-  watch: {
-    $route: {
-      handler(val, oldval) {
-        this.onRoutes = val;
-        console.log(this.onRoutes);
-        if (oldval == undefined) return;
-        //console.log("新路由信息")
-        //console.log(val);//新路由信息
-        //console.log("老路由信息")
-        //console.log(oldval);//老路由信息
-        if (val.path === oldval.path) return;
-        this.navPath = val.matched;
-      },
-      immediate: true, // 一旦监听到路由的变化立即执行
-      // 深度观察监听
-      deep: true,
-    },
-  },
+  // watch: {
+  //   $route: {
+  //     handler(val, oldval) {
+  //       this.onRoutes = val;
+  //       console.log(this.onRoutes);
+  //       if (oldval == undefined) return;
+  //       //console.log("新路由信息")
+  //       //console.log(val);//新路由信息
+  //       //console.log("老路由信息")
+  //       //console.log(oldval);//老路由信息
+  //       if (val.path === oldval.path) return;
+  //       this.navPath = val.matched;
+  //     },
+  //     immediate: true, // 一旦监听到路由的变化立即执行
+  //     // 深度观察监听
+  //     deep: true,
+  //   },
+  // },
 };
 </script>
 <style>

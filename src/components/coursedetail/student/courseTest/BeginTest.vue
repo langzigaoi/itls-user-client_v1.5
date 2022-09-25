@@ -5,8 +5,8 @@
       top="5vh"
       align="left"
       title="测验"
-      :append-to-body="true"
-      :visible.sync="diaVisible"
+       :append-to-body="true"
+       :visible.sync="diaVisible"
       width="80%"
       style="">
 
@@ -41,7 +41,7 @@
                   <el-radio   :label="'B'"> B</el-radio>
                   <el-radio   :label="'C'"> C</el-radio>
                   <el-radio   :label="'D'"> D</el-radio> -->
-                  <el-radio v-for="(item,index) in scope.row.problemChoices[0].ops" :label="index+1">{{item}}</el-radio>
+                  <el-radio v-for="option in scope.row.problemChoices[0].ops" :label="option.index">{{option.title}}</el-radio>
                 </el-radio-group>
               </template>
           </el-table-column>
@@ -129,14 +129,8 @@ export default {
       this.getProblem();
       this.getStudentId();
       this.ansRadio = this.stuAns;
-     
       // console.log(this.getAns());
       },
-    //字符串分割
-    getAns(str){
-      let op = str.split('@');
-      return op;
-    },
 
     //保存答案
     storeAnswer(){
@@ -169,10 +163,53 @@ export default {
         .then((res) => {
           this.ProblemChoiceList = res.data;
           for (let index = 0; index < this.ProblemChoiceList.length; index++) {
-            let ops = this.ProblemChoiceList[index].problemChoices[0].options.split("@");
-            this.ProblemChoiceList[index].problemChoices[0].ops = ops;   //存储分割好的选项
+            let optionString = this.ProblemChoiceList[index].problemChoices[0].options.toString();
+            let optionList = [];
+            let first = optionString.split("A.");
+              if (first.length == 2) {
+                // console.log(first);
+                var second = first[1].split("B.");
+                if (second.length == 2) {
+                //A选项
+                  optionList.push({
+                    title:"A."+second[0].trim(),
+                    index: "A" 
+                  });
+                  var third = second[1].split("C.")
+                  if (third.length == 2) {
+                    //B选项
+                    optionList.push({
+                      title:"B."+third[0].trim(),
+                      index: "B"
+                    });
+                    var forth = third[1].split("D.");
+                    if (forth.length == 2) {
+                      optionList.push({
+                        title:"C."+forth[0].trim(),
+                        index: "C" 
+                      });
+                      var fifth = forth[1].split("E.");
+                      optionList.push({
+                        title: "D."+fifth[0].trim(),
+                        index: "D"
+                      });
+                      if (fifth.length == 2) {
+                        var sixth = fifth[1].split("F.")
+                        optionList.push({
+                          title: "E."+sixth[0].trim(),
+                          index: "E"
+                        });
+                      }  
+                    }
+                  }
+                }
+              }
+            this.ProblemChoiceList[index].problemChoices[0].ops = optionList;   //存储分割好的选项
+            /////////////////////////////////////////////////////////////////////////////////////////////////
+            // let ops = this.ProblemChoiceList[index].problemChoices[0].options.split("@");
+            // this.ProblemChoiceList[index].problemChoices[0].ops = ops;   //存储分割好的选项
           }
-          console.log(this.ProblemChoiceList);
+          // console.log(this.ProblemChoiceList);
           this.testId = this.ProblemChoiceList[0].testId;
           this.length2 = this.ProblemChoiceList.length;
           let ansRadio = [];
@@ -181,53 +218,11 @@ export default {
             this.proIdList.push(this.ProblemChoiceList[index].choiceProblemId);
           }
           this.ansRadio = ansRadio
-          // console.log(this.ansRadio);
-          // console.log(this.proIdList);
-          // console.log(this.userId);
-          // console.log(this.testId);
         });
         
     },
     getProblemnumber() {
-      // this.stuRecords={};
-      // this.compute = 1;
-      // // this.TestResult.testId = this.ProblemChoiceList[0].testId;
-      // // this.TestResult.stuNo =  this.userId;
       this.dialogVisible = true;
-      // // this.stuRecords.push(this.userId);
-      // // this.stuRecords.push(this.testId);
-      // // this.stuRecords.push(this.proIdList);
-      // // this.stuRecords.push(this.ansRadio);
-      // this.stuRecords.stuNo = this.userId;
-      // this.stuRecords.testId = this.testId;
-      // this.stuRecords.proIdList = this.proIdList;
-      // for (let index = 0; index < this.ansRadio.length; index++) {
-      //   switch(this.ansRadio[index]){
-      //     case 1:
-      //       this.ansRadio[index] = "A";
-      //       break;
-      //     case 2:
-      //       this.ansRadio[index] = "B";
-      //       break;
-      //     case 3:
-      //       this.ansRadio[index] = "C";
-      //       break;
-      //     case 4:
-      //       this.ansRadio[index] = "D";
-      //       break;
-      //     case 5:
-      //       this.ansRadio[index] = "E";
-      //       break;
-      //     case 6:
-      //       this.ansRadio[index] = "F";
-      //       break;
-      //     default:
-      //       this.ansRadio[index] = "M";    //选项设定为6个，M代表错误选项
-      //       break;
-      //   }
-      // }
-      // this.stuRecords.ansList = this.ansRadio;
-      // console.log(this.stuRecords);
     },
     iscorrect() {
       this.dialogVisible = false;
@@ -237,44 +232,11 @@ export default {
     correct() {
       this.dialogVisible = false;
 
-      //原getProblemnumber()内容
       this.stuRecords={};
       this.compute = 1;
-      // this.TestResult.testId = this.ProblemChoiceList[0].testId;
-      // this.TestResult.stuNo =  this.userId;
-      //this.dialogVisible = true;
-      // this.stuRecords.push(this.userId);
-      // this.stuRecords.push(this.testId);
-      // this.stuRecords.push(this.proIdList);
-      // this.stuRecords.push(this.ansRadio);
       this.stuRecords.stuNo = this.userId;
       this.stuRecords.testId = this.testId;
       this.stuRecords.proIdList = this.proIdList;
-      for (let index = 0; index < this.ansRadio.length; index++) {
-        switch(this.ansRadio[index]){
-          case 1:
-            this.ansRadio[index] = "A";
-            break;
-          case 2:
-            this.ansRadio[index] = "B";
-            break;
-          case 3:
-            this.ansRadio[index] = "C";
-            break;
-          case 4:
-            this.ansRadio[index] = "D";
-            break;
-          case 5:
-            this.ansRadio[index] = "E";
-            break;
-          case 6:
-            this.ansRadio[index] = "F";
-            break;
-          default:
-            this.ansRadio[index] = "M";    //选项设定为6个，M代表错误选项
-            break;
-        }
-      }
       this.stuRecords.ansList = this.ansRadio;
       // console.log(this.stuRecords);
       // for (let i = 0; i < this.TestResult.TestTraces.length; i++) {
@@ -303,17 +265,18 @@ export default {
         //  this.testRec = JSON.stringify(this.stuRecords);
         //  console.log(this.testRec);
         //  console.log(JSON.parseArray(this.testRec));
-        console.log(this.stuRecords);
-         this.$api.student.getTest.testStuRecords(this.stuRecords).then(() => {
-          this.isSubmit = 1;
-          this.diaVisible = false;
-          this.$message({
-            type: "success",
-            message: "提交成功!",
+        // console.log(this.stuRecords);
+        this.$api.student.getTest.testStuRecords(this.stuRecords).then(() => {
+        this.isSubmit = 1;
+        this.diaVisible = false;
+        this.$message({
+          type: "success",
+          message: "提交成功!",
           });
-          this.$router.push({
-            path: "/studycourse/coursestudenttest"
-          });
+          // this.$router.push({
+          //   path: "/studycourse/coursestudenttest"
+          // });
+        this.$router.push(this.path)
         })
         .catch(() => {
           this.$message({

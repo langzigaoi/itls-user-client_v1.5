@@ -68,6 +68,15 @@ export const getExamProg = (params) => {
   })
 }
 
+//获取考试判断题
+export const getExamJudge = (params) => {
+  return axios({
+    url: preUrl + 'getExamJudge',
+    method: 'get',
+    params
+  })
+}
+
 //获取具体的考试信息
 export const getNewExamInfo = (params) => {
   return axios({

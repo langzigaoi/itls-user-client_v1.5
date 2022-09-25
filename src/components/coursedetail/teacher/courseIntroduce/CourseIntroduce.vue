@@ -3,18 +3,14 @@
     <!-- 展示 -->
     <div class="tcommonBox">
       <el-row>
-        <el-col :span="5">
-          <div>
-            <el-avatar
-              shape="square"
-              fit="contain"
-              :size="120"
-              :src="courseInstance.image"
-            ></el-avatar>
+        <el-col :span="6">
+          <div style="text-align:center">
+            <el-image fit="fit" v-if="courseInstance.image" style="width:200px" :src="courseInstance.image"> </el-image>
           </div>
+          
         </el-col>
 
-        <el-col :span="7">
+        <el-col :span="6">
           <el-row type="flex" class="el-row-margin">
             <div>
               <span>课程名称</span>
@@ -374,7 +370,9 @@ export default {
       infoForm: {},
       // 编辑页面显示标记
       editInfoFormVisible: false,
-      courseInstance: {}, //一个课程实例
+      courseInstance: {
+
+      }, //一个课程实例
       allTitle: [],
       dialogTableVisible: false,
       // 时间选择器
@@ -551,7 +549,6 @@ export default {
     },
     // 获取所有编程语言
     findAllLanguage() {
-      console.log("in");
       let suggests = [];
       this.$api.course.language.findAllLanguage().then((res) => {
         for (let index = 0; index < res.data.length; index++) {
@@ -578,7 +575,7 @@ export default {
           }
         }
       }
-      console.log(cinstanceLanguage);
+      // console.log(cinstanceLanguage);
       this.$api.course.language
         .updateCinstanceLanguage(cinstanceLanguage)
         .then((res) => {
@@ -593,7 +590,7 @@ export default {
       for (let index = 0; index < this.langlist.length; index++) {
         list.push({ cinstanceId: cid, languageId: this.langlist[index] });
       }
-      console.log(list);
+      // console.log(list);
       this.$api.course.language.addCinstanceLanguage(list).then((res) => {});
     },
 
