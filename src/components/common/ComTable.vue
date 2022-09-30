@@ -242,7 +242,7 @@ export default {
       loading: false, // 加载标识
       selections: [], // 列表选中列
       transientSelections: [],
-
+			showFlag: {},
       // del: true,
     };
   },

@@ -446,7 +446,17 @@ export default {
       }).catch((err) =>{})
     },
 
-    doneSummary() {
+    findContentList(itemId) {
+			console.log("2311111111111")
+      this.$api.exam.examContent
+        .findProblemList({ itemId: itemId })
+        .then((res) => {
+          return res.data;
+        });
+    },
+
+    // 保存选择题
+    saveChoose() {
       console.log(this.itemList.choose.contentList);
       let examId = this.examForm.id;
       // 构造traceList
