@@ -41,6 +41,15 @@ export const remove = (data) => {
   })
 }
 
+// 批量导入选课学生
+export const bulkImportByCid = (data) => {
+  return axios({
+    url: preUrl + 'bulkImportByCid',
+    method: 'post',
+    data
+  })
+}
+
 
 
 
