@@ -18,6 +18,14 @@ export const findPersonPage = (data) => {
     data
   })
 }
+export const findById = (params) => {
+  return axios({
+    url: preUrl + 'findById',
+    method: 'get',
+    params
+  })
+}
+
 // 删除
 export const del = (data) => {
   return axios({

@@ -5,9 +5,9 @@ module.exports = {
   // assetsDir: 'assets',
   devServer: { // 开发调试服务器配置项
     open: false, // npm run serve后自动打开页面
-    host: 'localhost', // 匹配本机IP地址
-    // host: '172.27.20.72',
-    port: 8080, // 开发服务器运行端口号
+    // host: 'localhost', // 匹配本机IP地址
+    host: '192.168.162.193',
+    port: 9100, // 开发服务器运行端口号
     compress: true // 启用静态资源压缩算法
   },
 

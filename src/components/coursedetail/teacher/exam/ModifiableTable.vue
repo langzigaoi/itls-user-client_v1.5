@@ -16,7 +16,15 @@
           type="primary"
           v-if="columnFlag.selectButton == true"
         >
-          选题
+          手动选题
+        </el-button>
+        <el-button
+          @click="randomChoose"
+          size="mini"
+          type="primary"
+          v-if="columnFlag.selectButton == true"
+        >
+          随机选题
         </el-button>
       </el-row>
     </div>
@@ -474,6 +482,9 @@ export default {
 
     choose() {
       this.$emit("choose");
+    },
+    randomChoose() {
+      this.$emit("randomChoose");
     },
     open(index, row) {
       // console.log(row);

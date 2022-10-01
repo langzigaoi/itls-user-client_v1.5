@@ -141,7 +141,9 @@
                         checkStrictly: true,
                         emitPath: false,
                         multiple: true,
-                      }" :clearable="true"></el-cascader>
+                      }" 
+                      collapse-tags
+                      :clearable="true"></el-cascader>
                   </el-row>
                 </el-form-item>
                 <el-form-item label="总题数" label-width="110px" prop="examName">
@@ -454,7 +456,7 @@
         <el-form-item>
           <div style="width:80%">
             <modifiable-table :data="problemListForm" :allProblemType="allProblemType" :columnFlag="listColumnFlag"
-              @open="openProblemInfo" @choose="changeAllProblemVisible">
+              @open="openProblemInfo" @choose="changeAllProblemVisible" @randomChoose="handleRandomChoose" >
             </modifiable-table>
           </div>
         </el-form-item>
@@ -483,7 +485,7 @@
           <el-row>
             <el-col :span="6" align="left">
               <el-cascader ref="knowledge" size="mini" style="width: 100%;" :props="{
-                checkStrictly: true,
+                checkStrictly: false,
                 emitPath: false,
                 multiple: true,
                 collapse: true,
@@ -877,7 +879,7 @@ export default {
         { prop: "examTypeName", label: "类型", minWidth: 150, align: "center" },
         // { prop: "num", label: "总题数", minWidth: 100, align: "center", formatter: this.getIsGenerate },
         // { prop: "fraction", label: "总分", minWidth: 100, align: "center", formatter: this.getIsGenerate },
-        { prop: "list", label: "范围", minWidth: 250, align: "center" },
+        { prop: "list", label: "范围", minWidth: 250, align: "center",  overflow:"true" },
         {
           prop: "startTime",
           label: "开始时间",
@@ -1206,11 +1208,9 @@ export default {
       //   openButton: false,
       //   previewItemList: false,
       // }
-
      
       this.objectiveListForm = {}
 
-      
       console.log(this.active);
       this.findData(this.active);
 
@@ -1218,22 +1218,25 @@ export default {
     findData(active){
       console.log(this.viewItemForm);
       if(active == 1){
-        this.infoForm =  JSON.parse(JSON.stringify(this.setupForm));
-        // 所选考试范围回显
-        if (this.setupForm.chapterOfList != null && this.setupForm.chapterOfList != undefined 
-          && this.setupForm.chapterOfList.length > 0) {
-          let chapterList = [];
-          for (let index = 0; index < this.setupForm.chapterOfList.length; index++) {
-            chapterList.push(parseInt(this.setupForm.chapterOfList[index].chapterId));
+        let examId = this.setupForm.id;
+        this.$api.exam.examSetup.findById({examId: examId}).then((res) =>{
+          // console.log(res);
+          this.infoForm = JSON.parse(JSON.stringify(res.data))
+          // 所选考试范围回显
+          if (this.infoForm.chapterOfList != null && this.infoForm.chapterOfList != undefined 
+          && this.infoForm.chapterOfList.length > 0) {
+            let chapterList = [];
+            for (let index = 0; index < this.infoForm.chapterOfList.length; index++) {
+              chapterList.push(parseInt(this.infoForm.chapterOfList[index].chapterId));
+            }
+            // console.log(chapterList);
+            this.infoForm.knowledgeId = chapterList;
           }
-          // console.log(chapterList);
-          this.infoForm.knowledgeId = chapterList;
-        }
+        })        
       } 
       else if (active == 2) {
         console.log(this.itemColumnFlag);
         console.log(this.typeColumnFlag);
-        
 
         this.itemColumnFlag= {
           problemType: true,
@@ -1264,26 +1267,20 @@ export default {
         console.log(this.viewItemForm);
 
         // 本考试范围回显 预处理
-        let chapterList = [];
-        for (let index = 0; index < this.setupForm.chapterOfList.length; index++) {
-          chapterList.push(parseInt(this.setupForm.chapterOfList[index].chapterId));
-        }
-        console.log(chapterList);
-        this.allProblemForm.knowledgeId = chapterList;
+        let examId = this.setupForm.id;
         //item项回显
-        this.examId = this.setupForm.id;
+        this.examId = examId
         this.pageRequest.params = [{ name: "examId", value: this.examId },];
+        console.log(this.pageRequest.params);
         this.$api.exam.examItem.findList(this.pageRequest)
           .then((res) => {
-            // console.log(res);
+            console.log(res);
             if (res.data != null) {
               console.log(res.data);
               this.viewItemForm.tableData = res.data.content;
               this.viewItemForm.totalSize = res.data.totalSize;
-              // this.generateForm = JSON.parse(JSON.stringify(row))
-              // console.log(this.generateForm);
               //处理章节查询参数
-              this.knowledgeOption = this.setupForm.chapterOfList;
+              this.knowledgeOption = this.infoForm.chapterOfList;
               let knowledgeString = "";
               for (let index = 0; index < this.knowledgeOption.length; index++) {
                 knowledgeString = knowledgeString + this.knowledgeOption[index].chapterId + ','
@@ -1291,11 +1288,29 @@ export default {
               this.allKnowledgeString = knowledgeString;
               // console.log(this.allKnowledgeString);
             }
-          }).catch((err) => { })
+        }).catch((err) => { })
+
+
+        this.$api.exam.examSetup.findById({examId: examId}).then((res) =>{
+          // console.log(res);
+          this.infoForm = JSON.parse(JSON.stringify(res.data))
+          // 所选考试范围回显
+          if (this.infoForm.chapterOfList != null && this.infoForm.chapterOfList != undefined 
+          && this.infoForm.chapterOfList.length > 0) {
+            let chapterList = [];
+            for (let index = 0; index < this.infoForm.chapterOfList.length; index++) {
+              chapterList.push(parseInt(this.infoForm.chapterOfList[index].chapterId));
+            }
+            this.allProblemForm.knowledgeId = chapterList;
+          }
+        })  
+        
+
       }
       else if (active == 4) {
         let examId = this.setupForm.id;
         this.examId = examId;
+
         this.pageRequest.params = [{ name: "examId", value: examId },];
         this.$api.exam.examContent.findByExamId(this.pageRequest).then((res) => {
           console.log(res.data);
@@ -1390,8 +1405,7 @@ export default {
                     message: "保存成功，请尽快组卷",
                     type: "success",
                   });
-                  this.findPersonPage(null);
-                  this.closeInfoForm();
+                  this.handleTabClick();
                 } else {
                   this.$message({
                     message: "操作失败, " + res.msg,
@@ -1454,7 +1468,7 @@ export default {
           this.allProblemType = JSON.parse(JSON.stringify(suggests))
         });
     },
-    findItemList() {
+    findItemList() { 
       this.pageRequest.params = [{ name: "examId", value: this.examId },];
       this.$api.exam.examItem.findList(this.pageRequest)
         .then((res) => {
@@ -1641,12 +1655,16 @@ export default {
             if (res.data != null) {
               console.log(res.data);
               this.problemListForm.tableData = res.data.content;
+              console.log(this.problemListForm);
             }
+          })
+          .then((res) =>{
+            this.problemListVisible = true;
           })
       }
       //显示对话框
-      this.problemListVisible = true;
-      console.log(this.problemListForm);
+
+
     },
     closeProblemListForm() {
       this.problemListVisible = false;
@@ -1753,11 +1771,12 @@ export default {
     },
     findProblemPage(data) {
       console.log(this.problemListForm);
+      let pageRequest = {pageNum: 1, pageSize: 10 }
       //按题型选择相应方法查询
       if (data !== null) {
-        this.pageRequest = data.pageRequest;
+        pageRequest = data.pageRequest;
       }
-      this.pageRequest.params = [
+      pageRequest.params = [
         { name: "courseId", value: this.$store.state.course.courseId },
         { name: "knowledgeString", value: this.knowledgeString },
         // { name: "knowledgeId", value: [] },
@@ -1767,7 +1786,7 @@ export default {
       console.log(lable);
       if (lable == "单选题") {
         this.$api.problem.choice
-          .findByKid(this.pageRequest)
+          .findByKid(pageRequest)
           .then((res) => {
             if (res.data !== null) {
               this.problemColumns = [...this.choiceColumns]
@@ -1783,7 +1802,7 @@ export default {
           .then(data != null ? data.callback : "");
       }
       if (lable == "编程题") {
-        this.$api.problem.program.findByKid(this.pageRequest)
+        this.$api.problem.program.findByKid(pageRequest)
           .then((res) => {
             if (res.data !== null) {
               this.problemColumns = [...this.programColumns]
@@ -1800,7 +1819,7 @@ export default {
       }
       if (lable == "判断题") {
         this.$api.problem.judge
-          .findByKid(this.pageRequest)
+          .findByKid(pageRequest)
           .then((res) => {
             if (res.data !== null) {
               this.problemColumns = [...this.judgeColumns]
@@ -1815,6 +1834,7 @@ export default {
           })
           .then(data != null ? data.callback : "");
       }
+      // return this.allProblemForm.tableData
       // console.log(this.pageRequest);
     },
     showSelections(list) {
@@ -1826,7 +1846,6 @@ export default {
       // console.log(this.generateForm);
       // console.log(this.itemListForm);
       // console.log(this.problemListForm);
-
       // console.log(this.knowledgeOption);
       // console.log(this.generateForm.chapterOfList);
       // console.log(this.allProblemForm);
@@ -1860,6 +1879,8 @@ export default {
     },
     closeAllProblemForm() {
       console.log(this.allProblemForm);
+      console.log(this.problemListForm);
+
       this.pageRequest.params = [{ name: "itemId", value: this.problemListForm.itemId },];
       this.$api.exam.examContent.findList(this.pageRequest)
         .then((res) => {
@@ -1871,10 +1892,10 @@ export default {
           }
         })
       // 清除组件内选中项
-      this.clearSelections();
+      // this.clearSelections();
       // 清除表格数据
-      this.problemListForm = {}
-      this.problemListForm.tableData = []
+      this.allProblemForm = {}
+      this.allProblemForm.tableData = []
       this.allProblemVisible = false
     },
     submitAllProblem() {
@@ -1888,6 +1909,36 @@ export default {
       } else {
         this.allProblemVisible = false;
       }
+    },
+    // 随机选题
+    handleRandomChoose(){
+      console.log(this.knowledgeString);
+      
+      let label = this.problemListForm.name;
+
+      this.$api.problem.selectProblem.selectProblemRandom
+        ({ courseId: this.$store.state.course.courseId,
+           problemTypeId: this.problemTypeLableToId(label),
+           size: this.problemListForm.num,
+           knowledgeStr: this.allKnowledgeString })
+        .then((res) => {
+          console.log(res);
+      })
+
+    },
+    problemTypeLableToId(lable){
+      if (lable === "单选题"){
+        return 1;
+      }
+      else if (lable === "判断题"){
+        return 3;
+      }
+      else if (lable === "编程题"){
+        return 7
+      }
+      else {
+        return null;
+      } 
     },
 
 

@@ -10,7 +10,7 @@
  import * as judger from './problem/judger'
  import * as submission from './problem/submission'
  import * as shortAnswer from './problem/shortAnswer'
- 
+ import * as selectProblem from './problem/selectProblem'
  
  // 默认全部导出
  export {
@@ -21,5 +21,7 @@
   multichoice,
   judger,
   submission,
-  shortAnswer
+  shortAnswer,
+
+  selectProblem,
  }

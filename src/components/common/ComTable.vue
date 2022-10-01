@@ -16,7 +16,7 @@
         :formatter="column.formatter" :sortable="column.sortable == null ? true : column.sortable">
       </el-table-column>
 
-      <el-table-column label="操作" width="300" fixed="right" v-if="showOperation" header-align="center" align="center">
+      <el-table-column label="操作" width="350" fixed="right" v-if="showOperation" header-align="center" align="center">
         <template slot-scope="scope">
           <!--公用-->
           <el-button size="mini" v-if="showFlag.view == true" :disabled="disableFlag.view == true"

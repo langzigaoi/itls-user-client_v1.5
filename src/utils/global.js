@@ -13,7 +13,9 @@ let ll = 'http://172.27.20.72:60101';
 let avatar = "https://langzigao.oss-cn-shenzhen.aliyuncs.com/2022/03/21/aba8f99e4af6492fb39f2d001abbfd37usr.png";
 
 // export const baseUrl = ll
-export const baseUrl = LD
+// export const baseUrl = LD
+export const baseUrl = SD
+
 
 export const avatarUrl = avatar
 
