@@ -13,7 +13,7 @@
 						 -->
 						<el-button size="mini" type="primary" @click="handleFileUpload">批量导入</el-button>
 					</el-form-item>
-					</el-button>
+					<!-- </el-button> -->
 				</el-form>
 			</el-col>
 		</el-row>

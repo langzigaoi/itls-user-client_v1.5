@@ -1922,7 +1922,14 @@ export default {
            size: this.problemListForm.num,
            knowledgeStr: this.allKnowledgeString })
         .then((res) => {
-          console.log(res);
+          console.log(res.data);
+          let suggests = JSON.parse(JSON.stringify(res.data));
+          for (let index = 0; index < suggests.length; index++) {
+            suggests[index].score = this.problemListForm.score / suggests.length
+          }
+          this.problemListForm.tableData = JSON.parse(JSON.stringify(suggests));
+          
+
       })
 
     },

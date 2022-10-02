@@ -2,91 +2,228 @@
   <div>
     <div></div>
 
-    <el-table ref="table" :data="data.content" :highlight-current-row="highlightCurrentRow"
-      :show-overflow-tooltip="showOverflowTooltip" @selection-change="selectionChange"
-      @current-change="handleCurrentChange" @select="selectItem" :row-key="getRowKeys" :border="border"
-      :max-height="maxHeight" :size="size" :align="align" :stripe="stripe" style="width: 100%">
-      <el-table-column type="selection" width="30" :reserve-selection="true"></el-table-column>
+    <el-table
+      ref="table"
+      :data="data.content"
+      :highlight-current-row="highlightCurrentRow"
+      :show-overflow-tooltip="showOverflowTooltip"
+      @selection-change="selectionChange"
+      @current-change="handleCurrentChange"
+      @select="selectItem"
+      :row-key="getRowKeys"
+      :border="border"
+      :max-height="maxHeight"
+      :size="size"
+      :align="align"
+      :stripe="stripe"
+      style="width: 100%"
+      :header-cell-style="{
+        padding: '',
+        background: '#F6F7FC',
+        color: '#333333',
+        textAlign: 'center',
+      }"
+      :cell-style="{ textAlign: 'center' }"
+      class="order"
+    >
+      <el-table-column
+        type="selection"
+        width="30"
+        :reserve-selection="true"
+      ></el-table-column>
 
-      <el-table-column type="index" width="50" label="序号" align="center" :index="indexMethod"></el-table-column>
+      <el-table-column
+        type="index"
+        width="50"
+        label="序号"
+        align="center"
+        :index="indexMethod"
+      ></el-table-column>
 
-      <el-table-column v-for="column in columns" header-align="center" :align="column.align" :prop="column.prop"
-        :label="column.label" :width="column.width" :min-width="column.minWidth"
-        :show-overflow-tooltip="column.overflow" :fixed="column.fixed" :key="column.prop" :type="column.type"
-        :formatter="column.formatter" :sortable="column.sortable == null ? true : column.sortable">
+      <el-table-column
+        v-for="column in columns"
+        header-align="center"
+        :align="column.align"
+        :prop="column.prop"
+        :label="column.label"
+        :width="column.width"
+        :min-width="column.minWidth"
+        :show-overflow-tooltip="column.overflow"
+        :fixed="column.fixed"
+        :key="column.prop"
+        :type="column.type"
+        :formatter="column.formatter"
+        :sortable="column.sortable == null ? true : column.sortable"
+      >
       </el-table-column>
 
-      <el-table-column label="操作" width="350" fixed="right" v-if="showOperation" header-align="center" align="center">
+      <el-table-column
+        label="操作"
+        width="350"
+        fixed="right"
+        v-if="showOperation"
+        header-align="center"
+        align="center"
+      >
         <template slot-scope="scope">
           <!--公用-->
-          <el-button size="mini" v-if="showFlag.view == true" :disabled="disableFlag.view == true"
-            @click="view(scope.$index, scope.row)">查看</el-button>
+          <el-button
+            size="mini"
+            v-if="showFlag.view == true"
+            :disabled="disableFlag.view == true"
+            @click="view(scope.$index, scope.row)"
+            >查看</el-button
+          >
           <!-- <h2>{{disableFlag.view}}</h2> -->
 
           <!--控制题库-->
-          <el-button size="mini" type="primary" v-if="showFlag.editProblem == true && scope.row.status == '0'"
-            :disabled="disableFlag.editProblem == true" @click="edit(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="mini" type="danger" v-if="showFlag.removeProblem == true && scope.row.status == '0'"
-            :disabled="disableFlag.removeProblem == true" @click="remove(scope.$index, scope.row)">删除</el-button>
+          <el-button
+            size="mini"
+            type="primary"
+            v-if="showFlag.editProblem == true && scope.row.status == '0'"
+            :disabled="disableFlag.editProblem == true"
+            @click="edit(scope.$index, scope.row)"
+            >编辑</el-button
+          >
+          <el-button
+            size="mini"
+            type="danger"
+            v-if="showFlag.removeProblem == true && scope.row.status == '0'"
+            :disabled="disableFlag.removeProblem == true"
+            @click="remove(scope.$index, scope.row)"
+            >删除</el-button
+          >
 
           <!--控制学生列表-->
-          <el-button size="mini" type="danger" v-if="showFlag.removeStudent == true"
-            :disabled="disableFlag.removeStudent == true" @click="remove(scope.$index, scope.row)">移除</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            v-if="showFlag.removeStudent == true"
+            :disabled="disableFlag.removeStudent == true"
+            @click="remove(scope.$index, scope.row)"
+            >移除</el-button
+          >
 
           <!--控制课程目标-->
-          <el-button size="mini" type="primary" v-if="showFlag.editObjective == true"
-            :disabled="disableFlag.editObjective == true" @click="edit(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="mini" type="danger" v-if="showFlag.removeObjective == true"
-            :disabled="disableFlag.removeObjective == true" @click="remove(scope.$index, scope.row)">删除</el-button>
+          <el-button
+            size="mini"
+            type="primary"
+            v-if="showFlag.editObjective == true"
+            :disabled="disableFlag.editObjective == true"
+            @click="edit(scope.$index, scope.row)"
+            >编辑</el-button
+          >
+          <el-button
+            size="mini"
+            type="danger"
+            v-if="showFlag.removeObjective == true"
+            :disabled="disableFlag.removeObjective == true"
+            @click="remove(scope.$index, scope.row)"
+            >删除</el-button
+          >
 
           <!--控制教学团队-->
-          <el-button size="mini" type="primary" v-if="showFlag.editTeachingTeam == true"
-            :disabled="disableFlag.editTeachingTeam == true" @click="edit(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="mini" type="danger" v-if="showFlag.removeTeachingTeam == true"
-            :disabled="disableFlag.removeTeachingTeam == true" @click="remove(scope.$index, scope.row)">删除</el-button>
+          <el-button
+            size="mini"
+            type="primary"
+            v-if="showFlag.editTeachingTeam == true"
+            :disabled="disableFlag.editTeachingTeam == true"
+            @click="edit(scope.$index, scope.row)"
+            >编辑</el-button
+          >
+          <el-button
+            size="mini"
+            type="danger"
+            v-if="showFlag.removeTeachingTeam == true"
+            :disabled="disableFlag.removeTeachingTeam == true"
+            @click="remove(scope.$index, scope.row)"
+            >删除</el-button
+          >
 
           <!--控制考试-->
           <!-- <el-row>
             <el-col> -->
-              <el-button size="mini" v-if="showFlag.setupForm == true" :disabled="disableFlag.setupForm == true"
-                @click="openSetupForm(scope.$index, scope.row)">试题设置</el-button>
+          <el-button
+            size="mini"
+            v-if="showFlag.setupForm == true"
+            :disabled="disableFlag.setupForm == true"
+            @click="openSetupForm(scope.$index, scope.row)"
+            >试题设置</el-button
+          >
 
-              <el-button size="mini" v-if="showFlag.preview == true" :disabled="disableFlag.preview == true"
-                @click="preview(scope.$index, scope.row)">
-                预览
-              </el-button>
+          <el-button
+            size="mini"
+            v-if="showFlag.preview == true"
+            :disabled="disableFlag.preview == true"
+            @click="preview(scope.$index, scope.row)"
+          >
+            预览
+          </el-button>
 
-              <el-button size="mini" type="primary" v-if="showFlag.pub == true"
-                :disabled="disableFlag.pub == true || scope.row.isPub == 1" @click="pub(scope.$index, scope.row)">
-                发布
-              </el-button>
+          <el-button
+            size="mini"
+            type="primary"
+            v-if="showFlag.pub == true"
+            :disabled="disableFlag.pub == true || scope.row.isPub == 1"
+            @click="pub(scope.$index, scope.row)"
+          >
+            发布
+          </el-button>
 
-              <el-button size="mini" type="danger" v-if="showFlag.removeExam == true"
-                :disabled="disableFlag.removeExam == true" @click="remove(scope.$index, scope.row)">删除</el-button>
-            <!-- </el-col>
+          <el-button
+            size="mini"
+            type="danger"
+            v-if="showFlag.removeExam == true"
+            :disabled="disableFlag.removeExam == true"
+            @click="remove(scope.$index, scope.row)"
+            >删除</el-button
+          >
+          <!-- </el-col>
           </el-row> -->
 
           <!--控制学生考试页面-->
-          <el-button style="width: 40%" size="mini" v-if="showFlag.startExam == true"
-            :disabled="disableFlag.startExam == true" @click="startExam(scope.$index, scope.row)">开始考试
+          <el-button
+            style="width: 40%"
+            size="mini"
+            v-if="showFlag.startExam == true"
+            :disabled="disableFlag.startExam == true"
+            @click="startExam(scope.$index, scope.row)"
+            >开始考试
           </el-button>
-          <el-button style="width: 40%" size="mini" v-if="showFlag.summary == true" type="primary"
-            :disabled="disableFlag.summary == true" @click="summary(scope.$index, scope.row)">成绩查询
+          <el-button
+            style="width: 40%"
+            size="mini"
+            v-if="showFlag.summary == true"
+            type="primary"
+            :disabled="disableFlag.summary == true"
+            @click="summary(scope.$index, scope.row)"
+            >成绩查询
           </el-button>
-
-
         </template>
       </el-table-column>
     </el-table>
 
     <div class="toolbar" style="padding: 20px, 20px">
-      <el-button :size="size" type="danger" @click="handleRemove(null)" :disabled="
-        this.selections.length === 0 || disableFlag.batchRemove == true
-      " style="float: left" v-if="showFlag.batchRemove == true">批量移除</el-button>
+      <el-button
+        :size="size"
+        type="danger"
+        @click="handleRemove(null)"
+        :disabled="
+          this.selections.length === 0 || disableFlag.batchRemove == true
+        "
+        style="float: left"
+        v-if="showFlag.batchRemove == true"
+        >批量移除</el-button
+      >
 
-      <el-pagination layout="total, prev, pager, next, jumper " @current-change="refreshPageRequest"
-        :current-page="pageRequest.pageNum" :page-size="pageRequest.pageSize" :total="data.totalSize"
-        style="float: right">
+      <el-pagination
+        layout="total, prev, pager, next, jumper "
+        @current-change="refreshPageRequest"
+        :current-page="pageRequest.pageNum"
+        :page-size="pageRequest.pageSize"
+        :total="data.totalSize"
+        style="float: right"
+      >
       </el-pagination>
     </div>
   </div>
@@ -192,7 +329,6 @@ export default {
           // 学生考试
           startExam: false,
           summary: false,
-
         }),
       },
     },
@@ -227,7 +363,6 @@ export default {
         // 学生考试
         startExam: false,
         summary: false,
-
       }),
     },
   },
@@ -242,7 +377,7 @@ export default {
       loading: false, // 加载标识
       selections: [], // 列表选中列
       transientSelections: [],
-			showFlag: {},
+      showFlag: {},
       // del: true,
     };
   },
@@ -385,7 +520,7 @@ export default {
           };
           this.$emit("handleRemove", { params: params, callback: callback });
         })
-        .catch(() => { });
+        .catch(() => {});
     },
     //批量删除
     handleRemove(items) {
@@ -415,7 +550,7 @@ export default {
           };
           this.$emit("handleRemove", { params: params, callback: callback });
         })
-        .catch(() => { });
+        .catch(() => {});
     },
 
     view(index, row) {
@@ -458,12 +593,15 @@ export default {
     },
     summary(index, row) {
       this.$emit("handleSummary", row);
-    }
+    },
   },
 };
 </script>
 
-<style >
+<style scoped>
+div /deep/ .order .el-table__header-wrapper .el-checkbox {
+  display: none;
+}
 .conf {
   background: #14889a !important;
   size: mini;
