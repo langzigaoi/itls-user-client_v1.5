@@ -3,14 +3,8 @@
 		<el-row>
 			<el-col align="left">
 				<el-form>
-					<!-- 					<el-button style="margin-right: 5px" size="mini" type="primary" @click="bulkImport">批量导入</el-button>
-					<el-button style="margin-right: 5px" size="mini" type="primary" @click="bulkImport">下载模板</el-button> -->
-					<!-- 	<el-form-item>
-						<kt-button icon="fa fa-download" label="模板下载" perms="usr:user:add" type="primary" @click="handleModelDownload" />
-					</el-form-item> -->
 					<el-form-item>
-						<!-- <kt-button icon="fa fa-plus" label="批量上传" perms="usr:user:add" type="primary" @click="handleFileUpload" />
-						 -->
+						<el-button size="mini" type="primary" @click="handleModelDownload">模板下载</el-button>
 						<el-button size="mini" type="primary" @click="handleFileUpload">批量导入</el-button>
 					</el-form-item>
 					<!-- </el-button> -->
@@ -130,6 +124,21 @@
 				console.log(this.uploadForm.fileList);
 				this.handleFile(true);
 			},
+			handleModelDownload() {
+				this.$api.course.choosing.model().then((res) => {
+					if (res.code == 200) {
+						this.$message({
+							message: "模板下载成功！",
+							type: "success"
+						});
+					} else {
+						this.$message({
+							message: "模板下载失败！",
+							type: "error",
+						});
+					}
+				});
+			},
 			handleFile(isMySelf) {
 				if (!isMySelf) {
 					return;
@@ -141,12 +150,20 @@
 				console.log(cinstanceId);
 				fileFormData.append("file", this.uploadForm.fileList);
 				fileFormData.append("cinstanceId", cinstanceId);
-				//to-do这里需要改
 				this.$api.course.choosing.bulkImportByCid(fileFormData).then((res) => {
 					console.log(res);
 					if (res.code != 200) {
+						this.$message({
+							message: res.message,
+							type: "error",
+						});
+
 						this.FileUploadDialogFormVisible = true;
 					} else {
+						this.$message({
+							message: res.message,
+							type: "success"
+						});
 						this.findPage;
 						// this.initColumns();
 						this.FileUploadDialogFormVisible = false;

@@ -50,6 +50,14 @@ export const bulkImportByCid = (data) => {
   })
 }
 
+// 下载导入模板
+export const model = () => {
+  return axios({
+    url: preUrl + 'model',
+    method: 'post',
+  })
+}
+
 
 
 
