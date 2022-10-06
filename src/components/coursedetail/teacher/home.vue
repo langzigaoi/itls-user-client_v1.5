@@ -1,7 +1,7 @@
 <template>
   <div  style="display: flex; height: 100vh">
     <el-container>
-      <el-header class="head"> 
+      <el-header class="head">
         <el-row>
           <el-col>
             <div class="system">程序设计智慧教学平台</div>
@@ -12,7 +12,7 @@
               第{{courseInstance.semester}}学期</div>
           </el-col>
         </el-row>
-        
+
 
         </el-header>
 
@@ -27,7 +27,7 @@
             text-color="#0d0e0f"
             active-text-color="#14889a"
             align="left" >
-          
+
               <el-submenu index="1" style="width: 160px">
                 <template title slot="title">
                   <i class="el-icon-odometer"></i>
@@ -127,20 +127,20 @@
               </el-menu-item>
 
               <el-submenu index="4">
-                <template slot="title">       
+                <template slot="title">
                   <span style="font-size: 1em"
                     ><i class="el-icon-bank-card" aria-hidden="true"></i> 题库</span
                   >
                 </template>
-                       
-                <el-menu-item index="/course/choiceList" 
+
+                <el-menu-item index="/course/choiceList"
                     v-if="hasMenu('/course/problemChoice') && hasProblemType('单选题')"
                     style="width: 160px"
                     @click="toOtherPathWithId('/course/choiceList', $route.query.id)"
                   >
                   <i class="el-icon-thumb"></i>单选题</el-menu-item
                 >
-                <el-menu-item index="/course/programList" 
+                <el-menu-item index="/course/programList"
                     v-if="hasProblemType('编程题')"
                     style="width: 160px"
                     @click="toOtherPathWithId('/course/programList', $route.query.id)"
@@ -176,9 +176,7 @@
                   <i class="el-icon-document"></i>简答题</el-menu-item
                 >
 
-
-                
-                <el-menu-item index="/course/problemApplication" 
+                <el-menu-item index="/course/problemApplication"
                    style="width: 160px"
                    v-if="hasProblemType('应用题')"
                   >
@@ -198,7 +196,7 @@
                   >
                   <i class="el-icon-set-up"></i>计算题</el-menu-item
                 >
-                <el-menu-item 
+                <el-menu-item
                    index=""
                    style="width: 160px"
                    v-if="hasProblemType('程序阅读题')"
@@ -213,10 +211,12 @@
                 <i class="el-icon-office-building"></i> 课程项目</el-menu-item
               >
 
-              <el-menu-item index="" style="width: 160px"
+              <el-menu-item index="/course/knowledgeGraph" style="width: 160px"
                 >
                 <i class="el-icon-share"></i>知识图谱</el-menu-item
               >
+
+
 
               <!-- <el-submenu index="6">
                 <template slot="title">
@@ -236,7 +236,7 @@
                 >
               </el-submenu> -->
 
-              <el-menu-item index="/home/teachercourse" 
+              <el-menu-item index="/home/teachercourse"
                   style="min-width: auto"
                 >
                 <i class="el-icon-arrow-left"></i>回到主页</el-menu-item
@@ -247,8 +247,8 @@
 
 
           </el-menu>
-          
-            
+
+
         </el-aside>
 
         <el-main class="main">
@@ -279,10 +279,10 @@ export default {
     };
   },
   computed: {
-    
+
   },
   created() {
-    
+
   },
   mounted() {
     console.log(this.$route.query.id);
@@ -310,8 +310,8 @@ export default {
       localStorage.setItem("CinstanceId", this.$route.query.id);
     }
     this.findACourseInstance();
-    
-    
+
+
   },
   methods: {
     //获取课程实例详情 显示head里面
@@ -331,7 +331,7 @@ export default {
             .then((res1) => {
               this.$store.commit("setcourseProblemTypeList", res1.data);
             });
-          
+
           // this.$api.course.courseProblemType.findCourseProblemType(this.courseInstance.courseId).then((res1) => {
           //   this.$store.commit("setcourseProblemTypeList", res1.data);
           // })
@@ -421,7 +421,7 @@ export default {
         .then((res) => {
           console.log(res);
           let data = res.data;
-          
+
           for (let index = 0; index < data.length; index++) {
             if (data[index].deep == 1) {
               deep1.push({
@@ -503,9 +503,9 @@ export default {
       console.log(deep2);
       this.$store.commit("setknowledge", deep2);
     },
-    
 
-    
+
+
   },
 };
 </script>
@@ -528,9 +528,9 @@ export default {
 }
 .course {
   font-size: 15px;
-  
+
   margin-bottom: 1px;
-  
+
 
 }
 
