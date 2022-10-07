@@ -1,21 +1,18 @@
 <template>
-  <div class="page-container">
+  <div class="page-container" style="padding-left:60px">
     <!--工具栏-->
-    <el-row type="flex" align="middle">
-      <el-col :span="18">
+    <el-row type="flex" align="middle" justify="start" >
         <el-input
-            style="heigth:20px"
+            style="heigth:20px; width:50%"
             placeholder="输入关键字进行过滤"
             v-model="filterText"
         >
         </el-input>
-      </el-col>
     </el-row>
-
-    <el-row>
-      <p></p>
-      <p></p>
-      <div class="custom-tree-container">
+    
+    <el-row style="margin-top:20px">
+      
+      <div class="custom-tree-container" >
         <el-tree
             ref="tree"
             :data="knowledgeTree"
@@ -24,26 +21,22 @@
             class="filter-tree"
             node-key="id"
             :expand-on-click-node="false"
-            default-expand-all
-            show-checkbox
+            :default-expand-all="false"
         >
             <span slot-scope="{ node }">
               <span>{{ node.data.value }} {{ node.data.label }}</span>
 
               <span style="padding-left: 20px;">
                 <el-button type="text" size="mini"
-
-                           @click="handleAddKnowledge(node)">新增
+                  @click="handleAddKnowledge(node)">新增
                 </el-button>
 
                 <el-button type="text" size="mini"
-
-                           @click="handleEditKnowledge(node)">编辑
+                  @click="handleEditKnowledge(node)">编辑
                 </el-button>
 
                 <el-button type="text" size="mini"
-
-                           @click="removeKnowledge(node)">删除
+                  @click="removeKnowledge(node)">删除
                 </el-button>
               </span>
             </span>
@@ -124,22 +117,16 @@
       </el-row>
 
       <div slot="footer" class="dialog-footer">
-        <kt-button
-            :size="size"
+        <el-button
             @click.native="knowledgeVisible = false"
             @click="closeKnowledgeForm"
-            perms="knowledge:edit:edit"
-            label="取消"
-        ></kt-button
+        >取消</el-button
         >
-        <kt-button
-            :size="size"
+        <el-button
             type="primary"
             @click.native="submitKnowldgeForm"
             :loading="editLoading"
-            perms="knowledge:edit:edit"
-            label="确定"
-        ></kt-button
+        >确定</el-button
         >
       </div>
     </el-dialog>
@@ -164,7 +151,6 @@
             return {
               size: "small",
               knowledgeTree: [],
-              allCourse: [],
               allTeachingGoal: [],
               allNodeType: [
                 {id: 1, value: "同级"},
@@ -190,44 +176,29 @@
               editLoading: false,
               operation: true,
 
+              courseId: null,
+
             };
         },
 
     mounted(){
-      // this.loadAllCourse();
+      this.courseId = this.$store.state.course.courseId
       this.loadAllTeachingGoal();
-      this.getKnowledge("2");
+      this.getKnowledge(this.courseId);
       },
     methods: {
-
-      // loadAllCourse() {
-      //   let suggests = [];
-      //   this.$api.metadata.goal.findAll().then((res) => {
-      //     // console.log(res);
-      //     for (let index = 0; index < res.data.length; index++) {
-      //       suggests.push({
-      //         value: res.data[index].name,
-      //         id: res.data[index].id,
-      //       });
-      //     }
-      //   });
-      //   this.allTeachingGoal = suggests;
-      // },
-
       loadAllTeachingGoal() {
         let suggests = [];
-        this.$api.knowledge.knowledge.findByCourseId().then((res) => {
-          // console.log(res);
+        this.$api.metadata.goal.findAll().then((res) => {
+          console.log(res);
           for (let index = 0; index < res.data.length; index++) {
             suggests.push({
               value: res.data[index].name,
               id: res.data[index].id,
             });
           }
-          // suggests = res.data
-          // console.log(suggests);
         });
-        this.allCourse = suggests;
+        this.allTeachingGoal = suggests;
       },
       querySearch(queryString, cb) {
         var suggests = this.allCourse;
@@ -238,14 +209,6 @@
         // 调用 callback 返回建议列表的数据
         cb(results);
       },
-
-       //handleSelectByCourse(item) {
-         //console.log(item);
-        // this.courseId = item;
-        // // this.getKnowledge(this.courseId);
-         //this.getKnowledge(item);
-        // // console.log(this.courseId);
-      // },
 
       filterNode(value, data) {
         if (!value) return true;
@@ -264,8 +227,6 @@
         this.knowledgeForm.rootParentId = node.data.parentId;
         this.knowledgeForm.rootLevel = node.level
         this.knowledgeForm.courseId = this.courseId
-
-
       },
       handleEditKnowledge(node) {
         console.log(node);
@@ -273,6 +234,7 @@
         this.$api.knowledge.knowledge.find({id: node.data.value}).then((res) =>{
           console.log(res);
           this.knowledgeForm = res.data;
+          this.knowledgeForm.kid = node.data.value;
           this.knowledgeVisible = true;
         })
 
@@ -284,8 +246,6 @@
         this.knowledgeVisible = false;
       },
       submitKnowldgeForm() {
-
-
         this.$refs.knowledgeForm.validate((valid) => {
           if (valid) {
             this.$confirm("确认提交吗？", "提示", {}).then(() => {
@@ -299,56 +259,40 @@
                   this.knowledgeForm.parentId = this.knowledgeForm.rootId;
                 }
                 console.log(this.knowledgeForm);
-                this.$api.knowledge.knowledge.add(this.knowledgeForm).then((res) =>{
+                this.$api.knowledge.pub.add(this.knowledgeForm).then((res) =>{
                   console.log(res);
                   if (res.code == 200) {
-                    this.getKnowledge(this.qureyCourse);
-                    this.$message({ message: "操作成功", type: "success" });
+                    this.getKnowledge(this.courseId);
+                    this.$message({ message: "申请成功", type: "success" });
                     this.closeKnowledgeForm();
                   }
                 })
               }
-
               else if (this.operation == false) {
                 console.log(this.knowledgeForm);
-                this.$api.knowledge.knowledge.update(this.knowledgeForm).then((res) =>{
+                this.$api.knowledge.pub.revise(this.knowledgeForm).then((res) =>{
                   console.log(res);
                   if (res.code == 200) {
-                    this.getKnowledge(this.qureyCourse);
-                    this.$message({ message: "操作成功", type: "success" });
+                    this.getKnowledge(this.courseId);
+                    this.$message({ message: "申请成功", type: "success" });
                     this.closeKnowledgeForm();
                   }
                 })
               }
-
             })
 
-
           }
-
         })
       },
 
       removeKnowledge(node) {
         console.log(node);
-        console.log(this.$refs.tree.getCheckedNodes())
-
-        let klist = []
-        if (this.$refs.tree.getCheckedNodes().length == 0) {
-          klist.push({id: node.data.value})
-        }
-        else if(this.$refs.tree.getCheckedNodes().length > 0) {
-          for (let i = 0; i < this.$refs.tree.getCheckedNodes().length; i++) {
-            klist.push({id: this.$refs.tree.getCheckedNodes()[i].value})
-          }
-        }
-        console.log(klist);
         this.$confirm("确认删除吗？", "提示", {}).then(() => {
-          this.$api.knowledge.knowledge.removeById(klist).then((res) =>{
+          this.$api.knowledge.pub.remove({kid: node.data.value}).then((res) =>{
             console.log(res);
             if (res.code == 200) {
-              this.getKnowledge(this.qureyCourse);
-              this.$message({ message: "操作成功", type: "success" });
+              this.getKnowledge(this.courseId);
+              this.$message({ message: "申请成功", type: "success" });
             } else {
               this.$message({ message: res.msg, type: "error" });
             }
@@ -392,7 +336,6 @@
             .then((res) => {
               console.log(res);
               let data = res.data;
-
               for (let index = 0; index < data.length; index++) {
                 if (data[index].deep == 1) {
                   deep1.push({
@@ -472,6 +415,6 @@
 </script>
 <style scoped>
 .input{
-  width: 200px;
+  width: 160px;
 }
 </style>
