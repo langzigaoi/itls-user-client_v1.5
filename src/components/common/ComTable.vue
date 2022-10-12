@@ -183,7 +183,7 @@
 
           <!--控制学生考试页面-->
           <el-button
-            style="width: 40%"
+            
             size="mini"
             v-if="showFlag.startExam == true"
             :disabled="disableFlag.startExam == true"
@@ -191,7 +191,7 @@
             >开始考试
           </el-button>
           <el-button
-            style="width: 40%"
+            
             size="mini"
             v-if="showFlag.summary == true"
             type="primary"
@@ -575,20 +575,6 @@ export default {
     startExam(index, row) {
       // console.log(row);
       var now = new Date().getTime();
-      // if (now < row.startTime) {
-      //   this.$message({
-      //     message: "未开放考试",
-      //     type: "error",
-      //   });
-      //   return null;
-      // }
-      // if (now > row.endTime) {
-      //   this.$message({
-      //     message: "考试已结束",
-      //     type: "error",
-      //   });
-      //   return null;
-      // }
       this.$emit("handleStartExam", row);
     },
     summary(index, row) {

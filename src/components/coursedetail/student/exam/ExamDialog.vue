@@ -116,9 +116,14 @@
                     <el-row style="margin-top:15px">
                         <el-radio :label="option.index">{{option.title}}</el-radio>
                     </el-row>
+                    
                 </div>
               </el-radio-group>
 
+              <el-row v-if="content.choice.answer != null && content.choice.answer != undefined"
+                style="padding-top: 10px;padding-left:10px" >
+                <div  class="answer">
+                参考答案: {{content.choice.answer}}</div></el-row>
               <el-divider></el-divider>
             </div>
           </el-card>
@@ -212,7 +217,7 @@
             <el-button size="mini" 
               type="danger"
               v-if="itemTabFlag != 0" 
-              @click="doneSummary"
+              @click="done"
               :disabled="this.summary.isCompleted == 1">
               提交
             </el-button>            
@@ -380,7 +385,7 @@ export default {
       this.pageRequest.params = [{ name: "examId", value: examId }];
       await this.$api.exam.examItem.findList(this.pageRequest).then(async (res) => {
         if (res.data != null) {
-          // console.log(res.data.content);
+          console.log(res.data.content);
           // 循环查询结果，获取题型list
           let suggests = res.data.content;
           let index = 0;
@@ -456,7 +461,7 @@ export default {
     },
 
     // 保存选择题
-    saveChoose() {
+    done() {
       console.log(this.itemList.choose.contentList);
       let examId = this.examForm.id;
       // 构造traceList
@@ -612,6 +617,13 @@ export default {
   padding-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
+}
+.answer {
+  font-style: normal;
+  color: #8c8585;
+  font: bolder;
+  margin: 2px;
+  height: 20px;
 }
 
 </style>

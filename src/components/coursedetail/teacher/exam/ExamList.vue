@@ -87,6 +87,14 @@
                   </el-date-picker>
                 </el-row>
               </el-form-item>
+              <el-form-item label="是否公布答案" label-width="110px" prop="showAnswer">
+                <el-row type="flex">
+                  <el-select size="small" v-model="addForm.showAnswer" placeholder="请选择">
+                    <el-option v-for="item in allShowAnswer" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-row>
+              </el-form-item>
 
             </el-col>
           </el-row>
@@ -188,6 +196,14 @@
                     </el-date-picker>
                   </el-row>
                 </el-form-item>
+                <el-form-item label="是否公布答案" label-width="110px" prop="showAnswer">
+                <el-row type="flex">
+                  <el-select size="small" v-model="infoForm.showAnswer" placeholder="请选择">
+                    <el-option v-for="item in allShowAnswer" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-row>
+              </el-form-item>
 
               </el-col>
             </el-row>
@@ -276,143 +292,6 @@
       </el-form>
     </el-dialog>
 
-
-
-    <!-- <el-dialog top="5vh" align="center" title="1.考试信息设置" :visible.sync="infoFormVisible" width="50%" style=""
-      @close="closeInfoForm">
-      <el-form ref="infoForm" :model="infoForm" :rules="infoFormRules">
-        <div>
-          <el-row type="flex" justify="center">
-            <el-col :span="7"></el-col>
-            <el-col :span="18">
-              <el-form-item label="标题" label-width="110px" prop="examName">
-                <el-row type="flex">
-                  <el-input style="width: 205px" size="mini" v-model="infoForm.examName" placeholder="请输入内容"></el-input>
-                </el-row>
-              </el-form-item>
-              <el-form-item label="类型" label-width="110px" prop="examTypeId">
-                <el-row type="flex">
-                  <el-select size="mini" v-model="infoForm.examTypeId" placeholder="请选择">
-                    <el-option v-for="item in allExamType" :key="item.value" :label="item.value" :value="item.id">
-                    </el-option>
-                  </el-select>
-                </el-row>
-              </el-form-item>
-              <el-form-item label="范围" label-width="110px" prop="knowledgeId">
-                <el-row type="flex">
-                  <el-cascader ref="knowledge" :show-all-levels="false" size="mini" style="width: 205px"
-                    v-model="infoForm.knowledgeId" placeholder="请选择" :options="allKnowledge" :props="{
-                      checkStrictly: true,
-                      emitPath: false,
-                      multiple: true,
-                    }" :clearable="true"></el-cascader>
-                </el-row>
-              </el-form-item>
-              <el-form-item label="总题数" label-width="110px" prop="examName">
-                <el-row type="flex">
-                  <el-input disabled style="width: 205px" size="mini" v-model="infoForm.num" placeholder="数目为空,请尽快组卷">
-                  </el-input>
-                </el-row>
-              </el-form-item>
-              <el-form-item label="总分" label-width="110px" prop="examName">
-                <el-row type="flex">
-                  <el-input disabled style="width: 205px" size="mini" v-model="infoForm.fraction"
-                    placeholder="数目为空,请尽快组卷"></el-input>
-                </el-row>
-              </el-form-item>
-
-              <el-form-item label="开始时间" label-width="110px" prop="startTime">
-                <el-row type="flex">
-                  <el-date-picker style="width: 205px" size="small" align="left" v-model="infoForm.startTime"
-                    type="datetime" placeholder="选择日期" :picker-options="pickerOptions">
-                  </el-date-picker>
-                </el-row>
-              </el-form-item>
-              <el-form-item label="结束时间" label-width="110px" prop="endTime">
-                <el-row type="flex">
-                  <el-date-picker style="width: 205px" size="small" align="left" v-model="infoForm.endTime"
-                    type="datetime" placeholder="选择日期" :picker-options="pickerOptions">
-                  </el-date-picker>
-                </el-row>
-              </el-form-item>
-              <el-form-item label="时长(分钟)" label-width="110px" prop="duration">
-                <el-row type="flex">
-                  <el-input style="width: 205px" size="mini" v-model="infoForm.duration" placeholder="请输入内容"></el-input>
-                </el-row>
-              </el-form-item>
-              <el-form-item label="成绩发布时间" label-width="110px" prop="resultPubTime">
-                <el-row type="flex">
-                  <el-date-picker style="width: 205px" size="small" align="left" v-model="infoForm.resultPubTime"
-                    type="datetime" placeholder="选择日期" :picker-options="pickerOptions">
-                  </el-date-picker>
-                </el-row>
-              </el-form-item>
-
-            </el-col>
-          </el-row>
-          <el-row>
-            <div>
-              <el-row type="flex" align="bottom" justify="center">
-                <el-button size="mini" @click="closeInfoForm">返回 </el-button>
-                <el-button type="primary" size="mini" @click="submitInfoForm">保存
-                </el-button>
-              </el-row>
-            </div>
-          </el-row>
-        </div>
-      </el-form>
-    </el-dialog> -->
-
-    <!--2.题型列表-->
-    <!-- <el-dialog top="5vh" align="center" title="2.题型设置" :visible.sync="itemListVisible" width="70%" style=""
-      @close="closeItemListForm">
-      <div style="">
-        <el-form :model="itemListForm" ref="itemListForm" size="small" text-algin="center">
-          <el-form-item>
-            <div style="width:80%">
-              <modifiable-table :data="itemListForm" :allProblemType="allProblemType" :columnFlag="itemColumnFlag"
-                @findPage="findItemList">
-              </modifiable-table>
-            </div>
-          </el-form-item>
-          <el-row>
-            <div>
-              <el-row type="flex" align="bottom" justify="center">
-                <el-button size="mini" @click="closeItemListForm">返回 </el-button>
-                <el-button type="primary" size="mini" @click="submitItemListForm">保存
-                </el-button>
-              </el-row>
-            </div>
-          </el-row>
-
-        </el-form>
-      </div>
-    </el-dialog> -->
-
-
-    <!--3.题目设置-第一层-->
-    <!-- <el-dialog top="5vh" align="center" title="3.题目设置" :visible.sync="generateVisible" width="70%" style=""
-      @close="closeGenerateForm">
-      <div style="">
-        <el-form :model="viewItemForm" ref="viewItemForm" size="small" text-algin="center">
-          <el-form-item>
-            <div style="width:80%">
-              <modifiable-table :data="viewItemForm" :columnFlag="typeColumnFlag" @open="changeProblemListVisible"
-                @handlePreviewChange="handlePreviewChange">
-              </modifiable-table>
-            </div>
-          </el-form-item>
-
-          <el-row>
-            <div>
-              <el-row type="flex" align="bottom" justify="center">
-                <el-button size="mini" @click="closeGenerateForm">返回 </el-button>
-              </el-row>
-            </div>
-          </el-row>
-        </el-form>
-      </div>
-    </el-dialog> -->
 
     <!--预览题型下的题目-->
     <el-dialog top="5vh" align="center" width="70%" :visible.sync="previewProblemListVisible"
@@ -531,33 +410,6 @@
       </el-form>
     </el-dialog>
 
-    <!--双向细目表-->
-    <!-- <el-dialog top="5vh" align="center" title="4.双向细目" :visible.sync="objectiveListVisible" width="70%"
-      @close="closeObjectiveList">
-      <el-form :model="objectiveListForm" ref="objectiveListForm" size="small" text-algin="center">
-
-        <el-form-item>
-          <div style="width:80%">
-            <modifiable-table :data="objectiveListForm" :allProblemType="allProblemType" :columnFlag="objColumnFlag"
-              :allObjective="allObjective" @open="openProblemInfo" @choose="changeAllProblemVisible"
-              @findPage="findObjectiveList">
-            </modifiable-table>
-          </div>
-        </el-form-item>
-
-        <el-row>
-          <div>
-            <el-row type="flex" align="middle" justify="center">
-              <el-button size="mini" @click="closeObjectiveList">返回 </el-button>
-              <el-button type="primary" size="mini" @click="submitObjectiveList">保存
-              </el-button>
-
-            </el-row>
-          </div>
-        </el-row>
-
-      </el-form>
-    </el-dialog> -->
 
 
     <!--单个题目展示弹框-->
@@ -791,6 +643,7 @@ export default {
         endTime: [{ required: true, message: "请选择", trigger: "blur" }],
         duration: [{ required: true, trigger: "blur", validator: this.checkDuration }],
         resultPubTime: [{ required: true, message: "请选择", trigger: "blur" }],
+        showAnswer: [{ required: true, message: "请选择", trigger: "blur" }],
       },
       infoFormRules: {
         examName: [{ required: true, message: "请输入", trigger: "blur" }],
@@ -800,7 +653,12 @@ export default {
         endTime: [{ required: true, message: "请选择", trigger: "blur" }],
         duration: [{ required: true, trigger: "blur", validator: this.checkDuration }],
         resultPubTime: [{ required: true, message: "请选择", trigger: "blur" }],
+        showAnswer: [{ required: true, message: "请选择", trigger: "blur" }],
       },
+      allShowAnswer:[
+        {label: "是", value: 1},
+        {label: "否", value: 0},
+      ],
       // 试题设置
       setupFormVisible: false,
       setupForm: {
@@ -921,6 +779,14 @@ export default {
           align: "center",
           formatter: this.dateFormat,
         },
+        {
+          prop: "showAnswer",
+          label: "是否公布答案",
+          minWidth: 150,
+          align: "center",
+          formatter: this.showAnswerFormat,
+        },
+        
       ],
       chapterList: [],
       pickerOptions: {},
@@ -1037,6 +903,15 @@ export default {
     },
     indexMethod: function (index) {
       return index + 1;
+    },
+    showAnswerFormat(row, column) {
+      if (row[column.property] == null) {
+        return "";
+      }else if (row[column.property] == 0) {
+        return "否";
+      } else if(row[column.property] == 1){
+        return "是";
+      }
     },
 
     handleChangeTypeFlag() {
