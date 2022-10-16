@@ -70,8 +70,8 @@ const routes = [
   },
 
 
-  
-  
+
+
   // 教师 课程实例内的内容
   {
     path: '/course',
@@ -183,6 +183,14 @@ const routes = [
         meta: { title: '题库-简答题列表' }
       },
 
+      {
+        path: 'knowledgeGraph',
+        name: 'knowledgeGraph',
+        component: () =>
+            import('@/components/coursedetail/teacher/knowledgeGraph/Knowledge'),
+        meta: { title: '知识图谱' }
+      },
+
 
 
 
@@ -194,7 +202,7 @@ const routes = [
           import('@/components/coursedetail/teacher/problemBank/judgment/JudgmentProblemUploadExcel'),
         meta: { title: '判断题导入' }
       },
-      
+
       {
         path: 'problemApplication',
         name: 'problemApplication',
@@ -224,12 +232,12 @@ const routes = [
           {
             path: 'knowledge',
             name: 'Knowledge',
-            component: () => import('@/components/home/teacherCourse/Knowledge'),
+            component: () => import('@/components/coursedetail/teacher/knowledgeGraph/Knowledge'),
           }
         ]
       },
-      
-      
+
+
       {
         path: 'teachingAnalyze',
         name: 'teachingAnalyze',
@@ -237,8 +245,8 @@ const routes = [
           import('@/components/coursedetail/teacher/teachingAnalyze/TeachingAnalyze'),
         meta: { title: '教学分析' }
       },
-      
-      
+
+
       {
         path: 'searchExperiment',
         name: 'SearchExperiment',
@@ -281,7 +289,7 @@ const routes = [
           import('@/components/coursedetail/teacher/experiment/StudentAnswer'),
         meta: { title: '学生实验详情' }
       },
-      
+
       {
         path: 'AddCourseHomework',
         name: 'AddCourseHomework',
@@ -413,8 +421,8 @@ const routes = [
       //     import('@/components/coursedetail/student/choseStudent/CinstanceStudentView'),
       //   meta: { title: '选课学生' }
       // },
-      
-      
+
+
       {
         path: 'courseExperiment',
         name: 'CourseExperiment',
@@ -458,7 +466,7 @@ const routes = [
           import('@/components/coursedetail/student/courseTest/BeginTest'),
         meta: { title: '开始测验' }
       },
-      
+
 
       {
         path: 'courseitem',

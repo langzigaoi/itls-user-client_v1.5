@@ -227,10 +227,10 @@ export default {
         this.$message({ message: "考试未开始", type: "warning" });
         return null;
       }
-      if(now > endTime ) {
-        this.$message({ message: "考试已结束", type: "warning" });
-        return null;
-      }
+      // if(now > endTime ) {
+      //   this.$message({ message: "考试已结束", type: "warning" });
+      //   return null;
+      // }
       
       this.$confirm("确认开始考试吗？", "提示", {}).then(() => {
         this.$api.exam.examSummary.addSummary({examId:row.id}).then((res) =>{
@@ -271,4 +271,5 @@ export default {
 .outside {
   text-align: center;
 }
+
 </style>

@@ -101,6 +101,10 @@ ul {
   color: #14889a;
   border-color: #14889a;
 }
+.el-button--text {
+  color: #14889a;
+
+}
 
 .el-cascader-node.in-active-path, .el-cascader-node.is-active, .el-cascader-node.is-selectable.in-checked-path {
   /* color: #409EFF; */
