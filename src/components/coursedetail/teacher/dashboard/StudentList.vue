@@ -13,13 +13,14 @@
 		</el-row>
 		<com-table :data="pageResults" :columns="columns" :showOperation="true" @findPage="findPage" @handleRemove="handleRemove"
 		 :showFlag="showFlag"></com-table>
-		<el-dialog title="批量导入" ref="uploadFrom" :visible.sync="FileUploadDialogFormVisible" destroy-on-close>
+		<el-dialog width="22%" title="批量导入" ref="uploadFrom" :visible.sync="FileUploadDialogFormVisible" destroy-on-close>
 			<el-form :model="uploadForm">
-				<el-form-item label-width="120px" align="left">
-					<el-upload style="margin-left: 0.5%" ref="upload" class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
+				<el-form-item label-width="60px" align="left">
+					<el-upload style="margin-left: 0.3%" ref="upload" class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
 					 :before-remove="beforeRemove" :on-change="handleChange" :auto-upload="false">
-						<el-button size="small" type="primary">点击上传</el-button>
-						<div slot="tip" class="el-upload__tip">只能上传xlsx、xls文件</div>
+						<el-button size="small" type="primary">点击上传</el-button>只能上传xlsx、xls文件
+				<!-- 		<div slot="tip" class="el-upload__tip">						
+							只能上传xlsx、xls文件</div> -->
 					</el-upload>
 				</el-form-item>
 			</el-form>
@@ -125,20 +126,42 @@
 				this.handleFile(true);
 			},
 			handleModelDownload() {
-				this.$api.course.choosing.model().then((res) => {
-					if (res.code == 200) {
-						this.$message({
-							message: "模板下载成功！",
-							type: "success"
-						});
-					} else {
-						this.$message({
-							message: "模板下载失败！",
-							type: "error",
-						});
-					}
-				});
+				let url = this.global.baseUrl;
+				// console.log(url);
+				window.open(url + "/course/choosing/model");
 			},
+			// 			handleModelDownload() {
+			// 				this.$api.course.choosing.model().then((res) => {
+			// 					if (res.code == 200) {
+			// 						this.$message({
+			// 							message: "模板下载成功！",
+			// 							type: "success"
+			// 						});
+			// 					} else {
+			// 						this.$message({
+			// 							message: "模板下载失败！",
+			// 							type: "error",
+			// 						});
+			// 					}
+			// 				});
+			// 			},
+			// 		handleModelDownload() {
+			// 			this.$api.course.choosing.model().then((res) => {
+			// 				// if(res.status == 200){
+			// // 				let fileName = res.headers['content-disposition']
+			// // 				fileName = fileName.substring(fileName.lastIndexOf("=")+1)
+			// // 				const content = res.data;
+			// // 				const blob = new Blob([content]);
+			// // 				const elink = document.createElement("a");
+			// // 				elink.download = fileName;
+			// // 				elink.style.display = "none";
+			// // 				elink.href = URL.createObjectURL(blob);
+			// // 				document.body.appendChild(elink);
+			// // 				elink.click();
+			// // 				URL.revokeObjectURL(elink.href);
+			// // 				document.body.removeChild(elink);
+			// 			});
+			// },
 			handleFile(isMySelf) {
 				if (!isMySelf) {
 					return;
