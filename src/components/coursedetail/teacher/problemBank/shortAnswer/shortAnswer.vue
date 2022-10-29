@@ -91,6 +91,7 @@
                   ></el-cascader>
                 </el-row>
               </el-form-item>
+
               <el-form-item
                 label="题干"
                 label-width="80px"
@@ -190,6 +191,8 @@
                 </el-col>
               </el-row>
 
+
+
               <el-row>
                 <div>
                   <el-row type="flex" align="bottom" justify="center">
@@ -199,6 +202,8 @@
                     <el-button type="primary" size="mini" @click="submitAdd"
                       >确定</el-button
                     >
+
+
                   </el-row>
                 </div>
               </el-row>
@@ -210,17 +215,18 @@
     </el-dialog>
 
     <el-dialog
-            :visible.sync="richEditor.dialogVisible"
+            :visible.sync="contentEditor.dialogVisible"
             append-to-body
             :close-on-click-modal="false"
             style="width: 100%; height: 100%"
             :show-close="false"
             center
-          > 
-            <ueditor @ready="editorReady" style="width:100%"/>
+          >
+
+            <vditor ref="contentEditor" @ready="editorReady" style="width:100%"/>
             <span slot="footer" class="dialog-footer">
-              <el-button type="primary" @click="editorConfirm">确 定</el-button>
-              <el-button @click="richEditor.dialogVisible = false"
+              <el-button type="primary" @click="submitForm">确 定</el-button>
+              <el-button @click="contentEditor.dialogVisible = false"
                 >取 消</el-button
               >
             </span>
@@ -382,7 +388,7 @@
                 prop="title"
                 required
               >
-                 <el-row type="flex"> 
+                 <el-row type="flex">
                   <el-input
                     style="textarea"
                     size="mini"
@@ -392,7 +398,7 @@
                     placeholder="请输入内容"
                     @focus="inputClick(editForm, 'title')"
                   ></el-input>
-                 </el-row> 
+                 </el-row>
               </el-form-item>
               <el-form-item
                 label="答案"
@@ -492,10 +498,10 @@
               </el-row>
             </el-col>
           </el-row>
-          
 
-           
-        </div> 
+
+
+        </div>
       </el-form>
     </el-dialog>
 
@@ -521,24 +527,28 @@
 
 <script>
 import ComTable from "../../../../common/ComTable.vue"
-import Ueditor from "../../../../Ueditor/index.vue"
+
+import Vditor from "../../../../Vditor/index.vue"
+
+
 export default {
   components: {
     ComTable,
-    Ueditor,
+
+    Vditor,
   },
 
   mounted() {
     this.allKnowledge = JSON.parse(
-      JSON.stringify(this.$store.state.course.knowledge)
+        JSON.stringify(this.$store.state.course.knowledge)
     );
     console.log(this.allKnowledge);
   },
   data() {
     return {
-    
+
       record: {},
-      pageRequest: { pageNum: 1, pageSize: 10 },
+      pageRequest: {pageNum: 1, pageSize: 10},
       pageResults: {},
       courseCinstanceId: "",
       flag: "1",
@@ -554,7 +564,7 @@ export default {
           minWidth: 150,
           align: "center",
         },
-        { prop: "title", label: "题干", minWidth: 250, align: "center" },
+        {prop: "title", label: "题干", minWidth: 250, align: "center"},
       ],
       personColumns: [
         // { prop: "courseName", label: "课程", minWidth: 150, align: "center" },
@@ -564,7 +574,7 @@ export default {
           minWidth: 150,
           align: "center",
         },
-        { prop: "title", label: "题干", minWidth: 250, align: "center" },
+        {prop: "title", label: "题干", minWidth: 250, align: "center"},
         {
           prop: "lastUpdateTime",
           label: "最后修改时间",
@@ -587,14 +597,14 @@ export default {
         knowledgeId: [],
       },
       addFormRules: {
-        knowledgeId: [{ required: true, message: "请选择", trigger: "blur" }],
-        title: [{ required: true, message: "请输入", trigger: "blur" }],
-        answer: [{ required: true, message: "请输入", trigger: "blur" }],
-        analysis: [{ required: true, message: "请输入", trigger: "blur" }],
-        markup: [{ required: true, message: "请输入", trigger: "blur" }],
-        difficulty: [{ required: true, message: "请选择", trigger: "blur" }],
+        knowledgeId: [{required: true, message: "请选择", trigger: "blur"}],
+        title: [{required: true, message: "请输入", trigger: "blur"}],
+        answer: [{required: true, message: "请输入", trigger: "blur"}],
+        analysis: [{required: true, message: "请输入", trigger: "blur"}],
+        markup: [{required: true, message: "请输入", trigger: "blur"}],
+        difficulty: [{required: true, message: "请选择", trigger: "blur"}],
         discrimination: [
-          { required: true, message: "请选择", trigger: "blur" },
+          {required: true, message: "请选择", trigger: "blur"},
         ],
       },
 
@@ -614,40 +624,55 @@ export default {
       editForm: {
         knowledgeId: [],
       },
-      richEditor: {
+
+
+      // richEditor: {
+      //   dialogVisible: false,
+      //   object: null,
+      //   parameterName: '',
+      //   instance: null,
+      // },
+
+
+
+      contentEditor: {
         dialogVisible: false,
         object: null,
         parameterName: '',
         instance: null,
       },
+
+
+
     };
   },
 
 
-
   methods: {
     editorReady(instance) {
-      this.richEditor.instance = instance
+      this.contentEditor.instance = instance
       let currentContent =
-        this.richEditor.object[this.richEditor.parameterName]
-      this.richEditor.instance.setContent(currentContent)
+          this.contentEditor.object[this.richEditor.parameterName]
+      this.contentEditor.instance.setContent(currentContent)
       // 光标定位到Ueditor
-      this.richEditor.instance.focus(true)
+      this.contentEditor.instance.focus(true)
     },
     inputClick(object, parameterName) {
-      this.richEditor.object = object
-      this.richEditor.parameterName = parameterName
-      this.richEditor.dialogVisible = true
+      this.contentEditor.object = object
+      this.contentEditor.parameterName = parameterName
+      this.contentEditor.dialogVisible = true
     },
-    editorConfirm() {
+
+    /* editorConfirm() {
       // 获取编辑器内容getContent()，获取纯文本内容getPlainTxt()
-      let content = this.richEditor.instance.getContent()
-   
+     let content = this.richEditor.instance.getContent()
+
       // 看看content有没有赋值成功
      // console.log(content);
       this.richEditor.object[this.richEditor.parameterName] = content
       this.richEditor.dialogVisible = false
-    },
+    },*/
+
 
     dateFormat(row, column) {
       return this.time(row[column.property]);
@@ -667,10 +692,10 @@ export default {
     handleSearchKnowledge(item) {
       console.log(item);
       if (
-        item === undefined ||
-        item === null ||
-        item === "" ||
-        item.length === 0
+          item === undefined ||
+          item === null ||
+          item === "" ||
+          item.length === 0
       ) {
         this.knowledgeId = "";
       } else {
@@ -698,25 +723,25 @@ export default {
         this.pageRequest = data.pageRequest;
       }
       this.pageRequest.params = [
-        { name: "courseId", value: this.$store.state.course.courseId },
-        { name: "knowledgeId", value: this.knowledgeId },
+        {name: "courseId", value: this.$store.state.course.courseId},
+        {name: "knowledgeId", value: this.knowledgeId},
       ];
       // console.log(this.pageRequest);
       this.$api.problem.shortAnswer
-        .findPage(this.pageRequest)
+          .findPage(this.pageRequest)
 
-        .then((res) => {
-          console.log(res.data);
-          if (res.data !== null) {
-            this.columns = [...this.allColumns];
-            this.pageResults = res.data;
-          }
-        })
-        .catch((err) => {
-          this.knowledgeId = "";
-          // this.findPage(null);
-        })
-        .then(data != null ? data.callback : "");
+          .then((res) => {
+            console.log(res.data);
+            if (res.data !== null) {
+              this.columns = [...this.allColumns];
+              this.pageResults = res.data;
+            }
+          })
+          .catch((err) => {
+            this.knowledgeId = "";
+            // this.findPage(null);
+          })
+          .then(data != null ? data.callback : "");
     },
     // 个人分页数据
     findPersonPage(data) {
@@ -724,28 +749,29 @@ export default {
         this.pageRequest = data.pageRequest;
       }
       this.pageRequest.params = [
-        { name: "courseId", value: this.$store.state.course.courseId },
-        { name: "knowledgeId", value: "" },
-        { name: "status", value: this.statu },
+        {name: "courseId", value: this.$store.state.course.courseId},
+        {name: "knowledgeId", value: ""},
+        {name: "status", value: this.statu},
       ];
       this.$api.problem.shortAnswer
-        .findPersonPage(this.pageRequest)
-        .then((res) => {
-          if (res.data == null) {
-            this.pageResults = {};
-          }
-          if (res.data !== null) {
-            // console.log(res.data);
-            // console.log(this.personColumns);
-            this.columns = [...this.personColumns];
-            // console.log(this.columns);
-            this.pageResults = res.data;
-          }
-          console.log(res.data);
-          console.log(this.pageResults);
-        })
-        .catch((err) => {})
-        .then(data != null ? data.callback : "");
+          .findPersonPage(this.pageRequest)
+          .then((res) => {
+            if (res.data == null) {
+              this.pageResults = {};
+            }
+            if (res.data !== null) {
+              // console.log(res.data);
+              // console.log(this.personColumns);
+              this.columns = [...this.personColumns];
+              // console.log(this.columns);
+              this.pageResults = res.data;
+            }
+            console.log(res.data);
+            console.log(this.pageResults);
+          })
+          .catch((err) => {
+          })
+          .then(data != null ? data.callback : "");
     },
 
     chandgeAddVisible() {
@@ -756,6 +782,57 @@ export default {
       this.$refs.addForm.resetFields();
       this.addForm = {};
     },
+
+    getValue() {
+      let value = this.$refs.contentEditor.getValue();
+      console.log(value)
+    },
+
+
+    submitForm() {
+
+      // this.$refs["addForm"].validate((valid) => {
+      //   if (valid) {
+      //     if (
+      //         this.contentEditor.getValue().length === 1 ||
+      //         this.contentEditor.getValue() == null ||
+      //         this.contentEditor.getValue() === ''
+      //     ) {
+      //       alert('话题内容不可为空')
+      //       return false
+      //     }
+
+          //通过this.contentEditor.getValue()获取编辑器内容
+          this.addForm.content = this.$refs.contentEditor.getValue();
+
+          //调用api把this.ruleForm传给后端
+          this.$api.problem.shortAnswer
+          .add(this.ruleForm)
+          .then((res) => {
+            if (res.code == 200) {
+              this.$message({message: "操作成功", type: "success"});
+              this.closeAddForm();
+              this.flag = "2";
+              this.handleChangeFlag();
+              // this.$refs.getAllAudit()
+            } else {
+              this.$message({
+                message: "操作失败, " + res.msg,
+                type: "error",
+              });
+            }
+          })
+          .catch((err) => {
+          });
+
+        // }
+
+      // })
+
+
+    },
+
+
     submitAdd() {
       this.$refs["addForm"].validate((valid) => {
         if (valid) {
@@ -766,22 +843,23 @@ export default {
             params.knowledgeId = this.addForm.knowledgeId[0];
             // console.log(params);
             this.$api.problem.shortAnswer
-              .add(params)
-              .then((res) => {
-                if (res.code == 200) {
-                  this.$message({ message: "操作成功", type: "success" });
-                  this.closeAddForm();
-                  this.flag = "2";
-                  this.handleChangeFlag();
-                  // this.$refs.getAllAudit()
-                } else {
-                  this.$message({
-                    message: "操作失败, " + res.msg,
-                    type: "error",
-                  });
-                }
-              })
-              .catch((err) => {});
+                .add(params)
+                .then((res) => {
+                  if (res.code == 200) {
+                    this.$message({message: "操作成功", type: "success"});
+                    this.closeAddForm();
+                    this.flag = "2";
+                    this.handleChangeFlag();
+                    // this.$refs.getAllAudit()
+                  } else {
+                    this.$message({
+                      message: "操作失败, " + res.msg,
+                      type: "error",
+                    });
+                  }
+                })
+                .catch((err) => {
+                });
           });
         }
       });
@@ -818,22 +896,23 @@ export default {
             params.knowledgeId = this.editForm.knowledgeId[0];
             // console.log(params);
             this.$api.problem.shortAnswer
-              .update(params)
-              .then((res) => {
-                if (res.code == 200) {
-                  this.$message({ message: "操作成功", type: "success" });
-                  this.closeEditForm();
-                  this.flag = "2";
-                  this.handleChangeFlag();
-                  // this.$refs.getAllAudit()
-                } else {
-                  this.$message({
-                    message: "操作失败, " + res.msg,
-                    type: "error",
-                  });
-                }
-              })
-              .catch((err) => {});
+                .update(params)
+                .then((res) => {
+                  if (res.code == 200) {
+                    this.$message({message: "操作成功", type: "success"});
+                    this.closeEditForm();
+                    this.flag = "2";
+                    this.handleChangeFlag();
+                    // this.$refs.getAllAudit()
+                  } else {
+                    this.$message({
+                      message: "操作失败, " + res.msg,
+                      type: "error",
+                    });
+                  }
+                })
+                .catch((err) => {
+                });
           });
         }
       });
@@ -842,11 +921,12 @@ export default {
     handleRemove(data) {
       console.log(data.params);
       this.$api.problem.shortAnswer
-        .del(data.params)
-        .then(data != null ? data.callback : "");
+          .del(data.params)
+          .then(data != null ? data.callback : "");
     },
-  },
+  }
 };
+
 </script>
 
 <style>
