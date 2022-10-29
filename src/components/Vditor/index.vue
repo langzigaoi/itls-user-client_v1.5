@@ -1,7 +1,6 @@
 <template>
   <div>
     <div id="vditor" name="description" ></div>
-<!--    <el-button @click="submit">a</el-button>-->
   </div>
 </template>
 <script>
@@ -13,7 +12,9 @@ export default {
 
   data(){
     return{
-      contentEditor: {},
+      contentEditor: {
+        value: ""
+      },
       ruleForm: {
         title: '',
         tags: [],
@@ -92,36 +93,24 @@ export default {
             'help',
           ],
         }],
+        after: () => {
+          // this.setValue(0)
+        },
     })
   },
-
+  watch: {
+    question(question) {
+      //console.log("监听到数据改变")
+      this.renderMarkdown(question.description);
+    }
+  },
   methods: {
     // 获取值
     getValue(){
-
       return this.contentEditor.getValue();
     },
-    // 我的提交表单代码大致如下,这段代码核心是this.ruleForm.content = this.contentEditor.getValue()
-    submitForm() {
-      this.$refs["formName"].validate((valid) => {
-        if (valid) {
-          if (
-              this.contentEditor.getValue().length === 1 ||
-              this.contentEditor.getValue() == null ||
-              this.contentEditor.getValue() === ''
-          ) {
-            alert('话题内容不可为空')
-            return false
-          }
-
-          //通过this.contentEditor.getValue()获取编辑器内容
-          // this.ruleForm.content = this.contentEditor.getValue()
-
-          //调用api把this.ruleForm传给后端
-
-        }
-
-      })
+    setValue(value){
+      return this.contentEditor.setValue(value);
     },
 
     renderMarkdown(md) {
@@ -130,12 +119,7 @@ export default {
         hljs: {style: "github"},
       });
     },
-    watch: {
-      question(question) {
-        //console.log("监听到数据改变")
-        this.renderMarkdown(question.description);
-      }
-    }
+    
   }
 
 }

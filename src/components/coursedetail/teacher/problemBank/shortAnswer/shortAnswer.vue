@@ -100,7 +100,6 @@
               >
                 <el-row type="flex">
                   <el-input
-                    style="textarea"
                     size="mini"
                     type="textarea"
                     :rows="4"
@@ -120,7 +119,6 @@
                     type="textarea"
                     :rows="4"
                     v-model="addForm.answer"
-                    auto-complete="off"
                     size="mini"
                     @focus="inputClick(addForm, 'answer')"
                   ></el-input>
@@ -132,7 +130,6 @@
                     type="textarea"
                     :rows="4"
                     v-model="addForm.analysis"
-                    auto-complete="off"
                     size="mini"
                     @focus="inputClick(addForm, 'analysis')"
                   ></el-input>
@@ -142,7 +139,6 @@
                 <el-row type="flex">
                   <el-input
                     v-model="addForm.markup"
-                    auto-complete="off"
                     size="mini"
                   ></el-input>
                 </el-row>
@@ -199,7 +195,7 @@
                     <el-button size="mini" @click="closeAddForm"
                       >返回
                     </el-button>
-                    <el-button type="primary" size="mini" @click="submitAdd"
+                    <el-button type="primary" size="mini" @click="submitAdd('addForm')"
                       >确定</el-button
                     >
 
@@ -223,9 +219,9 @@
             center
           >
 
-            <vditor ref="contentEditor" @ready="editorReady" style="width:100%"/>
+            <vditor ref="contentEditor"  style="width:100%"/>
             <span slot="footer" class="dialog-footer">
-              <el-button type="primary" @click="submitForm">确 定</el-button>
+              <el-button type="primary" @click="submitVditor">确 定</el-button>
               <el-button @click="contentEditor.dialogVisible = false"
                 >取 消</el-button
               >
@@ -505,23 +501,6 @@
       </el-form>
     </el-dialog>
 
-    <!-- <el-dialog
-            :visible.sync="richEditor.dialogVisible"
-            append-to-body
-            :close-on-click-modal="false"
-            style="width: 100%; height: 100%"
-            :show-close="false"
-            center
-          >
-            <Ueditor @ready="editorReady" />
-            <span slot="footer" class="dialog-footer">
-              <el-button type="primary" @click="editorConfirm">确 定</el-button>
-              <el-button @click="richEditor.dialogVisible = false"
-                >取 消</el-button
-              >
-            </span>
-        </el-dialog> -->
-
   </div>
 </template>
 
@@ -625,16 +604,6 @@ export default {
         knowledgeId: [],
       },
 
-
-      // richEditor: {
-      //   dialogVisible: false,
-      //   object: null,
-      //   parameterName: '',
-      //   instance: null,
-      // },
-
-
-
       contentEditor: {
         dialogVisible: false,
         object: null,
@@ -642,36 +611,47 @@ export default {
         instance: null,
       },
 
-
-
     };
   },
 
-
   methods: {
-    editorReady(instance) {
-      this.contentEditor.instance = instance
-      let currentContent =
-          this.contentEditor.object[this.richEditor.parameterName]
-      this.contentEditor.instance.setContent(currentContent)
-      // 光标定位到Ueditor
-      this.contentEditor.instance.focus(true)
-    },
+    // 编辑器相关
+    // editorReady(instance) {
+    //   console.log("调用了");
+    //   this.contentEditor.instance = instance
+    //   let currentContent = this.contentEditor.object[this.contentEditor.parameterName]
+    //   console.log(currentContent);
+    //   this.contentEditor.instance.setContent(currentContent)
+    //   // 光标定位到Ueditor
+    //   this.contentEditor.instance.focus(true)
+    // },
     inputClick(object, parameterName) {
+      // 原表单项信息赋给vditor的contentEditor对象参数，用于定位与回显
       this.contentEditor.object = object
       this.contentEditor.parameterName = parameterName
+      // 显示vditor对话框
       this.contentEditor.dialogVisible = true
+      // 设置延时回显，否则对话框中内容未完全加载完时执行下面函数会报错
+      setTimeout(() => {
+        // 当参数不为undefined时，判断为编辑操作，进行内容回显
+        if (this.contentEditor.object[this.contentEditor.parameterName] != undefined) {
+          this.$refs.contentEditor.setValue(this.contentEditor.object[this.contentEditor.parameterName])
+        } 
+        // 参数为undefined，操作为新增，值设置为""
+        else {
+          this.$refs.contentEditor.setValue("")
+        }
+      }, 10);
     },
-
-    /* editorConfirm() {
-      // 获取编辑器内容getContent()，获取纯文本内容getPlainTxt()
-     let content = this.richEditor.instance.getContent()
-
-      // 看看content有没有赋值成功
-     // console.log(content);
-      this.richEditor.object[this.richEditor.parameterName] = content
-      this.richEditor.dialogVisible = false
-    },*/
+    submitVditor() {
+      // 获取编辑器内容
+      let content = this.$refs.contentEditor.getValue()
+      // console.log(content);
+      // 将编辑器中内容赋值给对应表单项
+      // this.contentEditor.object = {}
+      this.contentEditor.object[this.contentEditor.parameterName] = content
+      this.contentEditor.dialogVisible = false
+    },
 
 
     dateFormat(row, column) {
@@ -775,6 +755,7 @@ export default {
     },
 
     chandgeAddVisible() {
+       console.log(this.addForm);
       this.addVisible = !this.addVisible;
     },
     closeAddForm() {
@@ -782,59 +763,9 @@ export default {
       this.$refs.addForm.resetFields();
       this.addForm = {};
     },
-
-    getValue() {
-      let value = this.$refs.contentEditor.getValue();
-      console.log(value)
-    },
-
-
-    submitForm() {
-
-      // this.$refs["addForm"].validate((valid) => {
-      //   if (valid) {
-      //     if (
-      //         this.contentEditor.getValue().length === 1 ||
-      //         this.contentEditor.getValue() == null ||
-      //         this.contentEditor.getValue() === ''
-      //     ) {
-      //       alert('话题内容不可为空')
-      //       return false
-      //     }
-
-          //通过this.contentEditor.getValue()获取编辑器内容
-          this.addForm.content = this.$refs.contentEditor.getValue();
-
-          //调用api把this.ruleForm传给后端
-          this.$api.problem.shortAnswer
-          .add(this.ruleForm)
-          .then((res) => {
-            if (res.code == 200) {
-              this.$message({message: "操作成功", type: "success"});
-              this.closeAddForm();
-              this.flag = "2";
-              this.handleChangeFlag();
-              // this.$refs.getAllAudit()
-            } else {
-              this.$message({
-                message: "操作失败, " + res.msg,
-                type: "error",
-              });
-            }
-          })
-          .catch((err) => {
-          });
-
-        // }
-
-      // })
-
-
-    },
-
-
-    submitAdd() {
-      this.$refs["addForm"].validate((valid) => {
+    submitAdd(formName) {
+      console.log(this.addForm);
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
             let params = Object.assign({}, this.addForm);
@@ -861,6 +792,8 @@ export default {
                 .catch((err) => {
                 });
           });
+        } else {
+          // callback();
         }
       });
     },
