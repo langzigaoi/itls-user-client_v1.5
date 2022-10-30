@@ -20,6 +20,7 @@
     "postcss-px2rem": "^0.3.0",
     "postcss-pxtorem": "^5.1.1",
     "qs": "^6.9.6",
+    "vditor": "^3.8.17",
     "vue": "^2.6.11",
     "vue-codemirror": "^4.0.6",
     "vue-pdf": "^4.2.0",
