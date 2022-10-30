@@ -9,14 +9,10 @@ import VueCodemirror from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 import moment from 'moment'
 
-import '/public/static/plugins/UEditor/ueditor.config.js'
-import '/public/static/plugins/UEditor/ueditor.all.min.js'
-import '/public/static/plugins/UEditor/lang/zh-cn/zh-cn.js'
-import '/public/static/plugins/UEditor/ueditor.parse.min.js'
-import '/public/static/plugins/UEditor/themes/default/css/ueditor.css'
-import '/public/static/plugins/UEditor/kityformula-plugin/addKityFormulaDialog.js'
-import '/public/static/plugins/UEditor/kityformula-plugin/defaultFilterFix.js'
-import '/public/static/plugins/UEditor/kityformula-plugin/getKfContent.js'
+
+// import Vditor from 'vditor'
+// import 'vditor/dist/index.css'
+// Vue.use(Vditor);
 
 
 Vue.prototype.global = global // 挂载全局配置模块
@@ -26,14 +22,14 @@ Vue.prototype.$moment = moment //时间
 
 //在axios中可以发送数组
 import qs from 'qs'
-//配全局属性配置，在任意组件内可以使用this.$qs获取qs对象 
+//配全局属性配置，在任意组件内可以使用this.$qs获取qs对象
 Vue.prototype.$qs = qs
 
 import 'element-ui/lib/theme-chalk/index.css';
 import ElementUI from 'element-ui';
 Vue.use(ElementUI);
 Vue.use(api)  // 注册使用API模块
-Vue.use(VueCodemirror, { 
+Vue.use(VueCodemirror, {
   options: { theme: '3024-night'},
   events: ['scroll']
 } )
@@ -47,11 +43,12 @@ import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
 
 //引入font-awesome
-import 'font-awesome/css/font-awesome.min.css' 
+import 'font-awesome/css/font-awesome.min.css'
 
 //  自定义全局方法
 import globalFunctions from './utils/global-functions'
 import globalEntity from './utils/global-entity'
+// import vditor from "@/components/Vditor";
 Vue.use(globalFunctions)
 Vue.use(globalEntity)
 

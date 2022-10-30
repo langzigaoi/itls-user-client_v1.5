@@ -26,10 +26,10 @@
      */
   window.UEDITOR_CONFIG = {
     //为编辑器实例添加一个路径，这个不能被注释
-    UEDITOR_HOME_URL: URL,
+    UEDITOR_HOME_URL: URL
 
     // 服务器统一请求接口路径
-    //serverUrl: URL + "",
+    ,serverUrl: '',
 
     //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的重新定义
     toolbars: [
@@ -188,9 +188,9 @@
     //,autoClearEmptyNode : true //getContent时，是否删除空的inlineElement节点（包括嵌套的情况）
 
     //启用自动保存
-    //,enableAutoSave: true
+    ,enableAutoSave: true
     //自动保存间隔时间， 单位ms
-    //,saveInterval: 500
+    ,saveInterval: 6000
 
     //启用拖放上传
     //,enableDragUpload: true
@@ -198,7 +198,7 @@
     //,enablePasteUpload: true
 
     //启用图片拉伸缩放
-    //,imageScaleEnabled: true
+    ,imageScaleEnabled: true
 
     //,fullscreen : false //是否开启初始化时即全屏，默认关闭
 

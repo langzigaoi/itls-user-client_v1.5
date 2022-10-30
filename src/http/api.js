@@ -1,4 +1,4 @@
-/* 
+/*
  * 接口统一集成模块
  */
 
@@ -35,6 +35,6 @@ export default {
   exam,
   experiment,
   dashboard,
-  student,
+  // student,
   judger
 }
