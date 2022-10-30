@@ -622,7 +622,7 @@ export default {
     //   let currentContent = this.contentEditor.object[this.contentEditor.parameterName]
     //   console.log(currentContent);
     //   this.contentEditor.instance.setContent(currentContent)
-    //   // 光标定位到Ueditor
+    //   // 光标定位到editor
     //   this.contentEditor.instance.focus(true)
     // },
     inputClick(object, parameterName) {
@@ -636,7 +636,7 @@ export default {
         // 当参数不为undefined时，判断为编辑操作，进行内容回显
         if (this.contentEditor.object[this.contentEditor.parameterName] != undefined) {
           this.$refs.contentEditor.setValue(this.contentEditor.object[this.contentEditor.parameterName])
-        } 
+        }
         // 参数为undefined，操作为新增，值设置为""
         else {
           this.$refs.contentEditor.setValue("")
@@ -649,7 +649,8 @@ export default {
       // console.log(content);
       // 将编辑器中内容赋值给对应表单项
       // this.contentEditor.object = {}
-      this.contentEditor.object[this.contentEditor.parameterName] = content
+      // this.contentEditor.object[this.contentEditor.parameterName] = content
+      this.$set(this.contentEditor.object, this.contentEditor.parameterName, content)
       this.contentEditor.dialogVisible = false
     },
 

@@ -10,15 +10,21 @@ import 'vditor/dist/index.css';
 
 export default {
 
-  data(){
-    return{
-      contentEditor: {
-        value: ""
-      },
+  props: {
+    value: {
+      type: String,
+      default: ''
+    },
+  },
+
+    data(){
+    return {
+      contentEditor: "",
+
       ruleForm: {
         title: '',
         tags: [],
-        content: ''
+        content: '',
 
     },
       question:{description:"loading..."},
@@ -28,7 +34,7 @@ export default {
 
     this.renderMarkdown(this.question.description),
 
-    this.contentEditor = new Vditor('vditor', {
+    this.contentEditor = new Vditor("vditor", {
       height: 500,
       placeholder: '此处为话题内容……',
       theme: 'classic',
@@ -94,7 +100,7 @@ export default {
           ],
         }],
         after: () => {
-          // this.setValue(0)
+          this.contentEditor.setValue(this.value)
         },
     })
   },
@@ -119,7 +125,7 @@ export default {
         hljs: {style: "github"},
       });
     },
-    
+
   }
 
 }
