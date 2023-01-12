@@ -2,7 +2,7 @@
 
   <div>
     <!--    <el-button @click="rerender" >重新渲染</el-button>-->
-    <div id="myChart" style=" width:1100px; height:570px;"></div>
+    <div id="myChart" style=" width:1130px; height:570px;"></div>
   </div>
 
 </template>
@@ -171,7 +171,7 @@ export default {
 <style scoped>
 
 #myChart{
-  width:1100px;
+  width:1130px;
   height:570px;
   background: rgba(242, 242, 242, 1);
 }

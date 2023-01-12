@@ -405,15 +405,6 @@ const routes = [
       //   meta: { title: '开始考试' }
       // },
 
-
-
-
-
-
-
-
-
-
       // {
       //   path: 'students',
       //   name: 'students',
@@ -475,6 +466,15 @@ const routes = [
           import('@/components/coursedetail/student/courseItem/CourseItem'),
         meta: { title: '课程项目' }
       },
+
+      {
+        path: 'knowledgeGraph',
+        name: 'knowledgeGraph',
+        component: () =>
+            import('@/components/coursedetail/student/KnowledgeGraph/Knowledge'),
+        meta: { title: '知识图谱' }
+      },
+
       {
         path: 'commentstu',
         name: 'commentstu',

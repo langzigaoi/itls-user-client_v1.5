@@ -1,7 +1,7 @@
 <template>
   <div class="homediv" style="display: flex; height: 100vh">
     <el-container>
-      <el-header class="head"> 
+      <el-header class="head">
         <el-row>
           <el-col>
             <div class="system">程序设计智慧教学平台</div>
@@ -12,7 +12,7 @@
               第{{courseInstance.semester}}学期</div>
           </el-col>
         </el-row>
-        
+
 
         </el-header>
 
@@ -28,7 +28,7 @@
             text-color="#0d0e0f"
             active-text-color="#14889a"
             align="left" >
-          
+
               <el-submenu index="1" style="width: 160px">
                 <template title slot="title">
                   <i class="el-icon-odometer"></i>
@@ -50,15 +50,15 @@
                   >
                   <i class="el-icon-data-line"></i>实验统计分析</el-menu-item
                 >
-                <el-menu-item index="" 
+                <el-menu-item index=""
                   >
                   <i class="el-icon-data-line"></i>知识路径分析</el-menu-item
                 >
-                <el-menu-item index="" 
+                <el-menu-item index=""
                   >
                   <i class="el-icon-data-line"></i>网络时空统计</el-menu-item
                 >
-                <el-menu-item index="" 
+                <el-menu-item index=""
                   >
                   <i class="el-icon-data-line"></i>个性化推荐</el-menu-item
                 >
@@ -149,7 +149,7 @@
                 <i class="el-icon-office-building"></i> 课程项目</el-menu-item
               >
 
-              <el-menu-item index="" style="width: 160px"
+              <el-menu-item index="/studycourse/knowledgeGraph" style="width: 160px"
                 >
                 <i class="el-icon-share"></i>知识图谱</el-menu-item
               >
@@ -172,7 +172,7 @@
                 >
               </el-submenu>
 
-              <el-menu-item index="/home/studentcourse" 
+              <el-menu-item index="/home/studentcourse"
                   style="min-width: auto"
                 >
                 <i class="el-icon-arrow-left"></i>回到主页</el-menu-item
@@ -187,8 +187,8 @@
 
 
           </el-menu>
-          
-            
+
+
         </el-aside>
 
         <el-main class="main">
@@ -206,8 +206,8 @@
 <script>
 import vTags from "../../common/Tags";
 export default {
-  components: { 
-    vTags 
+  components: {
+    vTags
   },
   computed: {},
 
@@ -286,9 +286,9 @@ export default {
 }
 .course {
   font-size: 15px;
-  
+
   margin-bottom: 1px;
-  
+
 
 }
 
