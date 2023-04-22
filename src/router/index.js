@@ -88,6 +88,15 @@ const routes = [
           import('@/components/coursedetail/teacher/dashboard/StudentList'),
         meta: { title: '学生列表' }
       },
+
+      {
+        path: 'studentInfo',
+        name: 'studentInfo',
+        component: () =>
+            import('@/components/coursedetail/teacher/dashboard/StudentInfo'),
+        meta: { title: '学生信息' }
+      },
+
       {
         path: 'courseintroduce',
         name: 'courseintroduce',

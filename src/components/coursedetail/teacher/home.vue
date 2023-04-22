@@ -39,6 +39,13 @@
                   >
                   <i class="el-icon-s-order"></i>学生列表</el-menu-item
                 >
+
+                <el-menu-item
+                    index="/course/studentInfo"
+                >
+                  <i class="el-icon-s-order"></i>学生信息</el-menu-item
+                >
+
                 <!-- <el-menu-item
                   index="/course/atlasAnalyze"
                   >
